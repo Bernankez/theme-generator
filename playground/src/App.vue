@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { colors } from "@bernankez/theme-generator";
+import ThemePalette from "./components/ThemePalette.vue";
 </script>
 
 <template>
   <div>
-    <div v-for="(color, key) in colors" :key="key">
-      {{ key }}
-    </div>
+    <ThemePalette />
   </div>
 </template>

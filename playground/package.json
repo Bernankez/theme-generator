@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@bernankez/theme-generator": "workspace:*",
+    "chroma-js": "^2.4.2",
     "unocss": "^0.59.4",
     "vue": "^3.4.21"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.4.4",
     "@unocss/reset": "^0.59.4",
     "@vitejs/plugin-vue": "^5.0.4",
     "typescript": "^5.2.2",
