@@ -23,6 +23,7 @@ const theme = computed(() => defineTheme({
 const json = theme.value.json;
 console.log(theme.value.css.light);
 console.log(theme.value.css.dark);
+// TODO headless ui for dialog
 </script>
 
 <template>
