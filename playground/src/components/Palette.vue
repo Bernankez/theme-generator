@@ -5,7 +5,14 @@ import { computed } from "vue";
 const color = defineModel<string>();
 
 const standardColor = computed({
-  get: () => color.value && chroma(color.value).hex(),
+  get: () => {
+    try {
+      return color.value && chroma(color.value).hex();
+    } catch (e) {
+      console.error(e);
+      return "";
+    }
+  },
   set: c => color.value = c,
 });
 </script>
