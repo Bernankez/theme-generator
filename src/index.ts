@@ -11,17 +11,25 @@ export interface DefineThemeOptions {
   defaults: AcceptableTheme;
   cssPrefix?: string;
   overrides?: Partial<AcceptableTheme>;
-  unocss?: {
-    /** un */
-    prefix?: string;
-  };
-  tailwind?: {
-    /** tw */
-    prefix?: string;
+  // unocss?: {
+  //   /** un */
+  //   prefix?: string;
+  // };
+  // tailwind?: {
+  //   /** tw */
+  //   prefix?: string;
+  // };
+}
+
+export interface ThemeReturn {
+  json: Theme;
+  css: {
+    light: string;
+    dark: string;
   };
 }
 
-export function defineTheme(options: DefineThemeOptions) {
+export function defineTheme(options: DefineThemeOptions): ThemeReturn {
   const { cssPrefix, defaults } = options;
 
   // TODO deep assign
@@ -36,8 +44,6 @@ export function defineTheme(options: DefineThemeOptions) {
       light: lightCSS,
       dark: darkCSS,
     },
-    unocss: "",
-    tailwind: "",
   };
 }
 
