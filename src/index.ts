@@ -1,3 +1,4 @@
+import { merge } from "lodash-es";
 import type { AcceptableTheme, Scheme, Theme } from "./types";
 import { kebabCase, toTheme } from "./utils/format";
 import { isColor } from "./utils/is";
@@ -30,11 +31,10 @@ export interface ThemeReturn {
 }
 
 export function defineTheme(options: DefineThemeOptions): ThemeReturn {
-  const { cssPrefix, defaults } = options;
+  const { cssPrefix, defaults, overrides = {} } = options;
 
-  // TODO deep assign
-  // assign(overrides, defaults)
-  const theme = toTheme(defaults);
+  const mergedTheme = merge({}, defaults, overrides);
+  const theme = toTheme(mergedTheme);
   const lightCSS = generateCSSProperties(theme, "light", cssPrefix);
   const darkCSS = generateCSSProperties(theme, "dark", cssPrefix);
 

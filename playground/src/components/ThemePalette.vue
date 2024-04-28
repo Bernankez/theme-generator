@@ -1,30 +1,50 @@
 <script setup lang="ts">
-import type { Scheme } from "@bernankez/theme-generator";
-import { defineTheme, inferThemeFromColor, isColor, isShape, kebabCase } from "@bernankez/theme-generator";
-import { computed, ref } from "vue";
+import type { Color, Scheme, Theme } from "@bernankez/theme-generator";
+import { isColor, isShape, kebabCase } from "@bernankez/theme-generator";
+import { ref, toRefs } from "vue";
+import { merge } from "lodash-es";
 import Palette from "./Palette.vue";
 import Select from "./Select.vue";
 import Icon from "./Icon.vue";
+
+const props = defineProps<{
+  modelValue: Theme;
+}>();
+
+const emit = defineEmits<{
+  "update:modelValue": [json: Theme];
+}>();
+
+const { modelValue: json } = toRefs(props);
+
+const scheme = defineModel<Scheme>("scheme", {
+  default: "light" as Scheme,
+});
+
+const cssPrefix = defineModel("cssPrefix", {
+  default: "",
+});
 
 const schemeOptions = ref([
   { label: "Light", value: "light" },
   { label: "Dark", value: "dark" },
 ]);
 
-const scheme = ref<Scheme>("light");
-const cssPrefix = ref("");
+function updateColor(key: string, color: string | Color) {
+  const obj = merge({}, json.value, {
+    [key]: {
+      [scheme.value]: color,
+    },
+  });
+  emit("update:modelValue", obj);
+}
 
-const defaults = computed(() => inferThemeFromColor("rgb(193, 67, 68)"));
-
-const theme = computed(() => defineTheme({
-  cssPrefix: cssPrefix.value,
-  defaults: defaults.value,
-}));
-
-const json = theme.value.json;
-console.log(theme.value.css.light);
-console.log(theme.value.css.dark);
-// TODO headless ui for dialog
+function updateShape(key: string, shape: string) {
+  const obj = merge({}, json.value, {
+    [key]: shape,
+  });
+  emit("update:modelValue", obj);
+}
 </script>
 
 <template>
@@ -83,11 +103,11 @@ console.log(theme.value.css.dark);
       </div>
       <div class="ml-2 w-28 shrink-0">
         <div v-if="isColor(key)" class="flex items-center gap-2">
-          <input v-model="json[key][scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" />
-          <Palette v-model="json[key][scheme]" class="shrink-0" />
+          <input :value="json[key][scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateColor(key, (e.currentTarget as HTMLInputElement).value)" />
+          <Palette :model-value="json[key][scheme]" class="shrink-0" @update:model-value="(color) => updateColor(key, color)" />
         </div>
         <div v-if="isShape(key)">
-          <input v-model="json[key]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" />
+          <input :value="json[key]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateShape(key, (e.currentTarget as HTMLInputElement).value)" />
         </div>
       </div>
     </div>

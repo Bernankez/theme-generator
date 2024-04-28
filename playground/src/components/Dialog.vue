@@ -49,7 +49,9 @@ const show = defineModel<boolean>();
                 class="flex cursor-default select-none items-center justify-between text-lg text-gray-900 font-medium leading-6"
               >
                 <slot name="title"></slot>
-                <Icon icon="i-lucide:x" @click="show = false" />
+                <slot name="close">
+                  <Icon icon="i-lucide:x" @click="show = false" />
+                </slot>
               </DialogTitle>
               <DialogDescription v-if="$slots.description">
                 <slot name="description"></slot>
