@@ -44,11 +44,15 @@ watch([defaults, cssPrefix], () => {
 watchEffect(() => {
   theme.value = themeValues.value.theme;
 });
+
+const css = computed(() => {
+  return `${themeValues.value.css.light}\n\n${themeValues.value.css.dark.split(":root").toSpliced(1, 0, ":root .dark").join("")}`;
+});
 </script>
 
 <template>
   <div>
-    <Header :css="themeValues.css[scheme]" :json="JSON.stringify(theme, null, 2)" />
+    <Header :css :json="JSON.stringify(theme, null, 2)" />
     <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="theme" @update:model-value="json => overrides = json" />
   </div>
 </template>

@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useClipboard } from "@vueuse/core";
-import type { Scheme } from "@bernankez/theme-generator";
 import { useHighlighter } from "../composables/useHighlighter";
 import Icon from "./Icon.vue";
 import Dialog from "./Dialog.vue";
 
-const props = defineProps<{
-  scheme: Scheme;
+const props = withDefaults(defineProps<{
   code?: string;
   lang?: string;
-}>();
+  showDownload?: boolean;
+  showCopy?: boolean;
+}>(), {
+  showDownload: true,
+  showCopy: true,
+});
 
 const source = computed(() => props.code || "");
 
@@ -24,7 +27,7 @@ function download() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `theme.${props.scheme}.${props.lang}`;
+  a.download = `theme.${props.lang}`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -42,13 +45,13 @@ const html = computed(() => codeToHtml(props.code, props.lang));
     </template>
     <template #close>
       <div class="flex items-center">
-        <Icon @click="download">
+        <Icon v-if="showDownload" @click="download">
           <div class="flex items-center gap-2 text-sm">
             <div class="i-lucide:cloud-download"></div>
             <span class="font-mono">Download</span>
           </div>
         </Icon>
-        <Icon @click="copy">
+        <Icon v-if="showCopy" @click="() => copy()">
           <div class="flex items-center gap-2 text-sm">
             <div :class="copied ? 'i-lucide:check' : 'i-lucide:copy'"></div>
             <span class="font-mono">{{ copied ? 'Copied' : 'Copy' }}</span>
