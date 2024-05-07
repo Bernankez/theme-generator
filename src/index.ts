@@ -1,5 +1,5 @@
 import { merge } from "lodash-es";
-import type { AcceptableTheme, Scheme, Theme } from "./types";
+import type { AcceptableTheme, Scheme, Theme, TransformerReturns } from "./types";
 import { kebabCase, toTheme } from "./utils/format";
 import { isColor } from "./utils/is";
 
@@ -7,43 +7,40 @@ export * from "./types";
 export * from "./utils/format";
 export * from "./utils/is";
 export * from "./infer";
+export * from "./transformers";
 
 export interface DefineThemeOptions {
   defaults: AcceptableTheme;
   cssPrefix?: string;
   overrides?: Partial<AcceptableTheme>;
-  // unocss?: {
-  //   /** un */
-  //   prefix?: string;
-  // };
-  // tailwind?: {
-  //   /** tw */
-  //   prefix?: string;
-  // };
 }
 
-export interface ThemeReturn {
-  json: Theme;
+export interface ThemeValues {
+  theme: Theme;
   css: {
     light: string;
     dark: string;
   };
 }
 
-export function defineTheme(options: DefineThemeOptions): ThemeReturn {
-  const { cssPrefix, defaults, overrides = {} } = options;
+export function defineTheme(options: DefineThemeOptions): ThemeValues;
+export function defineTheme<Options extends DefineThemeOptions & { transformers: ((theme: Theme) => unknown)[] }>(options: Options): ThemeValues & TransformerReturns<Options>;
+export function defineTheme(options: DefineThemeOptions & { transformers?: ((theme: Theme) => unknown)[] }) {
+  const { cssPrefix, defaults, overrides = {}, transformers = [] } = options;
 
   const mergedTheme = merge({}, defaults, overrides);
   const theme = toTheme(mergedTheme);
   const lightCSS = generateCSSProperties(theme, "light", cssPrefix);
   const darkCSS = generateCSSProperties(theme, "dark", cssPrefix);
+  const transformerReturns = merge({}, ...transformers.map(transformer => transformer(theme)));
 
   return {
-    json: theme,
+    theme,
     css: {
       light: lightCSS,
       dark: darkCSS,
     },
+    ...transformerReturns,
   };
 }
 

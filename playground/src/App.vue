@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AcceptableTheme, Scheme } from "@bernankez/theme-generator";
-import { defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { defaultColors, defineTheme, inferThemeFromColor, transformTailwind, transformUnoCSS } from "@bernankez/theme-generator";
 import { computed, ref, watch, watchEffect } from "vue";
 import ThemePalette from "./components/ThemePalette.vue";
 import Header from "./layout/Header.vue";
@@ -29,25 +29,26 @@ const defaults = computed(() => {
 
 const overrides = ref<Partial<AcceptableTheme>>({});
 
-const theme = computed(() => defineTheme({
+const themeValues = computed(() => defineTheme({
   cssPrefix: cssPrefix.value,
   defaults: defaults.value,
   overrides: overrides.value,
+  transformers: [transformTailwind(), transformUnoCSS()],
 }));
-const json = ref(theme.value.json);
+const theme = ref(themeValues.value.theme);
 
 watch([defaults, cssPrefix], () => {
   overrides.value = {};
 });
 
 watchEffect(() => {
-  json.value = theme.value.json;
+  theme.value = themeValues.value.theme;
 });
 </script>
 
 <template>
   <div>
-    <Header :css="theme.css[scheme]" :json="JSON.stringify(json, null, 2)" />
-    <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="json" @update:model-value="json => overrides = json" />
+    <Header :css="themeValues.css[scheme]" :json="JSON.stringify(theme, null, 2)" />
+    <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="theme" @update:model-value="json => overrides = json" />
   </div>
 </template>
