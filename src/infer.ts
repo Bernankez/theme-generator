@@ -1,5 +1,5 @@
 import type { AcceptableTheme } from "./types";
-import { toTheme } from "./utils/format";
+import { toTheme } from "./shared/format";
 
 export const defaultColors: AcceptableTheme = {
   background: {

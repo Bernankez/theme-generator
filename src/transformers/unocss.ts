@@ -1,16 +1,22 @@
-export interface TransformUnoCSSOptions {
-  /**
-   * @default "un"
-   */
-  prefix?: string;
-}
+import { isColor } from "../shared";
+import type { TransformerOptions } from "../types";
 
-export function transformUnoCSS(options?: TransformUnoCSSOptions) {
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { prefix = "un" } = options || {};
+export function transformUnoCSS() {
+  return (options: TransformerOptions) => {
+    const { theme } = options;
+    // eslint-disable-next-line unused-imports/no-unused-vars
+    const unocss = {
+      colors: {},
+    };
+    for (const key in theme) {
+      if (isColor(key)) {
+        // TODO
+      }
+    }
+    return {
+      unocss: {
 
-  return () => ({
-    unocss: {
-    },
-  });
+      },
+    };
+  };
 }

@@ -39,3 +39,17 @@ export function toTheme(obj: Record<string, string | Color>): Theme {
 export function kebabCase(str: string) {
   return str.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
 }
+
+export function findCommonPrefix(key: string, keys: string[]) {
+  const prefix = kebabCase(key).split("-")[0];
+  return keys.filter(k => kebabCase(k).startsWith(prefix)).map((k) => {
+    const kebab = kebabCase(k);
+    const [prefix] = kebab.split("-");
+    return {
+      key: k,
+      kebabCase: kebab,
+      prefix,
+      left: k.slice(prefix.length),
+    };
+  });
+}
