@@ -49,7 +49,7 @@ export function findCommonPrefix(key: string, keys: string[]) {
       key: k,
       kebabCase: kebab,
       prefix,
-      left: k.slice(prefix.length),
+      left: k.slice(prefix.length).toLowerCase(),
     };
   });
 }
