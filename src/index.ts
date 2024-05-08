@@ -1,7 +1,6 @@
 import { merge } from "lodash-es";
 import type { AcceptableTheme, Scheme, Theme, Transformer, TransformerReturns } from "./types";
-import { kebabCase, toTheme } from "./shared/format";
-import { isColor } from "./shared";
+import { hexToRGB, isColor, kebabCase, toTheme } from "./shared";
 
 export * from "./types";
 export * from "./infer";
@@ -51,7 +50,7 @@ ${Object.entries(theme).filter(([key, value]) => {
   }
   return !!value;
 }).map(([key, value]) => {
-  return `  --${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(key)}: ${isColor(key) ? theme[key][scheme] : value};`;
+  return `  --${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(key)}: ${isColor(key) ? [...hexToRGB(theme[key][scheme])].join(" ") : value};`;
 }).join("\n")}
 }`;
 }

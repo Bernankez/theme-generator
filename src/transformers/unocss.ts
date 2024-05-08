@@ -39,14 +39,14 @@ export function transformUnoCSS() {
         }
         if (prefixes.length === 1) {
           const singleKey = key as SingleColors;
-          unocss.colors[singleKey] = `var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase})`;
+          unocss.colors[singleKey] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
         } else if (prefixes.length > 1) {
           for (const prefix of prefixes) {
             const multiKey = prefix.prefix as MultiColors;
             if (!unocss.colors[multiKey]) {
               unocss.colors[multiKey] = {} as { DEFAULT: string; foreground: string };
             }
-            unocss.colors[multiKey][prefix.left as "foreground" || "DEFAULT"] = `var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase})`;
+            unocss.colors[multiKey][prefix.left as "foreground" || "DEFAULT"] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
           }
         }
       } else if (isShape(key)) {
