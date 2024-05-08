@@ -8,6 +8,7 @@ import Dialog from "./Dialog.vue";
 const props = withDefaults(defineProps<{
   code?: string;
   lang?: string;
+  filename?: string;
   showDownload?: boolean;
   showCopy?: boolean;
 }>(), {
@@ -27,7 +28,7 @@ function download() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `theme.${props.lang}`;
+  a.download = props.filename || `theme.${props.lang}`;
   a.click();
   URL.revokeObjectURL(url);
 }

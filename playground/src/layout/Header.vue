@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { storeToRefs } from "pinia";
 import CodeDialog from "../components/CodeDialog.vue";
+import { useThemeStore } from "../store/theme";
 
-const props = defineProps<{
-  css?: string;
-  json?: string;
-}>();
+const { themeValues, theme } = storeToRefs(useThemeStore());
+
+const css = computed(() => {
+  return `${themeValues.value.css.light}\n\n${themeValues.value.css.dark.split(":root").toSpliced(1, 0, ":root .dark").join("")}`;
+});
 
 const openNODE = ref(false);
 const openJSON = ref(false);
+const openUnoCSS = ref(false);
 const openCSS = ref(false);
 </script>
 
@@ -29,15 +33,23 @@ const openCSS = ref(false);
       <div class="cursor-default hover:underline hover:underline-2" @click="openJSON = true">
         JSON
       </div>
-      <CodeDialog v-model="openJSON" :code="props.json" lang="json">
+      <CodeDialog v-model="openJSON" :code="JSON.stringify(theme, null, 2)" lang="json">
         <template #title>
           JSON
+        </template>
+      </CodeDialog>
+      <div class="cursor-default hover:underline hover:underline-2" @click="openUnoCSS = true">
+        UnoCSS
+      </div>
+      <CodeDialog v-model="openUnoCSS" filename="unocss.json" :code="JSON.stringify(themeValues.unocss, null, 2)" lang="json">
+        <template #title>
+          UnoCSS
         </template>
       </CodeDialog>
       <div class="cursor-default hover:underline hover:underline-2" @click="openCSS = true">
         CSS
       </div>
-      <CodeDialog v-model="openCSS" :code="props.css" lang="css">
+      <CodeDialog v-model="openCSS" :code="css" lang="css">
         <template #title>
           CSS
         </template>

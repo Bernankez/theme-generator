@@ -41,7 +41,7 @@ const show = defineModel<boolean>();
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="max-w-md w-full transform overflow-hidden rounded-lg bg-white p-4 text-left align-middle shadow-sm transition-all"
+              class="max-w-2xl w-full transform overflow-hidden rounded-lg bg-white p-4 text-left align-middle shadow-sm transition-all"
             >
               <DialogTitle
                 v-if="$slots.title"
