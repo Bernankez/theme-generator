@@ -1,25 +1,11 @@
 import { merge } from "lodash-es";
-import type { AcceptableTheme, Scheme, Theme, Transformer, TransformerReturns } from "./types";
+import type { DefineThemeOptions, Scheme, Theme, ThemeValues, Transformer, TransformerReturns } from "./types";
 import { hexToRGB, isColor, kebabCase, toTheme } from "./shared";
 
 export * from "./types";
 export * from "./infer";
 export * from "./transformers";
 export * from "./shared";
-
-export interface DefineThemeOptions {
-  defaults: AcceptableTheme;
-  cssPrefix?: string;
-  overrides?: Partial<AcceptableTheme>;
-}
-
-export interface ThemeValues {
-  theme: Theme;
-  css: {
-    light: string;
-    dark: string;
-  };
-}
 
 export function defineTheme(options: DefineThemeOptions): ThemeValues;
 export function defineTheme<Options extends DefineThemeOptions & { transformers: Transformer[] }>(options: Options): ThemeValues & TransformerReturns<Options>;
