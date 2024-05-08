@@ -1,16 +1,16 @@
-export interface TransformTailwindOptions {
-  /**
-   * @default "tw"
-   */
-  prefix?: string;
-}
+import type { TransformerOptions } from "../types";
+import { type UnoCSSTheme, transformUnoCSS } from "./unocss";
 
-export function transformTailwind(options?: TransformTailwindOptions) {
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { prefix = "tw" } = options || {};
+export type { SingleColors, MultiColors } from "./unocss";
 
-  return () => ({
-    tailwind: {
-    },
-  });
+export type TailwindTheme = UnoCSSTheme;
+
+export function transformTailwind() {
+  const transformer = transformUnoCSS();
+  return (options: TransformerOptions) => {
+    const { unocss } = transformer(options);
+    return {
+      tailwind: unocss,
+    };
+  };
 }
