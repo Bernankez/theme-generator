@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Color, Scheme, Theme } from "@bernankez/theme-generator";
 import { isColor, isShape, kebabCase } from "@bernankez/theme-generator";
-import { ref, toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { merge } from "lodash-es";
 import Palette from "./Palette.vue";
 import Select from "./Select.vue";
@@ -32,8 +32,10 @@ const schemeOptions = ref([
 
 function updateColor(key: string, color: string | Color) {
   const obj = merge({}, json.value, {
-    [key]: {
-      [scheme.value]: color,
+    colors: {
+      [key]: {
+        [scheme.value]: color,
+      },
     },
   });
   emit("update:modelValue", obj);
@@ -45,6 +47,8 @@ function updateShape(key: string, shape: string) {
   });
   emit("update:modelValue", obj);
 }
+
+const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.keys(json.value).filter(key => key !== "colors")));
 </script>
 
 <template>
@@ -69,7 +73,7 @@ function updateShape(key: string, shape: string) {
     </div>
     <div class="palette-row font-bold">
       <div class="w-50 shrink-0">
-        Color name
+        Name
       </div>
       <div>
         Example use
@@ -83,7 +87,7 @@ function updateShape(key: string, shape: string) {
         <Icon icon="i-lucide:redo-2" title="Redo" />
       </div>
     </div>
-    <div v-for="(_, key) in json" :key="key" class="palette-row">
+    <div v-for="key in jsonKeys" :key="key" class="palette-row">
       <div class="w-50 shrink-0 text-sm">
         {{ key }}
       </div>
@@ -103,8 +107,8 @@ function updateShape(key: string, shape: string) {
       </div>
       <div class="ml-2 w-28 shrink-0">
         <div v-if="isColor(key)" class="flex items-center gap-2">
-          <input :value="json[key][scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateColor(key, (e.currentTarget as HTMLInputElement).value)" />
-          <Palette :model-value="json[key][scheme]" class="shrink-0" @update:model-value="(color) => updateColor(key, color)" />
+          <input :value="json.colors[key][scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateColor(key, (e.currentTarget as HTMLInputElement).value)" />
+          <Palette :model-value="json.colors[key][scheme]" class="shrink-0" @update:model-value="(color) => updateColor(key, color)" />
         </div>
         <div v-if="isShape(key)">
           <input :value="json[key]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateShape(key, (e.currentTarget as HTMLInputElement).value)" />

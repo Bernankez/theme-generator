@@ -1,21 +1,5 @@
 import { n } from "@bernankez/utils";
-
-export interface DefineThemeOptions {
-  defaults: AcceptableTheme;
-  cssPrefix?: string;
-  overrides?: Partial<AcceptableTheme>;
-  // TODO preset/adaptor/keyMapping convert theme to UI library theme eg.daisy-ui/shadcn-ui/naive-ui...
-  // how to handle structures
-  // { daisy: { unocss: object, tailwind: object } } ?
-}
-
-export interface ThemeValues {
-  theme: Theme;
-  css: {
-    light: string;
-    dark: string;
-  };
-}
+import type { DefineThemeOptions } from ".";
 
 export type TransformerOptions = DefineThemeOptions & { theme: Theme };
 /**
@@ -23,9 +7,23 @@ export type TransformerOptions = DefineThemeOptions & { theme: Theme };
  */
 export type Transformer<T = unknown> = (options: TransformerOptions) => T;
 
-export type Theme = Record<ColorKeywords, Color> & Record<ShapeKeywords, string>;
+export type Theme = {
+  colors: Record<ColorKeywords, Color>;
+  radius: string;
+} & {
+  [key: string]: string;
+};
 
-export type AcceptableTheme = Record<ColorKeywords, string | Color> & Record<ShapeKeywords, string>;
+export interface AcceptableTheme {
+  colors: Partial<Record<ColorKeywords, Color | string>>;
+  radius?: string;
+}
+
+export type CommonTheme = {
+  colors: Record<string, Color>;
+} & {
+  [key: string]: string;
+};
 
 export type Scheme = "light" | "dark";
 

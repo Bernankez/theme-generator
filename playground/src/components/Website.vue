@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="p-3">
+  <div class="bg-background p-3">
     <div class="flex items-center justify-center gap-3">
       <div class="text-5xl text-foreground font-bold font-italic">
         Visualize Your Colors<br />

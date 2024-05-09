@@ -1,42 +1,61 @@
 import { merge } from "lodash-es";
-import type { DefineThemeOptions, Scheme, Theme, ThemeValues, Transformer, TransformerReturns } from "./types";
-import { hexToRGB, isColor, kebabCase, toTheme } from "./shared";
+import type { AcceptableTheme, CommonTheme, Scheme } from "./types";
+import { hexToRGB, kebabCase, toTheme } from "./shared";
 
 export * from "./types";
 export * from "./infer";
 export * from "./transformers";
 export * from "./shared";
 
-export function defineTheme(options: DefineThemeOptions): ThemeValues;
-export function defineTheme<Options extends DefineThemeOptions & { transformers: Transformer[] }>(options: Options): ThemeValues & TransformerReturns<Options>;
-export function defineTheme(options: DefineThemeOptions & { transformers?: Transformer[] }) {
-  const { cssPrefix, defaults, overrides = {}, transformers = [] } = options;
+// TODO preset/adaptor/keyMapping convert theme to UI library theme eg.daisy-ui/shadcn-ui/naive-ui...
+// TODO transformers
+
+export interface DefineThemeOptions {
+  defaults: AcceptableTheme;
+  cssPrefix?: string;
+  overrides?: Partial<AcceptableTheme>;
+}
+
+export function defineTheme(options: DefineThemeOptions) {
+  const { defaults, overrides = {} } = options;
 
   const mergedTheme = merge({}, defaults, overrides);
   const theme = toTheme(mergedTheme);
-  const lightCSS = generateCSSProperties(theme, "light", cssPrefix);
-  const darkCSS = generateCSSProperties(theme, "dark", cssPrefix);
-  const transformerReturns = merge({}, ...transformers.map(transformer => transformer({ ...options, theme })));
+  return theme;
+}
 
+export interface GenerateCSSOptions {
+  cssPrefix?: string;
+}
+
+export function generateCSS(theme: CommonTheme, options?: GenerateCSSOptions) {
   return {
-    theme,
-    css: {
-      light: lightCSS,
-      dark: darkCSS,
-    },
-    ...transformerReturns,
+    light: generateCSSFromScheme(theme, "light", options),
+    dark: generateCSSFromScheme(theme, "dark", options),
   };
 }
 
-export function generateCSSProperties(theme: Theme, scheme: Scheme, cssPrefix?: string) {
-  return `:root {
-${Object.entries(theme).filter(([key, value]) => {
-  if (isColor(key)) {
-    return !!theme[key][scheme];
+export function generateCSSFromScheme(theme: CommonTheme, scheme: Scheme, options?: GenerateCSSOptions) {
+  const { cssPrefix } = options || {};
+  const css: Record<string, string> = {};
+  for (const key in theme) {
+    if (key === "colors") {
+      for (const c in theme.colors) {
+        if (!theme.colors[c][scheme]) {
+          continue;
+        }
+        css[`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(c)}`] = [...hexToRGB(theme.colors[c][scheme])].join(" ");
+      }
+    } else if (scheme !== "dark") {
+      if (!theme[key]) {
+        continue;
+      }
+      css[`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(key)}`] = theme[key];
+    }
   }
-  return !!value;
-}).map(([key, value]) => {
-  return `  --${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(key)}: ${isColor(key) ? [...hexToRGB(theme[key][scheme])].join(" ") : value};`;
+  return `:root${scheme === "dark" ? " .dark" : ""} {
+${Object.entries(css).map(([key, value]) => {
+  return `  ${key}: ${value};`;
 }).join("\n")}
 }`;
 }

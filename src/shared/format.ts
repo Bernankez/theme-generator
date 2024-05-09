@@ -1,5 +1,5 @@
 import { makeDestructurable } from "@bernankez/utils";
-import { type Color, type ColorKeywords, type ShapeKeywords, type Theme, colorKeywords, shapeKeywords } from "../types";
+import { type AcceptableTheme, type Color, type ColorKeywords, type ShapeKeywords, type Theme, colorKeywords, shapeKeywords } from "../types";
 import { isColor, isShape } from "./is";
 
 export function toColor(color: string | Color) {
@@ -12,21 +12,30 @@ export function toColor(color: string | Color) {
   return color;
 }
 
-export function toTheme(obj: Record<string, string | Color>): Theme {
-  const theme = {} as Theme;
+export function toTheme(obj: AcceptableTheme): Theme {
+  const theme = {
+    colors: {},
+  } as Theme;
   const keys: (ColorKeywords | ShapeKeywords)[] = [];
   for (const [key, value] of Object.entries(obj)) {
-    if (isColor(key)) {
-      theme[key] = toColor(value);
-      keys.push(key);
-    } else if (isShape(key) && typeof value === "string") {
+    if (key === "colors") {
+      for (const c in obj.colors) {
+        if (isColor(c)) {
+          const color = obj.colors[c];
+          if (color) {
+            theme.colors[c] = toColor(color);
+            keys.push(c);
+          }
+        }
+      }
+    } else if (isShape(key)) {
       theme[key] = value;
       keys.push(key);
     }
   }
   colorKeywords.forEach((keyword) => {
     if (!keys.includes(keyword)) {
-      theme[keyword] = toColor("");
+      theme.colors[keyword] = toColor("");
     }
   });
   shapeKeywords.forEach((keyword) => {

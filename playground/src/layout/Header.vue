@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { generateCSS } from "@bernankez/theme-generator";
 import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
 
-const { themeValues, theme } = storeToRefs(useThemeStore());
+const { theme } = storeToRefs(useThemeStore());
 
-const css = computed(() => {
-  return `${themeValues.value.css.light}\n\n${themeValues.value.css.dark.split(":root").toSpliced(1, 0, ":root .dark").join("")}`;
+const css = computed(() => generateCSS(theme.value));
+
+const cssCode = computed(() => {
+  return `${css.value.light}\n\n${css.value.dark}`;
 });
 
 const openNODE = ref(false);
 const openJSON = ref(false);
-const openUnoCSS = ref(false);
+// const openUnoCSS = ref(false);
 const openCSS = ref(false);
 </script>
 
@@ -38,18 +41,18 @@ const openCSS = ref(false);
           JSON
         </template>
       </CodeDialog>
-      <div class="cursor-default hover:underline hover:underline-2" @click="openUnoCSS = true">
+      <!-- <div class="cursor-default hover:underline hover:underline-2" @click="openUnoCSS = true">
         UnoCSS
       </div>
       <CodeDialog v-model="openUnoCSS" filename="unocss.json" :code="JSON.stringify(themeValues.unocss, null, 2)" lang="json">
         <template #title>
           UnoCSS
         </template>
-      </CodeDialog>
+      </CodeDialog> -->
       <div class="cursor-default hover:underline hover:underline-2" @click="openCSS = true">
         CSS
       </div>
-      <CodeDialog v-model="openCSS" :code="css" lang="css">
+      <CodeDialog v-model="openCSS" :code="cssCode" lang="css">
         <template #title>
           CSS
         </template>

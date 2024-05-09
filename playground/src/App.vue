@@ -21,13 +21,13 @@ const scheme = computed<Scheme>({
   },
 });
 
-const { theme, cssPrefix, overrides } = storeToRefs(useThemeStore());
+const { writableTheme, theme, cssPrefix, overrides } = storeToRefs(useThemeStore());
 
 const themeStyle = computed(() => {
   const style: CSSProperties = {};
-  for (const key in theme.value) {
+  for (const key of Object.keys(theme.value.colors).concat(Object.keys(theme.value).filter(key => key !== "colors"))) {
     if (isColor(key)) {
-      style[`--${kebabCase(key)}`] = [...hexToRGB(theme.value[key][scheme.value])].join(" ");
+      style[`--${kebabCase(key)}`] = [...hexToRGB(theme.value.colors[key][scheme.value])].join(" ");
     } else if (isShape(key)) {
       style[`--${kebabCase(key)}`] = theme.value[key];
     }
@@ -49,7 +49,7 @@ watchEffect(() => {
     </div>
     <div>
       <Header />
-      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="theme" @update:model-value="json => overrides = json" />
+      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
     </div>
   </div>
 </template>
