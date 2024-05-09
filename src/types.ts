@@ -1,29 +1,20 @@
 import { n } from "@bernankez/utils";
-import type { DefineThemeOptions } from ".";
-
-export type TransformerOptions = DefineThemeOptions & { theme: Theme };
-/**
- * Transform into atomic css engine theme
- */
-export type Transformer<T = unknown> = (options: TransformerOptions) => T;
 
 export type Theme = {
   colors: Record<ColorKeywords, Color>;
-  radius: string;
 } & {
-  [key: string]: string;
+  [key in ShapeKeywords]: string;
 };
 
-export interface AcceptableTheme {
+export type AcceptableTheme = {
   colors: Partial<Record<ColorKeywords, Color | string>>;
-  radius?: string;
-}
-
-export type CommonTheme = {
-  colors: Record<string, Color>;
 } & {
-  [key: string]: string;
+  [key in ShapeKeywords]?: string
 };
+
+export interface CommonTheme {
+  colors: Record<string, Color>;
+}
 
 export type Scheme = "light" | "dark";
 
@@ -51,7 +42,7 @@ export const colorKeywords = n([
 ]);
 
 export const shapeKeywords = n([
-  "radius",
+  "borderRadius",
 ]);
 
 export type ColorKeywords = typeof colorKeywords[number];
@@ -59,5 +50,3 @@ export type ColorKeywords = typeof colorKeywords[number];
 export type ShapeKeywords = typeof shapeKeywords[number];
 
 export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
-
-export type TransformerReturns<Options> = Options extends { transformers: Transformer<infer T>[] } ? UnionToIntersection<T> : never;

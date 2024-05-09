@@ -24,38 +24,43 @@ export function defineTheme(options: DefineThemeOptions) {
   return theme;
 }
 
-export interface GenerateCSSOptions {
+export interface GenerateCSSOptions<T extends CommonTheme> {
   cssPrefix?: string;
+  resolveVarName?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null;
 }
 
-export function generateCSS(theme: CommonTheme, options?: GenerateCSSOptions) {
+export function generateStyle<T extends CommonTheme>(theme: T, options?: GenerateCSSOptions<T>) {
   return {
-    light: generateCSSFromScheme(theme, "light", options),
-    dark: generateCSSFromScheme(theme, "dark", options),
+    light: generateStyleFromScheme(theme, "light", options),
+    dark: generateStyleFromScheme(theme, "dark", options),
   };
 }
 
-export function generateCSSFromScheme(theme: CommonTheme, scheme: Scheme, options?: GenerateCSSOptions) {
-  const { cssPrefix } = options || {};
-  const css: Record<string, string> = {};
+export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme: Scheme, options?: GenerateCSSOptions<T>) {
+  const { cssPrefix, resolveVarName } = options || {};
+  const style: Record<string, string> = {};
+
+  function getVarName(key: string) {
+    return resolveVarName?.(key) || key;
+  }
+
   for (const key in theme) {
     if (key === "colors") {
       for (const c in theme.colors) {
         if (!theme.colors[c][scheme]) {
           continue;
         }
-        css[`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(c)}`] = [...hexToRGB(theme.colors[c][scheme])].join(" ");
+        style[`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(getVarName(c))}`] = [...hexToRGB(theme.colors[c][scheme])].join(" ");
       }
     } else if (scheme !== "dark") {
       if (!theme[key]) {
         continue;
       }
-      css[`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(key)}`] = theme[key];
+      const value = theme[key];
+      if (typeof value === "string") {
+        style[`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(getVarName(key))}`] = value;
+      }
     }
   }
-  return `:root${scheme === "dark" ? " .dark" : ""} {
-${Object.entries(css).map(([key, value]) => {
-  return `  ${key}: ${value};`;
-}).join("\n")}
-}`;
+  return style;
 }

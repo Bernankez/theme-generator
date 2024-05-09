@@ -52,7 +52,7 @@ export const defaultColors: AcceptableTheme = {
     error: "#ff6f70",
     errorForeground: "#000000",
   },
-  radius: "0.5rem",
+  borderRadius: "0.5rem",
 };
 
 // convert colors to targetMode

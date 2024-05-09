@@ -29,7 +29,7 @@ export function toTheme(obj: AcceptableTheme): Theme {
         }
       }
     } else if (isShape(key)) {
-      theme[key] = value;
+      theme[key] = value as string;
       keys.push(key);
     }
   }

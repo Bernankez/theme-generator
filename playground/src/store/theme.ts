@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref, watch, watchEffect } from "vue";
-import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { type AcceptableTheme, defaultColors, defineTheme, generateStyle, inferThemeFromColor } from "@bernankez/theme-generator";
 
 export const useThemeStore = defineStore("theme", () => {
   const cssPrefix = ref("");
@@ -21,6 +21,14 @@ export const useThemeStore = defineStore("theme", () => {
     overrides: overrides.value,
   }));
 
+  const style = computed(() => generateStyle(theme.value, {
+    resolveVarName: (name) => {
+      if (name === "borderRadius") {
+        return "radius";
+      }
+    },
+  }));
+
   const writableTheme = ref(theme.value);
 
   watch([defaults, cssPrefix], () => {
@@ -38,5 +46,6 @@ export const useThemeStore = defineStore("theme", () => {
     overrides,
     theme,
     writableTheme,
+    style,
   };
 });

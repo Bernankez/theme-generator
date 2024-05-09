@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { type Scheme, hexToRGB, isColor, isShape, kebabCase } from "@bernankez/theme-generator";
-import type { CSSProperties } from "vue";
+import type { Scheme } from "@bernankez/theme-generator";
 import { computed, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import ThemePalette from "./components/ThemePalette.vue";
@@ -21,23 +20,11 @@ const scheme = computed<Scheme>({
   },
 });
 
-const { writableTheme, theme, cssPrefix, overrides } = storeToRefs(useThemeStore());
-
-const themeStyle = computed(() => {
-  const style: CSSProperties = {};
-  for (const key of Object.keys(theme.value.colors).concat(Object.keys(theme.value).filter(key => key !== "colors"))) {
-    if (isColor(key)) {
-      style[`--${kebabCase(key)}`] = [...hexToRGB(theme.value.colors[key][scheme.value])].join(" ");
-    } else if (isShape(key)) {
-      style[`--${kebabCase(key)}`] = theme.value[key];
-    }
-  }
-  return style;
-});
+const { writableTheme, style, cssPrefix, overrides } = storeToRefs(useThemeStore());
 
 watchEffect(() => {
-  for (const key in themeStyle.value) {
-    document.documentElement.style.setProperty(key, themeStyle.value[key as keyof CSSProperties] as any);
+  for (const key in style.value[scheme.value]) {
+    document.documentElement.style.setProperty(key, style.value[scheme.value][key]);
   }
 });
 </script>

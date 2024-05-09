@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { generateCSS } from "@bernankez/theme-generator";
 import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
 
-const { theme } = storeToRefs(useThemeStore());
+const { theme, style } = storeToRefs(useThemeStore());
 
-const css = computed(() => generateCSS(theme.value));
+const css = computed(() => {
+  return `:root {
+${Object.entries(style.value.light).map(([key, value]) => {
+    return `  ${key}: ${value};`;
+  }).join("\n")}
+}
 
-const cssCode = computed(() => {
-  return `${css.value.light}\n\n${css.value.dark}`;
+:root .dark {
+${Object.entries(style.value.dark).map(([key, value]) => {
+  return `  ${key}: ${value};`;
+}).join("\n")}
+}`;
 });
 
 const openNODE = ref(false);
@@ -52,7 +59,7 @@ const openCSS = ref(false);
       <div class="cursor-default hover:underline hover:underline-2" @click="openCSS = true">
         CSS
       </div>
-      <CodeDialog v-model="openCSS" :code="cssCode" lang="css">
+      <CodeDialog v-model="openCSS" :code="css" lang="css">
         <template #title>
           CSS
         </template>
