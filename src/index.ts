@@ -24,19 +24,19 @@ export function defineTheme(options: DefineThemeOptions) {
   return theme;
 }
 
-export interface GenerateCSSOptions<T extends CommonTheme> {
+export interface GenerateStyleOptions<T extends CommonTheme> {
   cssPrefix?: string;
   resolveVarName?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null;
 }
 
-export function generateStyle<T extends CommonTheme>(theme: T, options?: GenerateCSSOptions<T>) {
+export function generateStyle<T extends CommonTheme>(theme: T, options?: GenerateStyleOptions<T>) {
   return {
     light: generateStyleFromScheme(theme, "light", options),
     dark: generateStyleFromScheme(theme, "dark", options),
   };
 }
 
-export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme: Scheme, options?: GenerateCSSOptions<T>) {
+export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme: Scheme, options?: GenerateStyleOptions<T>) {
   const { cssPrefix, resolveVarName } = options || {};
   const style: Record<string, string> = {};
 
