@@ -34,11 +34,11 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="flex">
-    <div>
-      <Website />
+  <div class="h-screen flex">
+    <div class="w-full overflow-auto">
+      <Website class="h-full" />
     </div>
-    <div>
+    <div class="w-full overflow-auto b-0 b-l-1 b-muted b-solid">
       <Header />
       <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
     </div>
