@@ -21,13 +21,7 @@ export const useThemeStore = defineStore("theme", () => {
     overrides: overrides.value,
   }));
 
-  const style = computed(() => generateStyle(theme.value, {
-    resolveVarName: (name) => {
-      if (name === "borderRadius") {
-        return "radius";
-      }
-    },
-  }));
+  const style = computed(() => generateStyle(theme.value));
 
   const writableTheme = ref(theme.value);
 

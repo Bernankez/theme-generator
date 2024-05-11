@@ -7,8 +7,7 @@ export * from "./infer";
 export * from "./transformers";
 export * from "./shared";
 
-// TODO preset/adaptor/keyMapping convert theme to UI library theme eg.daisy-ui/shadcn-ui/naive-ui...
-// TODO transformers
+// NOTE preset/adaptor/keyMapping convert theme to UI library theme eg.daisy-ui/shadcn-ui/naive-ui...
 
 export interface DefineThemeOptions {
   defaults: AcceptableTheme;

@@ -42,7 +42,7 @@ export const colorKeywords = n([
 ]);
 
 export const shapeKeywords = n([
-  "borderRadius",
+  "radius",
 ]);
 
 export type ColorKeywords = typeof colorKeywords[number];

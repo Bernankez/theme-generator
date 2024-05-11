@@ -63,6 +63,9 @@ importers:
       unbuild:
         specifier: ^2.0.0
         version: 2.0.0(typescript@5.4.5)
+      unocss:
+        specifier: ^0.59.4
+        version: 0.59.4(postcss@8.4.38)(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7))
       vite:
         specifier: ^5.2.10
         version: 5.2.10(@types/node@20.12.7)
@@ -4568,6 +4571,16 @@ snapshots:
       '@typescript-eslint/types': 7.7.1
       eslint-visitor-keys: 3.4.3
 
+  '@unocss/astro@0.59.4(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7))':
+    dependencies:
+      '@unocss/core': 0.59.4
+      '@unocss/reset': 0.59.4
+      '@unocss/vite': 0.59.4(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7))
+    optionalDependencies:
+      vite: 5.2.10(@types/node@20.12.7)
+    transitivePeerDependencies:
+      - rollup
+
   '@unocss/astro@0.59.4(rollup@4.16.4)(vite@5.2.10(@types/node@20.12.7))':
     dependencies:
       '@unocss/core': 0.59.4
@@ -4575,6 +4588,24 @@ snapshots:
       '@unocss/vite': 0.59.4(rollup@4.16.4)(vite@5.2.10(@types/node@20.12.7))
     optionalDependencies:
       vite: 5.2.10(@types/node@20.12.7)
+    transitivePeerDependencies:
+      - rollup
+
+  '@unocss/cli@0.59.4(rollup@3.29.4)':
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
+      '@unocss/config': 0.59.4
+      '@unocss/core': 0.59.4
+      '@unocss/preset-uno': 0.59.4
+      cac: 6.7.14
+      chokidar: 3.6.0
+      colorette: 2.0.20
+      consola: 3.2.3
+      fast-glob: 3.3.2
+      magic-string: 0.30.10
+      pathe: 1.1.2
+      perfect-debounce: 1.0.0
     transitivePeerDependencies:
       - rollup
 
@@ -4716,6 +4747,22 @@ snapshots:
   '@unocss/transformer-variant-group@0.59.4':
     dependencies:
       '@unocss/core': 0.59.4
+
+  '@unocss/vite@0.59.4(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7))':
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
+      '@unocss/config': 0.59.4
+      '@unocss/core': 0.59.4
+      '@unocss/inspector': 0.59.4
+      '@unocss/scope': 0.59.4
+      '@unocss/transformer-directives': 0.59.4
+      chokidar: 3.6.0
+      fast-glob: 3.3.2
+      magic-string: 0.30.10
+      vite: 5.2.10(@types/node@20.12.7)
+    transitivePeerDependencies:
+      - rollup
 
   '@unocss/vite@0.59.4(rollup@4.16.4)(vite@5.2.10(@types/node@20.12.7))':
     dependencies:
@@ -7012,6 +7059,35 @@ snapshots:
       '@types/unist': 2.0.10
 
   universalify@2.0.1: {}
+
+  unocss@0.59.4(postcss@8.4.38)(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7)):
+    dependencies:
+      '@unocss/astro': 0.59.4(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7))
+      '@unocss/cli': 0.59.4(rollup@3.29.4)
+      '@unocss/core': 0.59.4
+      '@unocss/extractor-arbitrary-variants': 0.59.4
+      '@unocss/postcss': 0.59.4(postcss@8.4.38)
+      '@unocss/preset-attributify': 0.59.4
+      '@unocss/preset-icons': 0.59.4
+      '@unocss/preset-mini': 0.59.4
+      '@unocss/preset-tagify': 0.59.4
+      '@unocss/preset-typography': 0.59.4
+      '@unocss/preset-uno': 0.59.4
+      '@unocss/preset-web-fonts': 0.59.4
+      '@unocss/preset-wind': 0.59.4
+      '@unocss/reset': 0.59.4
+      '@unocss/transformer-attributify-jsx': 0.59.4
+      '@unocss/transformer-attributify-jsx-babel': 0.59.4
+      '@unocss/transformer-compile-class': 0.59.4
+      '@unocss/transformer-directives': 0.59.4
+      '@unocss/transformer-variant-group': 0.59.4
+      '@unocss/vite': 0.59.4(rollup@3.29.4)(vite@5.2.10(@types/node@20.12.7))
+    optionalDependencies:
+      vite: 5.2.10(@types/node@20.12.7)
+    transitivePeerDependencies:
+      - postcss
+      - rollup
+      - supports-color
 
   unocss@0.59.4(postcss@8.4.38)(rollup@4.16.4)(vite@5.2.10(@types/node@20.12.7)):
     dependencies:

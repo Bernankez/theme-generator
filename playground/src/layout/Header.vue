@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { transformTailwind, transformUnoCSS } from "@bernankez/theme-generator";
 import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
 
-const { theme, style } = storeToRefs(useThemeStore());
+const { theme, style, cssPrefix } = storeToRefs(useThemeStore());
 
 const css = computed(() => {
   return `:root {
@@ -20,9 +21,18 @@ ${Object.entries(style.value.dark).map(([key, value]) => {
 }`;
 });
 
+const unocss = computed(() => transformUnoCSS(theme.value, {
+  cssPrefix: cssPrefix.value,
+}));
+
+const tailwind = computed(() => transformTailwind(theme.value, {
+  cssPrefix: cssPrefix.value,
+}));
+
 const openNODE = ref(false);
 const openJSON = ref(false);
-// const openUnoCSS = ref(false);
+const openUnoCSS = ref(false);
+const openTailwind = ref(false);
 const openCSS = ref(false);
 </script>
 
@@ -48,20 +58,28 @@ const openCSS = ref(false);
           JSON
         </template>
       </CodeDialog>
-      <!-- <div class="cursor-default hover:underline hover:underline-2" @click="openUnoCSS = true">
-        UnoCSS
-      </div>
-      <CodeDialog v-model="openUnoCSS" filename="unocss.json" :code="JSON.stringify(themeValues.unocss, null, 2)" lang="json">
-        <template #title>
-          UnoCSS
-        </template>
-      </CodeDialog> -->
       <div class="cursor-default hover:underline hover:underline-2" @click="openCSS = true">
         CSS
       </div>
       <CodeDialog v-model="openCSS" :code="css" lang="css">
         <template #title>
           CSS
+        </template>
+      </CodeDialog>
+      <div class="cursor-default hover:underline hover:underline-2" @click="openUnoCSS = true">
+        UnoCSS
+      </div>
+      <CodeDialog v-model="openUnoCSS" filename="unocss.json" :code="JSON.stringify(unocss, null, 2)" lang="json">
+        <template #title>
+          UnoCSS
+        </template>
+      </CodeDialog>
+      <div class="cursor-default hover:underline hover:underline-2" @click="openTailwind = true">
+        Tailwind
+      </div>
+      <CodeDialog v-model="openTailwind" filename="tailwind.json" :code="JSON.stringify(tailwind, null, 2)" lang="json">
+        <template #title>
+          Tailwind
         </template>
       </CodeDialog>
       <a href="https://github.com/Bernankez/theme-generator" class="cursor-default" title="GitHub" target="_blank">

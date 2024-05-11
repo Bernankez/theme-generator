@@ -1,67 +1,49 @@
-import type { Prettier } from "@bernankez/utils";
-import { findCommonPrefix, isColor, isShape } from "../shared";
-import type { ColorKeywords, TransformerOptions } from "../types";
+import type { Theme } from "unocss/preset-uno";
+import { findCommonPrefix } from "../shared";
+import type { CommonTheme } from "../types";
 
-export type SingleColors = Extract<ColorKeywords, "background" | "foreground">;
-export type MultiColors = Extract<ColorKeywords, "primary" | "secondary" | "accent" | "muted" | "info" | "success" | "warning" | "error">;
+export interface TransformUnoCSSOptions<T extends CommonTheme> {
+  cssPrefix?: string;
+  resolveVarName?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null;
+}
 
-export type UnoCSSTheme = Prettier<{
-  colors: {
-    [Color in SingleColors]: string;
-  } & {
-    [Color in MultiColors]: {
-      DEFAULT: string;
-      foreground: string;
+export function transformUnoCSS<T extends CommonTheme>(theme: T, options?: TransformUnoCSSOptions<T>): Theme {
+  // NOTE more general
+  const { cssPrefix } = options || {};
+  const unocss: Theme = {
+    colors: {},
+  };
+  const colors = Object.keys(theme.colors);
+  const colorSet = new Set(colors);
+  for (const color of colorSet) {
+    const prefixes = findCommonPrefix(color, [...colorSet]);
+    for (const prefix of prefixes) {
+      colorSet.delete(prefix.key);
     }
-  };
-  borderRadius: {
-    lg: string;
-    md: string;
-    sm: string;
-  };
-}>;
-
-export function transformUnoCSS() {
-  // TODO refactor
-  return (options: TransformerOptions) => {
-    const { theme, cssPrefix } = options;
-
-    const unocss = {
-      colors: {},
-      borderRadius: {},
-    } as UnoCSSTheme;
-    const _keys = Object.keys(theme);
-    const keys = new Set(_keys);
-    for (const key of keys) {
-      if (isColor(key)) {
-        const prefixes = findCommonPrefix(key, [...keys]);
-        for (const prefix of prefixes) {
-          keys.delete(prefix.key);
+    if (prefixes.length === 1) {
+      unocss.colors![color] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
+    } else if (prefixes.length > 1) {
+      for (const prefix of prefixes) {
+        const key = prefix.prefix;
+        if (!unocss.colors![key]) {
+          unocss.colors![key] = {};
         }
-        if (prefixes.length === 1) {
-          const singleKey = key as SingleColors;
-          unocss.colors[singleKey] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
-        } else if (prefixes.length > 1) {
-          for (const prefix of prefixes) {
-            const multiKey = prefix.prefix as MultiColors;
-            if (!unocss.colors[multiKey]) {
-              unocss.colors[multiKey] = {} as { DEFAULT: string; foreground: string };
-            }
-            unocss.colors[multiKey][prefix.left as "foreground" || "DEFAULT"] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
-          }
-        }
-      } else if (isShape(key)) {
-        if (key === "radius") {
-          unocss.borderRadius = {
-            lg: `var(--${cssPrefix ? `${cssPrefix}-` : ""}radius)`,
-            md: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 2px)`,
-            sm: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 4px)`,
-          };
-        }
+        (unocss.colors![key] as any)[prefix.left || "DEFAULT"] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
       }
     }
-    return {
-      unocss,
-    };
-  };
+  }
+  for (const key in theme) {
+    if (key === "colors") {
+      continue;
+    }
+    if (key === "radius") {
+      unocss.borderRadius = {
+        lg: `var(--${cssPrefix ? `${cssPrefix}-` : ""}radius)`,
+        md: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 2px)`,
+        sm: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 4px)`,
+      };
+    }
+  }
+
+  return unocss;
 }

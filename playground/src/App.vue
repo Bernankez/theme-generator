@@ -23,8 +23,12 @@ const scheme = computed<Scheme>({
 const { writableTheme, style, cssPrefix, overrides } = storeToRefs(useThemeStore());
 
 watchEffect(() => {
-  for (const key in style.value[scheme.value]) {
-    document.documentElement.style.setProperty(key, style.value[scheme.value][key]);
+  let _style = { ...style.value[scheme.value] };
+  if (scheme.value === "dark") {
+    _style = { ...style.value.light, ..._style };
+  }
+  for (const key in _style) {
+    document.documentElement.style.setProperty(key, _style[key]);
   }
 });
 </script>
