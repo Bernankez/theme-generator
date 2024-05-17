@@ -4,6 +4,7 @@ import type { CommonTheme } from "../types";
 
 export interface TransformTailwindOptions<T extends CommonTheme> {
   cssPrefix?: string;
+  resolve?: (key: Exclude<keyof T, "colors">) => Omit<Theme, "colors"> | undefined | null;
   resolveVarName?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null;
 }
 
@@ -11,13 +12,10 @@ type Colors = Theme["colors"];
 
 export interface TailwindTheme {
   colors: Colors;
-  extend: {
-    borderRadius: Record<string, string>;
-  };
+  extend: Omit<Theme, "colors">;
 }
 
 export function transformTailwind<T extends CommonTheme>(theme: T, options?: TransformTailwindOptions<T>): TailwindTheme {
-  // NOTE more general
   const { cssPrefix } = options || {};
   const tailwind: TailwindTheme = {
     colors: {},
@@ -48,12 +46,9 @@ export function transformTailwind<T extends CommonTheme>(theme: T, options?: Tra
     if (key === "colors") {
       continue;
     }
-    if (key === "radius") {
-      tailwind.extend.borderRadius = {
-        lg: `var(--${cssPrefix ? `${cssPrefix}-` : ""}radius)`,
-        md: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 2px)`,
-        sm: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 4px)`,
-      };
+    const resolved = options?.resolve?.(key as string as Exclude<keyof T, "colors">);
+    if (resolved) {
+      Object.assign(tailwind.extend, resolved);
     }
   }
 

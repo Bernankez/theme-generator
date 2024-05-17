@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { transformTailwind, transformUnoCSS } from "@bernankez/theme-generator";
 import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
 
-const { theme, style, cssPrefix } = storeToRefs(useThemeStore());
+const { theme, style, tailwind, unocss } = storeToRefs(useThemeStore());
 
 const css = computed(() => {
   return `:root {
@@ -20,14 +19,6 @@ ${Object.entries(style.value.dark).map(([key, value]) => {
 }).join("\n")}
 }`;
 });
-
-const unocss = computed(() => transformUnoCSS(theme.value, {
-  cssPrefix: cssPrefix.value,
-}));
-
-const tailwind = computed(() => transformTailwind(theme.value, {
-  cssPrefix: cssPrefix.value,
-}));
 
 const openNODE = ref(false);
 const openJSON = ref(false);

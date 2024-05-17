@@ -1,16 +1,15 @@
-import type { Theme } from "unocss/preset-uno";
+import type { Theme as UnoCSSTheme } from "unocss/preset-uno";
 import { findCommonPrefix } from "../shared";
 import type { CommonTheme } from "../types";
 
 export interface TransformUnoCSSOptions<T extends CommonTheme> {
   cssPrefix?: string;
-  resolveVarName?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null;
+  resolve?: (key: Exclude<keyof T, "colors">) => Omit<UnoCSSTheme, "colors"> | undefined | null;
 }
 
-export function transformUnoCSS<T extends CommonTheme>(theme: T, options?: TransformUnoCSSOptions<T>): Theme {
-  // NOTE more general
+export function transformUnoCSS<T extends CommonTheme>(theme: T, options?: TransformUnoCSSOptions<T>): UnoCSSTheme {
   const { cssPrefix } = options || {};
-  const unocss: Theme = {
+  const unocss: UnoCSSTheme = {
     colors: {},
   };
   const colors = Object.keys(theme.colors);
@@ -36,12 +35,9 @@ export function transformUnoCSS<T extends CommonTheme>(theme: T, options?: Trans
     if (key === "colors") {
       continue;
     }
-    if (key === "radius") {
-      unocss.borderRadius = {
-        lg: `var(--${cssPrefix ? `${cssPrefix}-` : ""}radius)`,
-        md: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 2px)`,
-        sm: `calc(var(--${cssPrefix ? `${cssPrefix}-` : ""}radius) - 4px)`,
-      };
+    const resolved = options?.resolve?.(key as string as Exclude<keyof T, "colors">);
+    if (resolved) {
+      Object.assign(unocss, resolved);
     }
   }
 

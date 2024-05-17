@@ -5,6 +5,7 @@ import { toTheme } from "./shared";
 export * from "./types";
 export * from "./infer";
 export * from "./transformers";
+export * from "./presets";
 export * from "./shared";
 
 // NOTE preset/adaptor/keyMapping convert theme to UI library theme eg.daisy-ui/shadcn-ui/naive-ui...
