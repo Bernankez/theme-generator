@@ -12,7 +12,7 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <a v-if="showWrapper" :href="href" :target="target" :title="title" class="box-border flex cursor-default rounded-lg p-1.5 transition active:bg-neutral-200 hover:bg-neutral-100">
+  <a v-if="showWrapper" :href="href" :target="target" :title="title" class="box-border flex cursor-default rounded-lg p-1.5 text-primary transition active:bg-neutral-200 hover:bg-neutral-100 dark:active:bg-neutral-700 dark:hover:bg-neutral-800">
     <slot>
       <div class="text-lg" :class="[icon]"></div>
     </slot>
