@@ -4,11 +4,12 @@ import type { CommonTheme } from "../types";
 
 export interface TransformUnoCSSOptions<T extends CommonTheme> {
   cssPrefix?: string;
-  resolve?: (key: Exclude<keyof T, "colors">) => Omit<UnoCSSTheme, "colors"> | undefined | null;
+  colorSpace?: "rgb" | "hsl";
+  resolve?: (key: Exclude<keyof T, "colors">) => Omit<UnoCSSTheme, "colors"> | undefined | null | void;
 }
 
 export function transformUnoCSS<T extends CommonTheme>(theme: T, options?: TransformUnoCSSOptions<T>): UnoCSSTheme {
-  const { cssPrefix } = options || {};
+  const { cssPrefix, colorSpace = "rgb" } = options || {};
   const unocss: UnoCSSTheme = {
     colors: {},
   };
@@ -20,14 +21,14 @@ export function transformUnoCSS<T extends CommonTheme>(theme: T, options?: Trans
       colorSet.delete(prefix.key);
     }
     if (prefixes.length === 1) {
-      unocss.colors![color] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
+      unocss.colors![color] = `${colorSpace}(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
     } else if (prefixes.length > 1) {
       for (const prefix of prefixes) {
         const key = prefix.prefix;
         if (!unocss.colors![key]) {
           unocss.colors![key] = {};
         }
-        (unocss.colors![key] as any)[prefix.left || "DEFAULT"] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
+        (unocss.colors![key] as any)[prefix.left || "DEFAULT"] = `${colorSpace}(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
       }
     }
   }

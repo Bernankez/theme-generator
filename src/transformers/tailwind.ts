@@ -4,8 +4,8 @@ import type { CommonTheme } from "../types";
 
 export interface TransformTailwindOptions<T extends CommonTheme> {
   cssPrefix?: string;
-  resolve?: (key: Exclude<keyof T, "colors">) => Omit<Theme, "colors"> | undefined | null;
-  resolveVarName?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null;
+  colorSpace?: "rgb" | "hsl";
+  resolve?: (key: Exclude<keyof T, "colors">) => Omit<Theme, "colors"> | undefined | null | void;
 }
 
 type Colors = Theme["colors"];
@@ -16,7 +16,7 @@ export interface TailwindTheme {
 }
 
 export function transformTailwind<T extends CommonTheme>(theme: T, options?: TransformTailwindOptions<T>): TailwindTheme {
-  const { cssPrefix } = options || {};
+  const { cssPrefix, colorSpace = "rgb" } = options || {};
   const tailwind: TailwindTheme = {
     colors: {},
     extend: {
@@ -31,14 +31,14 @@ export function transformTailwind<T extends CommonTheme>(theme: T, options?: Tra
       colorSet.delete(prefix.key);
     }
     if (prefixes.length === 1) {
-      tailwind.colors![color] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
+      tailwind.colors![color] = `${colorSpace}(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefixes[0].kebabCase}))`;
     } else if (prefixes.length > 1) {
       for (const prefix of prefixes) {
         const key = prefix.prefix;
         if (!tailwind.colors![key]) {
           tailwind.colors![key] = {};
         }
-        (tailwind.colors![key] as any)[prefix.left || "DEFAULT"] = `rgb(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
+        (tailwind.colors![key] as any)[prefix.left || "DEFAULT"] = `${colorSpace}(var(--${cssPrefix ? `${cssPrefix}-` : ""}${prefix.kebabCase}))`;
       }
     }
   }

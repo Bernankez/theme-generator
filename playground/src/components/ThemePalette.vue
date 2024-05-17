@@ -1,6 +1,7 @@
-<script setup lang="ts">
-import type { Color, Scheme, Theme } from "@bernankez/theme-generator";
-import { isColor, isShape, kebabCase } from "@bernankez/theme-generator";
+<script setup lang="ts" generic="T extends CommonTheme">
+import type { Color, CommonTheme, Scheme } from "@bernankez/theme-generator";
+import { kebabCase } from "@bernankez/theme-generator";
+import type { Ref } from "vue";
 import { computed, ref, toRefs } from "vue";
 import { merge } from "lodash-es";
 import Palette from "./Palette.vue";
@@ -8,14 +9,15 @@ import Select from "./Select.vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps<{
-  modelValue: Theme;
+  modelValue: T;
 }>();
 
 const emit = defineEmits<{
-  "update:modelValue": [json: Theme];
+  "update:modelValue": [json: T];
 }>();
 
-const { modelValue: json } = toRefs(props);
+const { modelValue: _json } = toRefs(props);
+const json = _json as Ref<T>;
 
 const scheme = defineModel<Scheme>("scheme", {
   default: "light" as Scheme,
@@ -106,12 +108,12 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
         <Icon icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
       </div>
       <div class="ml-2 w-28 shrink-0">
-        <div v-if="isColor(key)" class="flex items-center gap-2">
+        <div v-if="key in json.colors" class="flex items-center gap-2">
           <input :value="json.colors[key][scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateColor(key, (e.currentTarget as HTMLInputElement).value)" />
           <Palette :model-value="json.colors[key][scheme]" class="shrink-0" @update:model-value="(color) => updateColor(key, color)" />
         </div>
-        <div v-if="isShape(key)">
-          <input :value="json[key]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateShape(key, (e.currentTarget as HTMLInputElement).value)" />
+        <div v-else>
+          <input :value="json[key as keyof T]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateShape(key, (e.currentTarget as HTMLInputElement).value)" />
         </div>
       </div>
     </div>

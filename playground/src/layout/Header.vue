@@ -3,8 +3,14 @@ import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
+import Select from "../components/Select.vue";
 
-const { theme, style, tailwind, unocss } = storeToRefs(useThemeStore());
+const { theme, style, tailwind, unocss, preset, presetKeys } = storeToRefs(useThemeStore());
+
+const options = ref(presetKeys.value.map(key => ({
+  label: key,
+  value: key,
+})));
 
 const css = computed(() => {
   return `:root {
@@ -28,11 +34,19 @@ const openCSS = ref(false);
 </script>
 
 <template>
-  <header class="flex items-center justify-between px-2 py-3 font-mono">
-    <div class="text-2xl">
-      theme-generator
+  <header class="flex flex-col gap-3 px-2 py-3 font-mono">
+    <div class="flex items-center justify-between">
+      <div class="text-2xl">
+        theme-generator
+      </div>
+      <div class="flex select-none items-center gap-3">
+        <Select v-model="preset" :options="options" />
+        <a href="https://github.com/Bernankez/theme-generator" class="cursor-default" title="GitHub" target="_blank">
+          <div class="i-fa6-brands:github text-2xl"></div>
+        </a>
+      </div>
     </div>
-    <div class="flex select-none items-center gap-3">
+    <div class="flex gap-3">
       <div class="cursor-default hover:underline hover:underline-2" @click="openNODE = true">
         NODE
       </div>
@@ -73,9 +87,6 @@ const openCSS = ref(false);
           Tailwind
         </template>
       </CodeDialog>
-      <a href="https://github.com/Bernankez/theme-generator" class="cursor-default" title="GitHub" target="_blank">
-        <div class="i-fa6-brands:github text-2xl"></div>
-      </a>
     </div>
   </header>
 </template>

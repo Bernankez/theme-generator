@@ -1,11 +1,11 @@
 import { transformStyle, transformTailwind, transformUnoCSS } from "../transformers";
-import type { CommonTheme } from "../types";
+import type { Theme } from "..";
 
 export interface DefaultPresetOptions {
   cssPrefix?: string;
 }
 
-export function defaultPreset<T extends CommonTheme>(theme: T, options?: DefaultPresetOptions) {
+export function defaultPreset(theme: Theme, options?: DefaultPresetOptions) {
   const { cssPrefix } = options || {};
 
   const style = transformStyle(theme, {
@@ -41,6 +41,7 @@ export function defaultPreset<T extends CommonTheme>(theme: T, options?: Default
   });
 
   return {
+    theme,
     style,
     unocss,
     tailwind,

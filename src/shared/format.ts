@@ -58,6 +58,34 @@ export function hexToRGB(hex: string) {
   return makeDestructurable({ r, g, b }, [r, g, b] as [number, number, number]);
 }
 
+export function hexToHsl(hex: string) {
+  const { r, g, b } = hexToRGB(hex);
+  const r1 = r / 255;
+  const g1 = g / 255;
+  const b1 = b / 255;
+  const max = Math.max(r1, g1, b1);
+  const min = Math.min(r1, g1, b1);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (d !== 0) {
+    s = d / (1 - Math.abs(2 * l - 1));
+    switch (max) {
+      case r1:
+        h = ((g1 - b1) / d + (g1 < b1 ? 6 : 0)) / 6;
+        break;
+      case g1:
+        h = ((b1 - r1) / d + 2) / 6;
+        break;
+      case b1:
+        h = ((r1 - g1) / d + 4) / 6;
+        break;
+    }
+  }
+  return makeDestructurable({ h, s, l }, [h, s, l]);
+}
+
 export function findCommonPrefix(key: string, keys: string[]) {
   const prefix = kebabCase(key).split("-")[0];
   return keys.filter(k => kebabCase(k).startsWith(prefix)).map((k) => {

@@ -1,10 +1,16 @@
 import { defineStore } from "pinia";
 import { computed, ref, watch, watchEffect } from "vue";
-import { type AcceptableTheme, defaultColors, defaultPreset, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { type AcceptableTheme, defaultColors, defaultPreset, defineTheme, inferThemeFromColor, shadcnPreset } from "@bernankez/theme-generator";
 
 export const useThemeStore = defineStore("theme", () => {
   const cssPrefix = ref("");
   const themeColor = ref("rgb(193, 67, 68)");
+  const presets = {
+    default: defaultPreset,
+    shadcn: shadcnPreset,
+  };
+  const presetKeys = ref(Object.keys(presets) as (keyof typeof presets)[]);
+  const preset = ref<keyof typeof presets>("default");
 
   const defaults = computed(() => {
     if (themeColor.value) {
@@ -15,18 +21,22 @@ export const useThemeStore = defineStore("theme", () => {
 
   const overrides = ref<Partial<AcceptableTheme>>({});
 
-  const theme = computed(() => defineTheme({
+  const _theme = computed(() => defineTheme({
     cssPrefix: cssPrefix.value,
     defaults: defaults.value,
     overrides: overrides.value,
   }));
 
-  const preset = computed(() => defaultPreset(theme.value, {
-    cssPrefix: cssPrefix.value,
-  }));
-  const style = computed(() => preset.value.style);
-  const unocss = computed(() => preset.value.unocss);
-  const tailwind = computed(() => preset.value.tailwind);
+  const _preset = computed(() => {
+    const presetFn = presets[preset.value];
+    return presetFn(_theme.value, {
+      cssPrefix: cssPrefix.value,
+    });
+  });
+  const theme = computed(() => _preset.value.theme);
+  const style = computed(() => _preset.value.style);
+  const unocss = computed(() => _preset.value.unocss);
+  const tailwind = computed(() => _preset.value.tailwind);
 
   const writableTheme = ref(theme.value);
 
@@ -48,5 +58,7 @@ export const useThemeStore = defineStore("theme", () => {
     style,
     unocss,
     tailwind,
+    preset,
+    presetKeys,
   };
 });

@@ -3,7 +3,8 @@ import type { CommonTheme, Scheme } from "../types";
 
 export interface TransformStyleOptions<T extends CommonTheme> {
   cssPrefix?: string;
-  resolve?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => Record<string, string> | string | undefined | null;
+  resolve?: (key: Exclude<keyof T, "colors"> | keyof T["colors"], scheme: Scheme) => Record<string, string> | string | undefined | null | void;
+  resolveKey?: (key: Exclude<keyof T, "colors"> | keyof T["colors"]) => string | undefined | null | void;
 }
 
 export function transformStyle<T extends CommonTheme>(theme: T, options?: TransformStyleOptions<T>) {
@@ -17,20 +18,15 @@ export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme:
   const { cssPrefix } = options || {};
   const style: Record<string, string> = {};
 
-  function resolve(key: string, value: any) {
-    const resolved = options?.resolve?.(key);
+  function resolve(key: string, value: any, scheme: Scheme) {
+    const resolved = options?.resolve?.(key, scheme);
     if (typeof resolved === "string" || !resolved) {
-      if (typeof value === "string") {
-        return {
-          [`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(resolved || key)}`]: value,
-        };
-      } else {
-        console.error(`Value of ${key} should be \`string\`. Received ${value}`);
-        return {};
-      }
-    } else {
-      return resolved;
+      const resolvedKey = options?.resolveKey?.(key);
+      return {
+        [`--${cssPrefix ? `${cssPrefix}-` : ""}${kebabCase(resolvedKey ?? key)}`]: resolved ?? value,
+      };
     }
+    return resolved;
   }
 
   for (const key in theme) {
@@ -39,7 +35,7 @@ export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme:
         if (!theme.colors[c][scheme]) {
           continue;
         }
-        const resolved = resolve(c, [...hexToRGB(theme.colors[c][scheme])].join(" "));
+        const resolved = resolve(c, [...hexToRGB(theme.colors[c][scheme])].join(" "), scheme);
         Object.assign(style, resolved);
       }
       continue;
@@ -50,7 +46,7 @@ export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme:
         continue;
       }
       const value = theme[key];
-      const resolved = resolve(key, value);
+      const resolved = resolve(key, value, scheme);
       Object.assign(style, resolved);
     }
   }
