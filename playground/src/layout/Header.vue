@@ -3,7 +3,8 @@ import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
-import Select from "../components/Select.vue";
+import Select from "../components/ui/Select.vue";
+import Button from "../components/ui/Button.vue";
 
 const { theme, style, tailwind, unocss, preset, presetKeys } = storeToRefs(useThemeStore());
 
@@ -41,6 +42,9 @@ const openCSS = ref(false);
       </div>
       <div class="flex select-none items-center gap-3">
         <Select v-model="preset" :options="options" />
+        <Button>
+          Export
+        </Button>
         <a href="https://github.com/Bernankez/theme-generator" class="cursor-default" title="GitHub" target="_blank">
           <div class="i-fa6-brands:github text-2xl"></div>
         </a>

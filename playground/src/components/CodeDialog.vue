@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { useClipboard } from "@vueuse/core";
 import { useHighlighter } from "../composables/useHighlighter";
-import Icon from "./Icon.vue";
-import Dialog from "./Dialog.vue";
+import Button from "./ui/Button.vue";
+import Dialog from "./ui/Dialog.vue";
 
 const props = withDefaults(defineProps<{
   code?: string;
@@ -46,19 +46,13 @@ const html = computed(() => codeToHtml(props.code, props.lang));
     </template>
     <template #close>
       <div class="flex items-center">
-        <Icon v-if="showDownload" @click="download">
-          <div class="flex items-center gap-2 text-sm">
-            <div class="i-lucide:cloud-download"></div>
-            <span class="font-mono">Download</span>
-          </div>
-        </Icon>
-        <Icon v-if="showCopy" @click="() => copy()">
-          <div class="flex items-center gap-2 text-sm">
-            <div :class="copied ? 'i-lucide:check' : 'i-lucide:copy'"></div>
-            <span class="font-mono">{{ copied ? 'Copied' : 'Copy' }}</span>
-          </div>
-        </Icon>
-        <Icon icon="i-lucide:x" @click="show = false" />
+        <Button v-if="showDownload" icon="i-lucide:cloud-download text-sm" class="text-sm font-mono" @click="download">
+          Download
+        </Button>
+        <Button v-if="showCopy" :icon="['text-sm', copied ? 'i-lucide:check' : 'i-lucide:copy']" class="text-sm font-mono" @click="() => copy()">
+          {{ copied ? 'Copied' : 'Copy' }}
+        </Button>
+        <Button icon="i-lucide:x" @click="show = false" />
       </div>
     </template>
     <div class="rounded-lg bg-neutral-50">

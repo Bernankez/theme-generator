@@ -7,7 +7,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import Icon from "./Icon.vue";
+import Button from "./Button.vue";
 
 const show = defineModel<boolean>();
 </script>
@@ -50,7 +50,7 @@ const show = defineModel<boolean>();
               >
                 <slot name="title"></slot>
                 <slot name="close">
-                  <Icon icon="i-lucide:x" @click="show = false" />
+                  <Button icon="i-lucide:x" @click="show = false" />
                 </slot>
               </DialogTitle>
               <DialogDescription v-if="$slots.description">

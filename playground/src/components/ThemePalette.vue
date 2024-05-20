@@ -4,9 +4,9 @@ import { kebabCase } from "@bernankez/theme-generator";
 import type { Ref } from "vue";
 import { computed, ref, toRefs } from "vue";
 import { merge } from "lodash-es";
-import Palette from "./Palette.vue";
-import Select from "./Select.vue";
-import Icon from "./Icon.vue";
+import Palette from "./ui/Palette.vue";
+import Select from "./ui/Select.vue";
+import Button from "./ui/Button.vue";
 
 const props = defineProps<{
   modelValue: T;
@@ -82,11 +82,11 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div>
       <div class="flex-auto"></div>
       <div>
-        <Icon icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
+        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
       </div>
       <div class="ml-2 w-28 flex items-center justify-evenly">
-        <Icon icon="i-lucide:undo-2" title="Undo" />
-        <Icon icon="i-lucide:redo-2" title="Redo" />
+        <Button icon="i-lucide:undo-2" title="Undo" />
+        <Button icon="i-lucide:redo-2" title="Redo" />
       </div>
     </div>
     <div v-for="key in jsonKeys" :key="key" class="palette-row">
@@ -105,7 +105,7 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div>
       <div class="flex-auto"></div>
       <div>
-        <Icon icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
+        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
       </div>
       <div class="ml-2 w-28 shrink-0">
         <div v-if="key in json.colors" class="flex items-center gap-2">
