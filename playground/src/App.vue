@@ -7,6 +7,7 @@ import Website from "./components/Website.vue";
 import Header from "./layout/Header.vue";
 import { isDark } from "./shared/isDark";
 import { useThemeStore } from "./store/theme";
+import Split from "./components/ui/Split.vue";
 
 const scheme = computed<Scheme>({
   get: () => {
@@ -34,13 +35,15 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="h-screen flex">
-    <div class="w-full overflow-auto">
+  <Split class="h-screen overflow-hidden" :min="0.25" :max="0.75">
+    <template #1>
       <Website class="h-full" />
-    </div>
-    <div class="w-full overflow-auto b-0 b-l-1 b-muted b-solid">
-      <Header />
-      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
-    </div>
-  </div>
+    </template>
+    <template #2>
+      <div class="w-full b-0 b-l-1 b-muted b-solid">
+        <Header />
+        <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
+      </div>
+    </template>
+  </Split>
 </template>
