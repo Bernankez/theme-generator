@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<{
   max?: number | string;
 }>(), {
   direction: "horizontal",
-  resizeTriggerSize: 3,
+  resizeTriggerSize: 4,
   min: 0,
   max: 1,
 });

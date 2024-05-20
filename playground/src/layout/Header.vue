@@ -5,6 +5,7 @@ import CodeDialog from "../components/CodeDialog.vue";
 import { useThemeStore } from "../store/theme";
 import Select from "../components/ui/Select.vue";
 import Button from "../components/ui/Button.vue";
+import ExportDialog from "../components/ExportDialog.vue";
 
 const { theme, style, tailwind, unocss, preset, presetKeys } = storeToRefs(useThemeStore());
 
@@ -27,6 +28,7 @@ ${Object.entries(style.value.dark).map(([key, value]) => {
 }`;
 });
 
+const showExport = ref(false);
 const openNODE = ref(false);
 const openJSON = ref(false);
 const openUnoCSS = ref(false);
@@ -35,20 +37,20 @@ const openCSS = ref(false);
 </script>
 
 <template>
-  <header class="flex flex-col gap-3 px-2 py-3 font-mono">
-    <div class="flex items-center justify-between">
-      <div class="text-2xl">
-        theme-generator
-      </div>
-      <div class="flex select-none items-center gap-3">
-        <Select v-model="preset" :options="options" />
-        <Button>
-          Export
-        </Button>
-        <a href="https://github.com/Bernankez/theme-generator" class="cursor-default" title="GitHub" target="_blank">
-          <div class="i-fa6-brands:github text-2xl"></div>
-        </a>
-      </div>
+  <header class="flex items-center justify-between gap-3 px-2 py-3 font-mono">
+    <div class="text-2xl">
+      theme-generator
+    </div>
+    <div class="flex select-none items-center gap-3">
+      <!-- TODO Theme -->
+      <Select v-model="preset" :options="options" />
+      <Button @click="showExport = true">
+        Export
+      </Button>
+      <ExportDialog v-model="showExport" />
+      <a href="https://github.com/Bernankez/theme-generator" class="cursor-default" title="GitHub" target="_blank">
+        <div class="i-fa6-brands:github text-2xl"></div>
+      </a>
     </div>
     <div class="flex gap-3">
       <div class="cursor-default hover:underline hover:underline-2" @click="openNODE = true">

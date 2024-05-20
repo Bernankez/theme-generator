@@ -44,11 +44,10 @@ const show = defineModel<boolean>();
               class="max-w-2xl w-full transform overflow-hidden rounded-lg bg-white p-4 text-left align-middle shadow-sm transition-all"
             >
               <DialogTitle
-                v-if="$slots.title"
                 as="h3"
                 class="flex cursor-default select-none items-center justify-between text-lg text-gray-900 font-medium leading-6"
               >
-                <slot name="title"></slot>
+                <slot v-if="$slots.title" name="title"></slot>
                 <slot name="close">
                   <Button icon="i-lucide:x" @click="show = false" />
                 </slot>
