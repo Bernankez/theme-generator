@@ -22,7 +22,7 @@ const html = computed(() => codeToHtml(props.code, props.lang));
 <template>
   <div class="relative rounded-lg bg-neutral-50 dark:bg-neutral-900">
     <div class="code max-h-80vh overflow-y-auto p-2" v-html="html.value"></div>
-    <Button :icon="['text-sm', copied ? 'i-lucide:check' : 'i-lucide:copy']" class="absolute right-1 top-1 text-sm font-mono" @click="() => copy()">
+    <Button :icon="['text-sm', copied ? 'i-lucide:check' : 'i-lucide:copy']" class="absolute right-4 top-1 text-sm font-mono" @click="() => copy()">
       {{ copied ? 'Copied' : 'Copy' }}
     </Button>
   </div>

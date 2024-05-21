@@ -8,6 +8,7 @@ import Header from "./layout/Header.vue";
 import { isDark } from "./shared/isDark";
 import { useThemeStore } from "./store/theme";
 import Split from "./components/ui/Split.vue";
+import { usePreset } from "./composables/usePreset";
 
 const scheme = computed<Scheme>({
   get: () => {
@@ -21,7 +22,8 @@ const scheme = computed<Scheme>({
   },
 });
 
-const { writableTheme, style, cssPrefix, overrides } = storeToRefs(useThemeStore());
+const { writableTheme, cssPrefix, overrides } = storeToRefs(useThemeStore());
+const { style } = usePreset("default");
 
 watchEffect(() => {
   let _style = { ...style.value[scheme.value] };

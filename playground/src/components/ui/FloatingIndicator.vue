@@ -12,9 +12,6 @@ watchEffect(() => {
 });
 const controlled = defineModel<string | number>();
 const active = useMergedState(controlled, uncontrolled);
-watchEffect(() => {
-  console.log(active.value);
-});
 
 const width = computed(() => `${(100 / (props.data?.length || 1))}%`);
 const translateX = computed(() => {
