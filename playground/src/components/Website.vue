@@ -32,19 +32,19 @@
         Why <code>@bernankez/theme-generator</code>
       </h2>
       <div class="flex flex-col gap-3 @lg:flex-row">
-        <div class="flex-1 rounded-xl bg-accent p-3 text-accent-foreground">
+        <div class="flex-1 rounded-lg bg-accent p-3 text-accent-foreground">
           <div class="text-xl font-bold">
             One Click
           </div>
           Auto infer theme from a primary color
         </div>
-        <div class="flex-1 rounded-xl bg-accent p-3 text-accent-foreground">
+        <div class="flex-1 rounded-lg bg-accent p-3 text-accent-foreground">
           <div class="text-xl font-bold">
             UI Framework Presets
           </div>
           Adapt for multiple UI frameworks
         </div>
-        <div class="flex-1 rounded-xl bg-accent p-3 text-accent-foreground">
+        <div class="flex-1 rounded-lg bg-accent p-3 text-accent-foreground">
           <div class="text-xl font-bold">
             Fully Opensource
           </div>
