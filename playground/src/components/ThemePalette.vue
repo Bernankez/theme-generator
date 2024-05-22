@@ -50,6 +50,22 @@ function updateShape(key: string, shape: string) {
   emit("update:modelValue", obj);
 }
 
+function sync(key: string, triggerEmit = true) {
+  if (scheme.value === "dark") {
+    json.value.colors[key].dark = json.value.colors[key].light;
+  } else {
+    json.value.colors[key].light = json.value.colors[key].dark;
+  }
+  triggerEmit && emit("update:modelValue", json.value);
+}
+
+function syncAll() {
+  for (const key in json.value.colors) {
+    sync(key, false);
+  }
+  emit("update:modelValue", json.value);
+}
+
 const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.keys(json.value).filter(key => key !== "colors")));
 </script>
 
@@ -82,7 +98,7 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div>
       <div class="flex-auto"></div>
       <div>
-        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
+        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" @click="syncAll" />
       </div>
       <div class="ml-2 w-28 flex items-center justify-evenly">
         <Button icon="i-lucide:undo-2" title="Undo" />
@@ -105,7 +121,7 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div>
       <div class="flex-auto"></div>
       <div>
-        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" />
+        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" @click="sync(key)" />
       </div>
       <div class="ml-2 w-28 shrink-0">
         <div v-if="key in json.colors" class="flex items-center gap-2">
