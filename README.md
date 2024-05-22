@@ -6,3 +6,4 @@
 - [ ] Undo/Redo
 - [ ] Export/Import
 - [ ] Theme presets
+- [ ] DaisyUI preset
