@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref, watch, watchEffect } from "vue";
-import { type AcceptableTheme, defaultColors, defaultPreset, defineTheme, inferThemeFromColor, shadcnPreset } from "@bernankez/theme-generator";
+import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
 
 export const useThemeStore = defineStore("theme", () => {
   const cssPrefix = ref("");

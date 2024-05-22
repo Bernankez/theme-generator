@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Scheme } from "@bernankez/theme-generator";
-import { computed, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import ThemePalette from "./components/ThemePalette.vue";
 import Website from "./components/Website.vue";
@@ -25,27 +25,32 @@ const scheme = computed<Scheme>({
 const { writableTheme, cssPrefix, overrides } = storeToRefs(useThemeStore());
 const { style } = usePreset("default");
 
+const websiteWrapperRef = ref<HTMLDivElement>();
+
 watchEffect(() => {
-  let _style = { ...style.value[scheme.value] };
+  if (!websiteWrapperRef.value) {
+    return;
+  }
+  let _style = { ...style.value?.[scheme.value] };
   if (scheme.value === "dark") {
-    _style = { ...style.value.light, ..._style };
+    _style = { ...style.value?.light, ..._style };
   }
   for (const key in _style) {
-    document.documentElement.style.setProperty(key, _style[key]);
+    websiteWrapperRef.value.style.setProperty(key, _style[key]);
   }
 });
 </script>
 
 <template>
-  <Split class="h-screen overflow-hidden" :min="0.25" :max="0.75">
+  <Split class="h-screen overflow-hidden" :min="0.25" :max="0.75" :resize-trigger-size="6">
     <template #1>
-      <Website class="h-full" />
+      <div ref="websiteWrapperRef">
+        <Website />
+      </div>
     </template>
     <template #2>
-      <div class="w-full b-0 b-l-1 b-muted b-solid">
-        <Header />
-        <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
-      </div>
+      <Header />
+      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
     </template>
   </Split>
 </template>

@@ -8,8 +8,6 @@ export * from "./transformers";
 export * from "./presets";
 export * from "./shared";
 
-// NOTE preset/adaptor/keyMapping convert theme to UI library theme eg.daisy-ui/shadcn-ui/naive-ui...
-
 export interface DefineThemeOptions {
   defaults: AcceptableTheme;
   cssPrefix?: string;

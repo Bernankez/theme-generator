@@ -12,7 +12,7 @@ const showExport = ref(false);
       theme-generator
     </div>
     <div class="flex select-none items-center gap-3">
-      <Button @click="showExport = true">
+      <Button icon="i-lucide:zap" @click="showExport = true">
         Generate
       </Button>
       <ExportDialog v-model="showExport" />

@@ -25,8 +25,8 @@ const resizeWrapperStyle = computed(() => props.direction === "vertical"
       height: "100%",
     }));
 
-const size = ref<string | number>("50%");
-const offset = ref(3);
+const size = ref<string | number>(0.5);
+const offset = ref(0);
 const slot1Style = computed(() => {
   const sizeValue = size.value;
   if (typeof sizeValue === "string") {
@@ -136,7 +136,7 @@ function updateSize(e: MouseEvent) {
     </div>
     <div ref="resizeTriggerRef" class="shrink-0 grow-0" :style="{ ...resizeWrapperStyle, cursor }" @mousedown="onMouseDown">
       <slot name="resize-trigger">
-        <div class="h-full w-full bg-gray transition-200" :class="[dragging ? 'shadow-sm shadow-info bg-info' : 'hover:shadow-sm hover:shadow-info hover:bg-info']"></div>
+        <div class="h-full w-full bg-foreground transition-200" :class="[dragging ? 'shadow-sm shadow-info bg-info!' : 'hover:shadow-sm hover:shadow-info hover:bg-info']"></div>
       </slot>
     </div>
     <div class="w-full overflow-auto">

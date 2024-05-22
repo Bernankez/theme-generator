@@ -8,8 +8,10 @@ const props = withDefaults(defineProps<{
   code?: string;
   lang?: string;
   showCopy?: boolean;
+  showLang?: boolean;
 }>(), {
   showCopy: true,
+  showLang: true,
 });
 
 const source = computed(() => props.code || "");
@@ -20,9 +22,12 @@ const html = computed(() => codeToHtml(props.code, props.lang));
 </script>
 
 <template>
-  <div class="relative rounded-lg bg-neutral-50 dark:bg-neutral-900">
+  <div class="group relative rounded-lg bg-neutral-50 dark:bg-neutral-900">
     <div class="code max-h-80vh overflow-y-auto p-2" v-html="html.value"></div>
-    <Button :icon="['text-sm', copied ? 'i-lucide:check' : 'i-lucide:copy']" class="absolute right-4 top-1 text-sm font-mono" @click="() => copy()">
+    <div v-if="showLang" class="absolute right-4 top-0 text-sm text-muted-foreground font-mono opacity-100 transition group-hover:opacity-0">
+      {{ lang }}
+    </div>
+    <Button v-if="showCopy" :icon="['text-sm', copied ? 'i-lucide:check' : 'i-lucide:copy']" class="absolute right-4 top-1 bg-neutral-50 text-sm font-mono opacity-0 group-hover:opacity-100" @click="() => copy()">
       {{ copied ? 'Copied' : 'Copy' }}
     </Button>
   </div>

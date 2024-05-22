@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { computed, ref, watchEffect } from "vue";
-import { useThemeStore } from "../store/theme";
-import type { Preset } from "../composables/usePreset";
+import type { PresetName } from "../composables/usePreset";
 import { presets, usePreset } from "../composables/usePreset";
 import Dialog from "./ui/Dialog.vue";
 import FloatingIndicator from "./ui/FloatingIndicator.vue";
@@ -36,12 +34,12 @@ const titles = [
   },
 ];
 
-const preset = ref<Preset>("default");
+const preset = ref<PresetName>("default");
 const active = ref("node");
 
 const currentPreset = usePreset(preset);
 const filteredTitles = computed(() => titles.filter((title) => {
-  return title.key in currentPreset || title.key === "node";
+  return (title.key in currentPreset && currentPreset[title.key as keyof typeof currentPreset].value) || title.key === "node";
 }));
 
 watchEffect(() => {
@@ -52,20 +50,37 @@ const options = ref(presets.map(key => ({
   label: key,
   value: key,
 })));
+
+const presetKeyMap: Record<PresetName, string> = {
+  default: "defaultPreset",
+  shadcn: "shadcnPreset",
+};
+const index = computed(() => `import { defineTheme, inferThemeFromColor, ${presetKeyMap[preset.value]} } from "@bernankez/theme-generator";
+
+// Use your favorite color
+const inferredTheme = inferThemeFromColor("${currentPreset.preset.value.theme.colors.primary.light}");
+
+const defaultTheme = defineTheme({
+  defaults: inferredTheme,
+});
+
+const { ${Object.keys(currentPreset.preset.value).join(", ")} } = ${presetKeyMap[preset.value]}(defaultTheme);
+`);
 </script>
 
 <template>
   <Dialog v-model="show">
     <template #title>
       <div class="flex items-center gap-2">
+        UI Framework:
         <Select v-model="preset" :options="options" />
       </div>
     </template>
     <FloatingIndicator v-model="active" :data="filteredTitles" class="font-mono" />
     <div class="mt-3">
-      <!-- TODO fix height -->
-      <div v-if="active === 'node'">
+      <div v-if="active === 'node'" class="flex flex-col gap-3">
         <CodeBlock code="npm install @bernankez/theme-generator" lang="sh" />
+        <CodeBlock :code="index" lang="ts" />
       </div>
       <div v-else-if="active === 'json'">
         <CodeBlock :code="JSON.stringify(currentPreset.json.value, null, 2)" lang="json" />

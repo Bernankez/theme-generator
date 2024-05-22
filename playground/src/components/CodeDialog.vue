@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useClipboard } from "@vueuse/core";
-import { useHighlighter } from "../composables/useHighlighter";
 import Button from "./ui/Button.vue";
 import Dialog from "./ui/Dialog.vue";
+import CodeBlock from "./CodeBlock.vue";
 
 const props = withDefaults(defineProps<{
   code?: string;
@@ -34,9 +34,6 @@ function download() {
 }
 
 const show = defineModel<boolean>();
-
-const { codeToHtml } = useHighlighter();
-const html = computed(() => codeToHtml(props.code, props.lang));
 </script>
 
 <template>
@@ -55,9 +52,7 @@ const html = computed(() => codeToHtml(props.code, props.lang));
         <Button icon="i-lucide:x" @click="show = false" />
       </div>
     </template>
-    <div class="rounded-lg bg-neutral-50">
-      <div class="code max-h-80vh overflow-y-auto p-2" v-html="html.value"></div>
-    </div>
+    <CodeBlock :show-copy="false" :code="code" :lang="lang" />
   </Dialog>
 </template>
 

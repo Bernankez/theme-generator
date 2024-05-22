@@ -1,6 +1,5 @@
 import { type MaybeRefOrGetter, computed, shallowRef, toValue } from "vue";
 import { type BundledLanguage, type BundledTheme, type HighlighterGeneric, bundledLanguages, getHighlighter } from "shiki/bundle/web";
-import { isDark } from "../shared/isDark";
 
 const highlighter = shallowRef<HighlighterGeneric<BundledLanguage, BundledTheme>>();
 export function useHighlighter() {
@@ -26,7 +25,8 @@ export function useHighlighter() {
       }
       return highlighter.value.codeToHtml(toValue(code)!, {
         lang: toValue(lang) || "",
-        theme: isDark.value ? "vitesse-dark" : "vitesse-light",
+        theme: "vitesse-light",
+        // theme: isDark.value ? "vitesse-dark" : "vitesse-light",
       });
     });
   }
