@@ -41,13 +41,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && pnpm -F \"playground\" build",
     "dev": "unbuild --stub && pnpm -F \"playground\" dev",
     "fix": "eslint . -f mo --fix",
     "lint": "eslint . -f mo",
     "prepack": "nr build",
     "prepare": "simple-git-hooks",
-    "preview": "node --watch bin/index.js",
+    "preview": "pnpm -F \"playground\" preview",
     "release": "bumpp && npm publish",
     "start": "tsx src/index.ts",
     "test": "vitest",
