@@ -125,7 +125,7 @@ class Infer {
   }
 
   clone() {
-    return new Infer(this.primaryColor);
+    return new Infer(this.primaryColor.hex());
   }
 
   mix(color: string | chroma.Color, f?: number) {
