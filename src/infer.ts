@@ -78,8 +78,8 @@ export function inferThemeFromColor(themeColor: string) {
         dark: primary.darken(0.1).hex(),
       },
       primaryForeground: {
-        light: primary.foreground(0.1).hex(),
-        dark: primary.darken(0.1).foreground(0.1).hex(),
+        light: primary.opposite(0.1).hex(),
+        dark: primary.darken(0.1).opposite(0.1).hex(),
       },
       secondary: {
         light: primary.lighten(0.75).hex(),
@@ -155,7 +155,7 @@ class Infer {
     return this.mix("#000000", f);
   }
 
-  foreground(offset = 0) {
+  opposite(offset = 0) {
     const l = this.primaryColor.luminance();
     return this.luminance(l > 0.5 ? 0 + offset : 1 - offset);
   }
