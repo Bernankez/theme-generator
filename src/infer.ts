@@ -58,18 +58,20 @@ export const defaultColors: AcceptableTheme = {
 
 // convert colors to targetMode
 export function inferThemeFromColor(themeColor: string) {
+  if (!chroma.valid(themeColor)) {
+    throw new Error(`Invalid color ${themeColor}`);
+  }
   const primary = new Infer(themeColor);
 
   const theme: AcceptableTheme = {
     colors: {
-      // TODO
       background: {
-        light: primary.mix("white", 0.99).hex(),
-        dark: primary.mix("black", 0.99).hex(),
+        light: primary.lighten(0.99).hex(),
+        dark: primary.darken(0.99).hex(),
       },
       foreground: {
-        light: primary.mix("black", 0.99).hex(),
-        dark: primary.mix("white", 0.99).hex(),
+        light: primary.darken(0.99).hex(),
+        dark: primary.lighten(0.99).hex(),
       },
       primary: {
         light: primary.hex(),
@@ -80,28 +82,28 @@ export function inferThemeFromColor(themeColor: string) {
         dark: primary.darken(0.1).foreground(0.1).hex(),
       },
       secondary: {
-        light: "#f5f5f5",
-        dark: "#262626",
+        light: primary.lighten(0.75).hex(),
+        dark: primary.darken(0.75).hex(),
       },
       secondaryForeground: {
-        light: "#171717",
-        dark: "#fafafa",
+        light: primary.darken(0.75).hex(),
+        dark: primary.lighten(0.75).hex(),
       },
       accent: {
-        light: "#f5f5f5",
-        dark: "#262626",
+        light: primary.lighten(0.9).hex(),
+        dark: primary.darken(0.9).hex(),
       },
       accentForeground: {
-        light: "#171717",
-        dark: "#fafafa",
+        light: primary.darken(0.9).hex(),
+        dark: primary.lighten(0.9).hex(),
       },
       muted: {
-        light: "#f5f5f5",
-        dark: "#262626",
+        light: primary.lighten(0.9).hex(),
+        dark: primary.darken(0.9).hex(),
       },
       mutedForeground: {
-        light: "#737373",
-        dark: "#fafafa",
+        light: primary.mix("gray", 0.9).hex(),
+        dark: primary.lighten(0.9).mix("gray", 0.1).hex(),
       },
       info: "#00b3f0",
       infoForeground: "#000000",
@@ -145,8 +147,12 @@ class Infer {
     return cloned;
   }
 
+  lighten(f?: number) {
+    return this.mix("#ffffff", f);
+  }
+
   darken(f?: number) {
-    return this.mix("black", f);
+    return this.mix("#000000", f);
   }
 
   foreground(offset = 0) {
