@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useEventListener } from "@vueuse/core";
+import { useMergedState } from "@bernankez/utils/vue";
 
 const props = withDefaults(defineProps<{
   direction?: "horizontal" | "vertical";
@@ -25,7 +26,11 @@ const resizeWrapperStyle = computed(() => props.direction === "vertical"
       height: "100%",
     }));
 
-const size = ref<string | number>(0.5);
+const uncontrolledSize = ref(0.5);
+const controlledSize = defineModel<string | number>("size");
+
+const size = useMergedState(controlledSize, uncontrolledSize);
+
 const offset = ref(0);
 const slot1Style = computed(() => {
   const sizeValue = size.value;

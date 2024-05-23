@@ -42,7 +42,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <Split class="h-screen overflow-hidden" :min="0.25" :max="0.75" :resize-trigger-size="6">
+  <Split class="h-screen overflow-hidden" :size="0.2" :min="0.25" :max="0.75" :resize-trigger-size="6">
     <template #1>
       <div ref="websiteWrapperRef">
         <Website />
