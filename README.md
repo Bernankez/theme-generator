@@ -5,7 +5,8 @@
 - [x] Sync from dark/light
 - [x] Undo/Redo
 - [ ] Global key shortcut for undo/redo
-- [ ] Infer theme from primary color
+- [x] Infer theme from primary color
+- [ ] Choose a primary color as guidance
 - [ ] Export/Import
 - [ ] Theme presets
 - [ ] DaisyUI preset
