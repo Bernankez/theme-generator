@@ -58,26 +58,26 @@ export const defaultColors: AcceptableTheme = {
 
 // convert colors to targetMode
 export function inferThemeFromColor(themeColor: string) {
-  const infer = new Infer(themeColor);
+  const primary = new Infer(themeColor);
 
   const theme: AcceptableTheme = {
     colors: {
       // TODO
       background: {
-        light: infer.mix("white", 0.99).hex(),
-        dark: infer.mix("black", 0.99).hex(),
+        light: primary.mix("white", 0.99).hex(),
+        dark: primary.mix("black", 0.99).hex(),
       },
       foreground: {
-        light: infer.mix("black", 0.99).hex(),
-        dark: infer.mix("white", 0.99).hex(),
+        light: primary.mix("black", 0.99).hex(),
+        dark: primary.mix("white", 0.99).hex(),
       },
       primary: {
-        light: infer.hex(),
-        dark: infer.darken(0.1).hex(),
+        light: primary.hex(),
+        dark: primary.darken(0.1).hex(),
       },
       primaryForeground: {
-        light: infer.foreground(0.1).hex(),
-        dark: "#171717",
+        light: primary.foreground(0.1).hex(),
+        dark: primary.darken(0.1).foreground(0.1).hex(),
       },
       secondary: {
         light: "#f5f5f5",
@@ -125,12 +125,12 @@ class Infer {
   }
 
   clone() {
-    return new Infer(this.primaryColor.hex());
+    return new Infer(this.primaryColor);
   }
 
   mix(color: string | chroma.Color, f?: number) {
     const cloned = this.clone();
-    cloned.primaryColor.mix(color, f);
+    cloned.primaryColor = cloned.primaryColor.mix(color, f);
     return cloned;
   }
 
@@ -141,7 +141,7 @@ class Infer {
       return this.primaryColor.luminance();
     }
     const cloned = this.clone();
-    cloned.primaryColor.luminance(f, "oklch");
+    cloned.primaryColor = cloned.primaryColor.luminance(f, "oklch");
     return cloned;
   }
 
@@ -150,9 +150,8 @@ class Infer {
   }
 
   foreground(offset = 0) {
-    const cloned = this.clone();
-    const l = cloned.primaryColor.luminance();
-    return cloned.luminance(l > 0.5 ? 0 + offset : 1 - offset);
+    const l = this.primaryColor.luminance();
+    return this.luminance(l > 0.5 ? 0 + offset : 1 - offset);
   }
 
   hex() {
