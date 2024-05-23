@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { findCommonPrefix } from "../../src";
+import { findCommonPrefix, hexToHsl, hexToRGB } from "../../src";
 
 const keys = ["primary", "primaryForeground", "border", "secondaryForeground", "secondary"];
 
@@ -53,5 +53,45 @@ describe("findCommonPrefix", () => {
         },
       ]
     `);
+  });
+});
+
+describe("hexToRGB", () => {
+  it("should convert hex", () => {
+    expect(hexToRGB("#c14344")).toEqual({
+      r: 193,
+      g: 67,
+      b: 68,
+    });
+  });
+});
+
+describe("hexToHsl", () => {
+  it("should convert hex to hsl", () => {
+    expect(hexToHsl("#c14344")).toEqual(
+      {
+        h: 359.5238095238095,
+        l: 0.5098039215686274,
+        s: 0.5039999999999999,
+      },
+    );
+  });
+
+  it("should handle hue-less colors properly", () => {
+    expect(hexToHsl("#ffffff")).toEqual(
+      {
+        h: 0,
+        l: 1,
+        s: 0,
+      },
+    );
+
+    expect(hexToHsl("#000000")).toEqual(
+      {
+        h: 0,
+        l: 0,
+        s: 0,
+      },
+    );
   });
 });

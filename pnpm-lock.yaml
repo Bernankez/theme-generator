@@ -21,6 +21,9 @@ importers:
       '@bernankez/utils':
         specifier: ^0.6.3
         version: 0.6.3(vue@3.4.24(typescript@5.4.5))
+      '@types/chroma-js':
+        specifier: ^2.4.4
+        version: 2.4.4
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -33,6 +36,9 @@ importers:
       bumpp:
         specifier: ^9.4.0
         version: 9.4.0
+      chroma-js:
+        specifier: ^2.4.2
+        version: 2.4.2
       eslint:
         specifier: ^9.1.1
         version: 9.1.1
@@ -84,9 +90,6 @@ importers:
       '@vueuse/core':
         specifier: ^10.9.0
         version: 10.9.0(vue@3.4.24(typescript@5.4.5))
-      chroma-js:
-        specifier: ^2.4.2
-        version: 2.4.2
       pinia:
         specifier: ^2.1.7
         version: 2.1.7(typescript@5.4.5)(vue@3.4.24(typescript@5.4.5))
@@ -103,9 +106,6 @@ importers:
       '@iconify-json/lucide':
         specifier: ^1.1.185
         version: 1.1.185
-      '@types/chroma-js':
-        specifier: ^2.4.4
-        version: 2.4.4
       '@unocss/reset':
         specifier: ^0.59.4
         version: 0.59.4
