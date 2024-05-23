@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
 
 export const useThemeStore = defineStore("theme", () => {
@@ -15,13 +15,8 @@ export const useThemeStore = defineStore("theme", () => {
   const theme = computed(() => defineTheme({
     cssPrefix: cssPrefix.value,
     defaults: defaults.value,
-    overrides: overrides.value,
   }));
   const writableTheme = ref(theme.value);
-
-  watch([defaults, cssPrefix], () => {
-    overrides.value = {};
-  });
 
   watchEffect(() => {
     writableTheme.value = theme.value;

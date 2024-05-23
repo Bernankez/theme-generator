@@ -22,7 +22,7 @@ const scheme = computed<Scheme>({
   },
 });
 
-const { writableTheme, cssPrefix, overrides } = storeToRefs(useThemeStore());
+const { writableTheme, cssPrefix } = storeToRefs(useThemeStore());
 const { style } = usePreset("default");
 
 const websiteWrapperRef = ref<HTMLDivElement>();
@@ -50,7 +50,7 @@ watchEffect(() => {
     </template>
     <template #2>
       <Header />
-      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" :model-value="writableTheme" @update:model-value="json => overrides = json" />
+      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" v-model="writableTheme" />
     </template>
   </Split>
 </template>

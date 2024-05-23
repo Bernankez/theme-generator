@@ -1,23 +1,16 @@
 <script setup lang="ts" generic="T extends CommonTheme">
 import type { Color, CommonTheme, Scheme } from "@bernankez/theme-generator";
 import { kebabCase } from "@bernankez/theme-generator";
-import type { Ref } from "vue";
-import { computed, ref, toRefs } from "vue";
+import { computed, ref } from "vue";
 import { merge } from "lodash-es";
+import { useDebounceFn, useManualRefHistory } from "@vueuse/core";
 import Palette from "./ui/Palette.vue";
 import Select from "./ui/Select.vue";
 import Button from "./ui/Button.vue";
 
-const props = defineProps<{
-  modelValue: T;
-}>();
-
-const emit = defineEmits<{
-  "update:modelValue": [json: T];
-}>();
-
-const { modelValue: _json } = toRefs(props);
-const json = _json as Ref<T>;
+const json = defineModel<T>({
+  required: true,
+});
 
 const scheme = defineModel<Scheme>("scheme", {
   default: "light" as Scheme,
@@ -32,6 +25,12 @@ const schemeOptions = ref([
   { label: "Dark", value: "dark" },
 ]);
 
+const { undo, redo, canRedo, canUndo, commit } = useManualRefHistory(json, {
+  clone: true,
+});
+
+const debouncedCommit = useDebounceFn(commit);
+
 function updateColor(key: string, color: string | Color) {
   const obj = merge({}, json.value, {
     colors: {
@@ -40,30 +39,38 @@ function updateColor(key: string, color: string | Color) {
       },
     },
   });
-  emit("update:modelValue", obj);
+  json.value = obj;
+  debouncedCommit();
 }
 
 function updateShape(key: string, shape: string) {
   const obj = merge({}, json.value, {
     [key]: shape,
   });
-  emit("update:modelValue", obj);
+  json.value = obj;
+  debouncedCommit();
 }
 
-function sync(key: string, triggerEmit = true) {
+function sync(key: string, triggerCommit = true) {
+  if (json.value.colors[key].dark === json.value.colors[key].light) {
+    return;
+  }
   if (scheme.value === "dark") {
     json.value.colors[key].dark = json.value.colors[key].light;
   } else {
     json.value.colors[key].light = json.value.colors[key].dark;
   }
-  triggerEmit && emit("update:modelValue", json.value);
+  triggerCommit && commit();
 }
 
 function syncAll() {
   for (const key in json.value.colors) {
     sync(key, false);
   }
-  emit("update:modelValue", json.value);
+  // trigger emit
+  // eslint-disable-next-line no-self-assign
+  json.value = json.value;
+  commit();
 }
 
 const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.keys(json.value).filter(key => key !== "colors")));
@@ -101,8 +108,8 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
         <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" @click="syncAll" />
       </div>
       <div class="ml-2 w-28 flex items-center justify-evenly">
-        <Button icon="i-lucide:undo-2" title="Undo" />
-        <Button icon="i-lucide:redo-2" title="Redo" />
+        <Button :disabled="!canUndo" icon="i-lucide:undo-2" title="Undo" @click="undo" />
+        <Button :disabled="!canRedo" icon="i-lucide:redo-2" title="Redo" @click="redo" />
       </div>
     </div>
     <div v-for="key in jsonKeys" :key="key" class="palette-row">

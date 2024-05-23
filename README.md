@@ -3,7 +3,7 @@
 ## TODOS
 
 - [x] Sync from dark/light
-- [ ] Undo/Redo
+- [x] Undo/Redo
 - [ ] Infer theme from primary color
 - [ ] Export/Import
 - [ ] Theme presets

@@ -13,10 +13,10 @@ export type PresetName = keyof typeof _presets;
 export const presets = Object.keys(_presets) as PresetName[];
 
 export function usePreset(preset: MaybeRefOrGetter<PresetName>) {
-  const { theme, cssPrefix } = storeToRefs(useThemeStore());
+  const { writableTheme, cssPrefix } = storeToRefs(useThemeStore());
 
   const presetFn = computed(() => _presets[toValue(preset)]);
-  const currentPreset = computed<Preset>(() => presetFn.value(theme.value, {
+  const currentPreset = computed<Preset>(() => presetFn.value(writableTheme.value, {
     cssPrefix: cssPrefix.value,
   }));
 
