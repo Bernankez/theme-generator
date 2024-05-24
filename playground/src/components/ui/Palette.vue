@@ -2,6 +2,10 @@
 import chroma from "chroma-js";
 import { computed } from "vue";
 
+defineProps<{
+  round?: boolean;
+}>();
+
 const color = defineModel<string>();
 
 const standardColor = computed({
@@ -18,5 +22,15 @@ const standardColor = computed({
 </script>
 
 <template>
-  <input v-model="standardColor" type="color" class="h-8 w-7 b-none bg-transparent p-0 outline-none" />
+  <input v-model="standardColor" type="color" class="h-8 w-7 b-none bg-transparent p-0 outline-none" :class="[round && 'palette']" />
 </template>
+
+<style scoped>
+.palette::-webkit-color-swatch {
+  border-radius: 999px;
+}
+
+.palette::-moz-color-swatch {
+  border-radius: 999px;
+}
+</style>
