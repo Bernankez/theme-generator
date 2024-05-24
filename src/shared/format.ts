@@ -1,6 +1,6 @@
 import { makeDestructurable } from "@bernankez/utils";
 import chroma from "chroma-js";
-import { type AcceptableTheme, type Color, type ColorKeywords, type ShapeKeywords, type Theme, colorKeywords, shapeKeywords } from "../types";
+import { type AcceptableTheme, type Color, type ColorKeywords, type CommonTheme, type ShapeKeywords, type Theme, colorKeywords, shapeKeywords } from "../types";
 import { isColor, isShape } from "./is";
 
 export function toColor(color: string | Color) {
@@ -45,6 +45,30 @@ export function toTheme(obj: AcceptableTheme): Theme {
     }
   });
   return theme;
+}
+
+export function light<T extends CommonTheme>(theme: T): { colors: Record<keyof T["colors"], string> } & Omit<T, "colors"> {
+  const colors = {} as Record<keyof T["colors"], string>;
+  for (const [key, value] of Object.entries(theme.colors)) {
+    colors[key as keyof T["colors"]] = value.light;
+  }
+  const { colors: _, ...left } = theme;
+  return {
+    colors,
+    ...left,
+  };
+}
+
+export function dark<T extends CommonTheme>(theme: T): { colors: Record<keyof T["colors"], string> } & Omit<T, "colors"> {
+  const colors = {} as Record<keyof T["colors"], string>;
+  for (const [key, value] of Object.entries(theme.colors)) {
+    colors[key as keyof T["colors"]] = value.dark;
+  }
+  const { colors: _, ...left } = theme;
+  return {
+    colors,
+    ...left,
+  };
 }
 
 export function kebabCase(str: string) {

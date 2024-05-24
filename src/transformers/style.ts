@@ -1,4 +1,4 @@
-import { hexToRGB, kebabCase } from "../shared";
+import { dark, hexToRGB, kebabCase, light } from "../shared";
 import type { CommonTheme, Scheme } from "../types";
 
 export interface TransformStyleOptions<T extends CommonTheme> {
@@ -29,24 +29,28 @@ export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme:
     return resolved;
   }
 
-  for (const key in theme) {
+  const resolveScheme = scheme === "dark" ? dark : light;
+  const resolvedTheme = resolveScheme(theme);
+
+  for (const _key in resolvedTheme) {
+    const key = _key as keyof typeof resolvedTheme;
     if (key === "colors") {
-      for (const c in theme.colors) {
-        if (!theme.colors[c][scheme]) {
+      for (const c in resolvedTheme.colors) {
+        if (!resolvedTheme.colors[c]) {
           continue;
         }
-        const resolved = resolve(c, [...hexToRGB(theme.colors[c][scheme])].join(" "), scheme);
+        const resolved = resolve(c, [...hexToRGB(resolvedTheme.colors[c])].join(" "), scheme);
         Object.assign(style, resolved);
       }
       continue;
     }
     // Only set shape keywords in light scheme
     if (scheme === "light") {
-      if (!theme[key]) {
+      if (!resolvedTheme[key]) {
         continue;
       }
-      const value = theme[key];
-      const resolved = resolve(key, value, scheme);
+      const value = resolvedTheme[key];
+      const resolved = resolve(key as string, value, scheme);
       Object.assign(style, resolved);
     }
   }
