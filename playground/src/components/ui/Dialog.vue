@@ -29,7 +29,7 @@ const show = defineModel<boolean>();
 
       <div class="fixed inset-0 overflow-y-auto">
         <div
-          class="min-h-full flex items-center justify-center p-4 text-center"
+          class="h-full min-h-full flex items-center justify-center text-center sm:h-unset sm:p-4"
         >
           <TransitionChild
             as="template"
@@ -41,7 +41,7 @@ const show = defineModel<boolean>();
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="max-w-2xl w-full transform overflow-hidden rounded-lg bg-white p-4 text-left align-middle shadow-sm transition-all"
+              class="h-full w-full transform overflow-hidden bg-white p-4 text-left align-middle transition-all sm:h-unset sm:max-w-2xl sm:rounded-lg sm:shadow-sm"
             >
               <DialogTitle
                 as="h3"
