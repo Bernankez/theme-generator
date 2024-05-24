@@ -1,17 +1,28 @@
 import { defineStore } from "pinia";
 import { computed, ref, watchEffect } from "vue";
-import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { n } from "@bernankez/utils";
 
 export const useThemeStore = defineStore("theme", () => {
   const cssPrefix = ref("");
-  const themeColor = ref("rgb(193, 67, 68)");
+  const themeColor = ref("#c14344");
+  const modeOptions = computed(() => n([
+    {
+      label: "default",
+      value: "default",
+    },
+    {
+      label: themeColor.value,
+      value: "infer",
+    },
+  ]));
+  const mode = ref<typeof modeOptions["value"][number]["value"]>("default");
   const defaults = computed(() => {
-    if (themeColor.value) {
+    if (mode.value === "infer") {
       return inferThemeFromColor(themeColor.value);
     }
     return defaultColors;
   });
-  const overrides = ref<Partial<AcceptableTheme>>({});
   const theme = computed(() => defineTheme({
     cssPrefix: cssPrefix.value,
     defaults: defaults.value,
@@ -26,8 +37,9 @@ export const useThemeStore = defineStore("theme", () => {
     cssPrefix,
     themeColor,
     defaults,
-    overrides,
     theme,
     writableTheme,
+    modeOptions,
+    mode,
   };
 });

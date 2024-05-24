@@ -6,7 +6,7 @@
 - [x] Undo/Redo
 - [ ] Global key shortcut for undo/redo
 - [x] Infer theme from primary color
-- [ ] Choose a primary color as guidance
+- [x] Choose a primary color as guidance
 - [ ] Export/Import
 - [ ] Theme presets
 - [ ] DaisyUI preset

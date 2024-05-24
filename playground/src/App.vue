@@ -2,6 +2,7 @@
 import type { Scheme } from "@bernankez/theme-generator";
 import { computed, ref, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import ThemePalette from "./components/ThemePalette.vue";
 import Website from "./components/Website.vue";
 import Header from "./layout/Header.vue";
@@ -39,10 +40,12 @@ watchEffect(() => {
     websiteWrapperRef.value.style.setProperty(key, _style[key]);
   }
 });
+
+const { sm } = useBreakpoints(breakpointsTailwind);
 </script>
 
 <template>
-  <Split class="h-screen overflow-hidden" :size="0.4" :min="0" :max="1" :resize-trigger-size="6">
+  <Split class="h-screen overflow-hidden" :direction="sm ? undefined : 'vertical'" :size="0.4" :min="0" :max="1" :resize-trigger-size="6">
     <template #1>
       <div ref="websiteWrapperRef">
         <Website />
