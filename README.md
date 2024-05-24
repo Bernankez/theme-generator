@@ -4,7 +4,7 @@
 
 - [x] Sync from dark/light
 - [x] Undo/Redo
-- [ ] Global key shortcut for undo/redo
+- [x] Global key shortcut for undo/redo
 - [x] Infer theme from primary color
 - [x] Choose a primary color as guidance
 - [ ] Export/Import

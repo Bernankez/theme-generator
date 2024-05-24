@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import type { PresetName } from "../composables/usePreset";
 import { presets, usePreset } from "../composables/usePreset";
 import Dialog from "./ui/Dialog.vue";

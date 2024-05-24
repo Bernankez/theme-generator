@@ -1,9 +1,9 @@
 <script setup lang="ts" generic="T extends CommonTheme">
 import type { Color, CommonTheme, Scheme } from "@bernankez/theme-generator";
 import { kebabCase } from "@bernankez/theme-generator";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { merge } from "lodash-es";
-import { useDebounceFn, useManualRefHistory } from "@vueuse/core";
+import { useDebounceFn, useMagicKeys, useManualRefHistory } from "@vueuse/core";
 import Palette from "./ui/Palette.vue";
 import Select from "./ui/Select.vue";
 import Button from "./ui/Button.vue";
@@ -27,6 +27,20 @@ const schemeOptions = ref([
 
 const { undo, redo, canRedo, canUndo, commit } = useManualRefHistory(json, {
   clone: true,
+});
+
+const { ctrl_z, command_z, shift_command_z, shift_ctrl_z } = useMagicKeys();
+
+watch([ctrl_z, command_z], ([ctrl_z, command_z]) => {
+  if ((ctrl_z || command_z) && canUndo.value) {
+    undo();
+  }
+});
+
+watch([shift_command_z, shift_ctrl_z], ([shift_command_z, shift_ctrl_z]) => {
+  if ((shift_command_z || shift_ctrl_z) && canRedo.value) {
+    redo();
+  }
 });
 
 const debouncedCommit = useDebounceFn(commit);
