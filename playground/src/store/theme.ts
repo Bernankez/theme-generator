@@ -1,31 +1,58 @@
 import { defineStore } from "pinia";
-import { computed, ref, watchEffect } from "vue";
-import { defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { computed, ref, toValue, watchEffect } from "vue";
+import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
 import { n } from "@bernankez/utils";
+import { useConfigStore } from "./config";
+
+export const modes = n(["default", "infer", "preset", "custom"]);
+
+export type Mode = typeof modes[number];
+
+export interface MenuItemConfig {
+  id: string;
+  icon?: string;
+  label: string | (() => string);
+  title?: string;
+  mode: Mode;
+  theme?: AcceptableTheme | (() => AcceptableTheme);
+  cssPrefix?: string;
+  /** Defaults to false */
+  deletable?: boolean;
+}
 
 export const useThemeStore = defineStore("theme", () => {
+  const { configs } = useConfigStore();
+
   const cssPrefix = ref("");
   const themeColor = ref("#c14344");
-  const modeOptions = computed(() => n([
+  const menus = computed<MenuItemConfig[]>(() => [
     {
+      id: "default",
       label: "default",
-      value: "default",
+      mode: "default",
+      theme: defaultColors,
     },
     {
-      label: themeColor.value,
-      value: "infer",
+      id: "infer",
+      label: () => themeColor.value,
+      mode: "infer",
+      theme: () => inferThemeFromColor(themeColor.value),
+      title: "Infer theme from a theme color",
     },
-  ]));
-  const mode = ref<typeof modeOptions["value"][number]["value"]>("default");
-  const defaults = computed(() => {
-    if (mode.value === "infer") {
-      return inferThemeFromColor(themeColor.value);
-    }
-    return defaultColors;
-  });
+    ...configs.map(config => ({
+      id: config._id,
+      label: config.name,
+      mode: "custom" as Mode,
+      theme: config.theme,
+      cssPrefix: config.cssPrefix,
+      deletable: true,
+    })),
+  ]);
+  const selectedId = ref("default");
+  const selected = computed(() => menus.value.find(menu => menu.id === selectedId.value)!);
+  const base = computed(() => selected.value.theme || defaultColors);
   const theme = computed(() => defineTheme({
-    cssPrefix: cssPrefix.value,
-    defaults: defaults.value,
+    defaults: toValue(base.value),
   }));
   const writableTheme = ref(theme.value);
 
@@ -36,10 +63,11 @@ export const useThemeStore = defineStore("theme", () => {
   return {
     cssPrefix,
     themeColor,
-    defaults,
+    defaults: base,
     theme,
     writableTheme,
-    modeOptions,
-    mode,
+    menus,
+    selected,
+    selectedId,
   };
 });

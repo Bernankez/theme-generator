@@ -10,7 +10,6 @@ export * from "./shared";
 
 export interface DefineThemeOptions {
   defaults: AcceptableTheme;
-  cssPrefix?: string;
   overrides?: Partial<AcceptableTheme>;
 }
 

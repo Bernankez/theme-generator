@@ -7,6 +7,8 @@
 - [x] Global key shortcut for undo/redo
 - [x] Infer theme from primary color
 - [x] Choose a primary color as guidance
-- [ ] Export/Import
-- [ ] Theme presets
+- [x] Export/Import
+- [ ] Persist writableTheme/cssPrefix/themeColor/SelectedId
+- [ ] Theme presets (keke.cc/luyejiu.live)
 - [ ] DaisyUI preset
+- [ ] Improve Website example
