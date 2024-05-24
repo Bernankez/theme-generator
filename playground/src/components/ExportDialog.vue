@@ -42,10 +42,6 @@ const filteredTitles = computed(() => titles.filter((title) => {
   return (title.key in currentPreset && currentPreset[title.key as keyof typeof currentPreset].value) || title.key === "node";
 }));
 
-watchEffect(() => {
-  active.value = filteredTitles.value[0]?.key || "node";
-});
-
 const options = ref(presets.map(key => ({
   label: key,
   value: key,

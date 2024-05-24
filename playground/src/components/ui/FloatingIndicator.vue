@@ -1,17 +1,30 @@
 <script setup lang="ts">
 import { useMergedState } from "@bernankez/utils/vue";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   data?: { label: string | number;key: string | number }[];
-}>();
+  keepSelected?: boolean;
+}>(), {
+  keepSelected: true,
+});
 
 const uncontrolled = ref<string | number>();
-watchEffect(() => {
-  uncontrolled.value = props.data?.[0].key;
-});
 const controlled = defineModel<string | number>();
 const active = useMergedState(controlled, uncontrolled);
+
+watch(() => props.data, (data, oldData) => {
+  if (oldData && data && active.value) {
+    if (data.find(item => item.key === active.value) && props.keepSelected) {
+      // Keep previous value
+    } else {
+      // Reset to first value
+      active.value = data[0].key;
+    }
+  } else {
+    active.value = data?.[0].key;
+  }
+}, { immediate: true });
 
 const width = computed(() => `${(100 / (props.data?.length || 1))}%`);
 const translateX = computed(() => {
