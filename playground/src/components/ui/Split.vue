@@ -6,25 +6,32 @@ import { useMergedState } from "@bernankez/utils/vue";
 const props = withDefaults(defineProps<{
   direction?: "horizontal" | "vertical";
   resizeTriggerSize?: number;
+  resizeTriggerSublineSize: number;
   min?: number | string;
   max?: number | string;
 }>(), {
   direction: "horizontal",
   resizeTriggerSize: 4,
+  resizeTriggerSublineSize: 1,
   min: 0,
   max: 1,
 });
 
 const cursor = computed(() => props.direction === "vertical" ? "row-resize" : "col-resize");
-const resizeWrapperStyle = computed(() => props.direction === "vertical"
-  ? ({
-      height: `${props.resizeTriggerSize}px`,
-      width: "100%",
-    })
-  : ({
-      width: `${props.resizeTriggerSize}px`,
-      height: "100%",
-    }));
+const resizeWrapperStyle = computed(() => calculateStyle(props.resizeTriggerSize));
+const resizeSublineStyle = computed(() => calculateStyle(props.resizeTriggerSublineSize));
+
+function calculateStyle(size: number) {
+  return props.direction === "vertical"
+    ? ({
+        height: `${size}px`,
+        width: "100%",
+      })
+    : ({
+        width: `${size}px`,
+        height: "100%",
+      });
+}
 
 const uncontrolledSize = ref(0.5);
 const controlledSize = defineModel<string | number>("size");
@@ -139,14 +146,14 @@ function updateSize(e: MouseEvent) {
     <div :style="slot1Style" class="w-full overflow-auto">
       <slot name="1"></slot>
     </div>
-    <div ref="resizeTriggerRef" :style="{ cursor }" class="group flex shrink-0 grow-0" @mousedown="onMouseDown">
-      <div class="h-full w-1px bg-foreground" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
+    <div ref="resizeTriggerRef" :style="{ cursor }" class="group flex shrink-0 grow-0" :class="[props.direction === 'vertical' && 'flex-col']" @mousedown="onMouseDown">
+      <div class="bg-foreground" :style="{ ...resizeSublineStyle }" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
       <div :style="{ ...resizeWrapperStyle }" class="shrink-0">
         <slot name="resize-trigger">
           <div class="h-full w-full bg-foreground transition-200"></div>
         </slot>
       </div>
-      <div class="h-full w-1px bg-foreground" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
+      <div class="bg-foreground" :style="{ ...resizeSublineStyle }" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
     </div>
     <div class="w-full overflow-auto">
       <slot name="2"></slot>
