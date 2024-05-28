@@ -45,7 +45,7 @@ const { sm } = useBreakpoints(breakpointsTailwind);
 </script>
 
 <template>
-  <Split class="h-screen overflow-hidden" :direction="sm ? undefined : 'vertical'" :size="0.4" :min="0" :max="1" :resize-trigger-size="6">
+  <Split class="h-screen overflow-hidden" :direction="sm ? undefined : 'vertical'" :size="0.4" :min="0" :max="1">
     <template #1>
       <div ref="websiteWrapperRef">
         <Website />

@@ -139,10 +139,14 @@ function updateSize(e: MouseEvent) {
     <div :style="slot1Style" class="w-full overflow-auto">
       <slot name="1"></slot>
     </div>
-    <div ref="resizeTriggerRef" class="shrink-0 grow-0" :style="{ ...resizeWrapperStyle, cursor }" @mousedown="onMouseDown">
-      <slot name="resize-trigger">
-        <div class="h-full w-full bg-foreground transition-200" :class="[dragging ? 'shadow-sm shadow-info bg-info!' : 'hover:shadow-sm hover:shadow-info hover:bg-info']"></div>
-      </slot>
+    <div ref="resizeTriggerRef" :style="{ cursor }" class="group flex shrink-0 grow-0" @mousedown="onMouseDown">
+      <div class="h-full w-1px bg-foreground" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
+      <div :style="{ ...resizeWrapperStyle }" class="shrink-0">
+        <slot name="resize-trigger">
+          <div class="h-full w-full bg-foreground transition-200"></div>
+        </slot>
+      </div>
+      <div class="h-full w-1px bg-foreground" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
     </div>
     <div class="w-full overflow-auto">
       <slot name="2"></slot>
