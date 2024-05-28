@@ -12,3 +12,4 @@
 - [ ] Theme presets (keke.cc/luyejiu.live)
 - [ ] DaisyUI preset
 - [ ] Improve Website example
+- [ ] PWA support
