@@ -11,15 +11,13 @@ const props = withDefaults(defineProps<{
   max?: number | string;
 }>(), {
   direction: "horizontal",
-  resizeTriggerSize: 4,
-  resizeTriggerSublineSize: 1,
+  resizeTriggerSize: 12,
   min: 0,
   max: 1,
 });
 
 const cursor = computed(() => props.direction === "vertical" ? "row-resize" : "col-resize");
 const resizeWrapperStyle = computed(() => calculateStyle(props.resizeTriggerSize));
-const resizeSublineStyle = computed(() => calculateStyle(props.resizeTriggerSublineSize));
 
 function calculateStyle(size: number) {
   return props.direction === "vertical"
@@ -146,14 +144,10 @@ function updateSize(e: MouseEvent) {
     <div :style="slot1Style" class="w-full overflow-auto">
       <slot name="1"></slot>
     </div>
-    <div ref="resizeTriggerRef" :style="{ cursor }" class="group flex shrink-0 grow-0" :class="[props.direction === 'vertical' && 'flex-col']" @mousedown="onMouseDown">
-      <div class="bg-foreground" :style="{ ...resizeSublineStyle }" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
-      <div :style="{ ...resizeWrapperStyle }" class="shrink-0">
-        <slot name="resize-trigger">
-          <div class="h-full w-full bg-foreground transition-200"></div>
-        </slot>
-      </div>
-      <div class="bg-foreground" :style="{ ...resizeSublineStyle }" :class="[dragging ? 'bg-opacity-100' : 'bg-opacity-30']"></div>
+    <div ref="resizeTriggerRef" :style="{ ...resizeWrapperStyle, cursor }" class="group flex shrink-0 grow-0 items-center" :class="[props.direction === 'vertical' && 'flex-col']" @mousedown="onMouseDown">
+      <slot name="resize-trigger">
+        <div class="rounded-full bg-muted-foreground bg-opacity-50 transition-200 transition-all group-hover:bg-opacity-80" :class="[props.direction === 'vertical' ? 'w-12 group-hover:w-15 h-full my-2px' : 'h-12 group-hover:h-15 w-full mx-2px']"></div>
+      </slot>
     </div>
     <div class="w-full overflow-auto">
       <slot name="2"></slot>
