@@ -146,7 +146,7 @@ function updateSize(e: MouseEvent) {
     </div>
     <div ref="resizeTriggerRef" :style="{ ...resizeWrapperStyle, cursor }" class="group flex shrink-0 grow-0 items-center" :class="[props.direction === 'vertical' && 'flex-col']" @mousedown="onMouseDown">
       <slot name="resize-trigger">
-        <div class="rounded-full bg-muted-foreground bg-opacity-50 transition-200 transition-all group-hover:bg-opacity-80" :class="[props.direction === 'vertical' ? 'w-12 group-hover:w-15 h-full my-2px' : 'h-12 group-hover:h-15 w-full mx-2px']"></div>
+        <div class="rounded-full bg-muted-foreground bg-opacity-50 transition-200 transition-all group-hover:bg-opacity-80" :class="[props.direction === 'vertical' ? 'w-12 group-hover:w-15 h-full my-2px' : 'h-12 group-hover:h-15 w-full mx-2px', dragging ? props.direction === 'vertical' ? 'w-15 bg-opacity-80' : 'h-15 bg-opacity-80' : '']"></div>
       </slot>
     </div>
     <div class="w-full overflow-auto">
