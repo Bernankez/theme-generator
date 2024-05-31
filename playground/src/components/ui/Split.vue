@@ -6,7 +6,7 @@ import { useMergedState } from "@bernankez/utils/vue";
 const props = withDefaults(defineProps<{
   direction?: "horizontal" | "vertical";
   resizeTriggerSize?: number;
-  resizeTriggerSublineSize: number;
+  resizeTriggerSublineSize?: number;
   min?: number | string;
   max?: number | string;
 }>(), {
