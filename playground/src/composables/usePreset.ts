@@ -1,10 +1,10 @@
-import { type Preset, defaultPreset, shadcnPreset } from "@bernankez/theme-generator";
+import { type Preset, nonePreset, shadcnPreset } from "@bernankez/theme-generator";
 import { storeToRefs } from "pinia";
 import { type MaybeRefOrGetter, computed, toValue } from "vue";
 import { useThemeStore } from "../store/theme";
 
 const _presets = {
-  default: defaultPreset,
+  none: nonePreset,
   shadcn: shadcnPreset,
 };
 

@@ -34,7 +34,7 @@ const titles = [
   },
 ];
 
-const preset = ref<PresetName>("default");
+const preset = ref<PresetName>("none");
 const active = ref("node");
 
 const currentPreset = usePreset(preset);
@@ -48,7 +48,7 @@ const options = ref(presets.map(key => ({
 })));
 
 const presetKeyMap: Record<PresetName, string> = {
-  default: "defaultPreset",
+  none: "nonePreset",
   shadcn: "shadcnPreset",
 };
 const index = computed(() => `import { defineTheme, inferThemeFromColor, ${presetKeyMap[preset.value]} } from "@bernankez/theme-generator";

@@ -12,7 +12,7 @@ const json = defineModel<T>({
   required: true,
 });
 
-const scheme = defineModel<Scheme>("scheme", {
+const activeScheme = defineModel<Scheme>("scheme", {
   default: "light" as Scheme,
 });
 
@@ -45,11 +45,11 @@ watch([shift_command_z, shift_ctrl_z], ([shift_command_z, shift_ctrl_z]) => {
 
 const debouncedCommit = useDebounceFn(commit);
 
-function updateColor(key: string, color: string | Color) {
+function updateColor(key: string, color: string | Color, scheme: Scheme) {
   const obj = merge({}, json.value, {
     colors: {
       [key]: {
-        [scheme.value]: color,
+        [scheme]: color,
       },
     },
   });
@@ -65,28 +65,6 @@ function updateShape(key: string, shape: string) {
   debouncedCommit();
 }
 
-function sync(key: string, triggerCommit = true) {
-  if (json.value.colors[key].dark === json.value.colors[key].light) {
-    return;
-  }
-  if (scheme.value === "dark") {
-    json.value.colors[key].dark = json.value.colors[key].light;
-  } else {
-    json.value.colors[key].light = json.value.colors[key].dark;
-  }
-  triggerCommit && commit();
-}
-
-function syncAll() {
-  for (const key in json.value.colors) {
-    sync(key, false);
-  }
-  // trigger emit
-  // eslint-disable-next-line no-self-assign
-  json.value = json.value;
-  commit();
-}
-
 const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.keys(json.value).filter(key => key !== "colors")));
 </script>
 
@@ -98,7 +76,7 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div>
       <div class="flex-auto"></div>
       <div class="text-sm">
-        <Select v-model="scheme" :options="schemeOptions" />
+        <Select v-model="activeScheme" :options="schemeOptions" />
       </div>
     </div>
     <div class="palette-row">
@@ -118,9 +96,6 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
         Example use
       </div>
       <div class="flex-auto"></div>
-      <div>
-        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" @click="syncAll" />
-      </div>
       <div class="ml-2 w-28 flex items-center justify-evenly">
         <Button :disabled="!canUndo" icon="i-lucide:undo-2" title="Undo" @click="undo" />
         <Button :disabled="!canRedo" icon="i-lucide:redo-2" title="Redo" @click="redo" />
@@ -141,13 +116,12 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
         </div>
       </div>
       <div class="flex-auto"></div>
-      <div>
-        <Button icon="i-lucide:file-symlink" :title="`Sync from ${scheme === 'light' ? 'dark' : 'light'}`" @click="sync(key)" />
-      </div>
-      <div class="ml-2 w-28 shrink-0">
-        <div v-if="key in json.colors" class="flex items-center gap-2">
-          <input :value="json.colors[key][scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateColor(key, (e.currentTarget as HTMLInputElement).value)" />
-          <Palette :model-value="json.colors[key][scheme]" class="shrink-0" @update:model-value="(color) => updateColor(key, color)" />
+      <div class="w-33 shrink-0">
+        <div v-if="key in json.colors">
+          <div v-for="scheme in ['light', 'dark']" :key="scheme" class="flex items-center gap-2 px-2 transition transition-500" :class="[activeScheme === scheme ? 'from-transparent via-neutral-200 to-transparent bg-gradient-to-r' : 'scale-80']">
+            <input :value="json.colors[key][scheme as Scheme]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateColor(key, (e.currentTarget as HTMLInputElement).value, scheme as Scheme)" />
+            <Palette :model-value="json.colors[key][scheme as Scheme]" class="shrink-0" @update:model-value="(color) => updateColor(key, color, scheme as Scheme)" />
+          </div>
         </div>
         <div v-else>
           <input :value="json[key as keyof T]" class="w-full b-none bg-transparent text-right text-sm font-mono outline-none" @input="(e) => updateShape(key, (e.currentTarget as HTMLInputElement).value)" />
@@ -159,6 +133,6 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
 
 <style scoped>
 .palette-row {
-  @apply font-mono flex items-center b-0 b-b-1 b-light b-solid px-2 py-1;
+  @apply font-mono flex items-center b-0 b-b-1 b-light b-solid pl-2 py-1 p;
 }
 </style>
