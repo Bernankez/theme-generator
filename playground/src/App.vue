@@ -24,7 +24,7 @@ const scheme = computed<Scheme>({
 });
 
 const { writableTheme, cssPrefix } = storeToRefs(useThemeStore());
-const { style } = usePreset("default");
+const { style } = usePreset("none");
 
 const websiteWrapperRef = ref<HTMLDivElement>();
 
