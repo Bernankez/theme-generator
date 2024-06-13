@@ -30,8 +30,19 @@ useDropZone(dropZoneRef, {
   },
 });
 
-function onDrag(e: DragEvent) {
+function onDragStart(e: DragEvent) {
   e.dataTransfer?.setData("color", color.value || "");
+}
+
+function onDragOver(e: DragEvent) {
+  if (!e.dataTransfer) {
+    return;
+  }
+  if (!props.droppable) {
+    e.dataTransfer.dropEffect = "none";
+  } else {
+    e.dataTransfer.dropEffect = "copy";
+  }
 }
 
 const standardColor = computed({
@@ -48,7 +59,7 @@ const standardColor = computed({
 </script>
 
 <template>
-  <input ref="dropZoneRef" v-model="standardColor" :draggable="draggable ? 'true' : 'false'" type="color" class="h-8 w-7 b-none bg-transparent p-0 outline-none" :class="[round && 'palette']" @dragstart="onDrag" />
+  <input ref="dropZoneRef" v-model="standardColor" :draggable="draggable ? 'true' : 'false'" type="color" class="h-8 w-7 b-none bg-transparent p-0 outline-none" :class="[round && 'palette']" @dragstart="onDragStart" @dragover="onDragOver" />
 </template>
 
 <style scoped>
