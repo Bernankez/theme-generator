@@ -52,7 +52,7 @@ const { sm } = useBreakpoints(breakpointsTailwind);
       </div>
     </template>
     <template #2>
-      <Header />
+      <Header class="sticky top-0 z-1" />
       <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" v-model="writableTheme" />
     </template>
   </Split>

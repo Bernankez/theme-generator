@@ -33,7 +33,7 @@ function remove(menu: MenuItemConfig) {
 </script>
 
 <template>
-  <header class="flex items-center justify-between gap-3 px-2 py-3 font-mono">
+  <header class="flex items-center justify-between gap-3 bg-background px-2 py-3 font-mono shadow">
     <div class="text-2xl">
       theme-generator
     </div>
