@@ -1,12 +1,38 @@
 <script setup lang="ts">
+import { useDropZone } from "@vueuse/core";
 import chroma from "chroma-js";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
-defineProps<{
+const props = withDefaults(defineProps<{
   round?: boolean;
-}>();
+  draggable?: boolean;
+  droppable?: boolean;
+}>(), {
+  draggable: true,
+  droppable: true,
+});
 
 const color = defineModel<string>();
+
+const dropZoneRef = ref<HTMLInputElement>();
+
+useDropZone(dropZoneRef, {
+  onDrop(_, e) {
+    if (!props.droppable) {
+      return;
+    }
+    if (e.dataTransfer?.getData("color")) {
+      const c = e.dataTransfer.getData("color");
+      if (c !== color.value) {
+        color.value = e.dataTransfer.getData("color");
+      }
+    }
+  },
+});
+
+function onDrag(e: DragEvent) {
+  e.dataTransfer?.setData("color", color.value || "");
+}
 
 const standardColor = computed({
   get: () => {
@@ -22,7 +48,7 @@ const standardColor = computed({
 </script>
 
 <template>
-  <input v-model="standardColor" type="color" class="h-8 w-7 b-none bg-transparent p-0 outline-none" :class="[round && 'palette']" />
+  <input ref="dropZoneRef" v-model="standardColor" :draggable="draggable ? 'true' : 'false'" type="color" class="h-8 w-7 b-none bg-transparent p-0 outline-none" :class="[round && 'palette']" @dragstart="onDrag" />
 </template>
 
 <style scoped>
