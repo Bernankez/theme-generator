@@ -1,7 +1,7 @@
 import { n } from "@bernankez/utils";
 import { type Color, type Theme, hexToHsl, transformStyle, transformTailwind, transformUnoCSS } from "..";
 
-export interface ShadcnPresetOptions {
+export interface PresetShadcnOptions {
   cssPrefix?: string;
 }
 
@@ -70,7 +70,7 @@ function handlePercent(num: number) {
   return num.toFixed(1).replace(".0", "");
 }
 
-export function shadcnPreset(theme: Theme, options?: ShadcnPresetOptions) {
+export function presetShadcn(theme: Theme, options?: PresetShadcnOptions) {
   const { cssPrefix } = options || {};
   const transformedTheme = transformTheme(theme);
   const style = transformStyle(transformedTheme, {

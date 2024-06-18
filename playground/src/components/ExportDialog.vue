@@ -48,8 +48,8 @@ const options = ref(presets.map(key => ({
 })));
 
 const presetKeyMap: Record<PresetName, string> = {
-  none: "nonePreset",
-  shadcn: "shadcnPreset",
+  none: "presetNone",
+  shadcn: "presetShadcn",
 };
 const index = computed(() => `import { defineTheme, inferThemeFromColor, ${presetKeyMap[preset.value]} } from "@bernankez/theme-generator";
 

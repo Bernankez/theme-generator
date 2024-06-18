@@ -1,11 +1,11 @@
-import { type Preset, nonePreset, shadcnPreset } from "@bernankez/theme-generator";
+import { type Preset, presetNone, presetShadcn } from "@bernankez/theme-generator";
 import { storeToRefs } from "pinia";
 import { type MaybeRefOrGetter, computed, toValue } from "vue";
 import { useThemeStore } from "../store/theme";
 
 const _presets = {
-  none: nonePreset,
-  shadcn: shadcnPreset,
+  none: presetNone,
+  shadcn: presetShadcn,
 };
 
 export type PresetName = keyof typeof _presets;

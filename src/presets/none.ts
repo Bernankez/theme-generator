@@ -1,11 +1,11 @@
 import { transformStyle, transformTailwind, transformUnoCSS } from "../transformers";
 import type { Theme } from "..";
 
-export interface NonePresetOptions {
+export interface PresetNoneOptions {
   cssPrefix?: string;
 }
 
-export function nonePreset(theme: Theme, options?: NonePresetOptions) {
+export function presetNone(theme: Theme, options?: PresetNoneOptions) {
   const { cssPrefix } = options || {};
 
   const style = transformStyle(theme, {
