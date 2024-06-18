@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { computed, ref, toValue, watchEffect } from "vue";
-import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
+import { computed, ref } from "vue";
+import { type AcceptableTheme, defaultColors, defineTheme } from "@bernankez/theme-generator";
 import { n } from "@bernankez/utils";
 import { push } from "notivue";
 import { useShare } from "../composables/useShare";
