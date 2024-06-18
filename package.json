@@ -52,7 +52,7 @@
     "start": "tsx src/index.ts",
     "test": "vitest",
     "test:once": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && pnpm -F \"playground\" typecheck"
   },
   "peerDependencies": {
     "unocss": "^0.59.4"
