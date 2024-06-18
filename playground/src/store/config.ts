@@ -1,13 +1,18 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { ThemeConfig } from "../composables/useConfig";
+import type { InternalThemeConfig } from "../composables/useConfig";
 
 export const useConfigStore = defineStore("config", () => {
-  const configs = ref<ThemeConfig[]>([]);
+  const configs = ref<InternalThemeConfig[]>([]);
+
+  const builtInConfigs = ref<InternalThemeConfig[]>([]);
 
   return {
     configs,
+    builtInConfigs,
   };
 }, {
-  persist: false,
+  persist: {
+    paths: ["configs"],
+  },
 });

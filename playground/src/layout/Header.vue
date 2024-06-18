@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { storeToRefs } from "pinia";
-import { push } from "notivue";
+import { toColor } from "@bernankez/theme-generator";
 import Button from "../components/ui/Button.vue";
 import Dropdown from "../components/ui/Dropdown.vue";
 import MenuItem from "../components/ui/MenuItem.vue";
 import ExportDialog from "../components/ExportDialog.vue";
-import { useThemeStore } from "../store/theme";
-import { useShare } from "../composables/useShare";
-import { useConfig } from "../composables/useConfig";
+import { useMenu } from "../composables/useMenu";
+import { scheme } from "../shared/isDark";
 
-const { writableTheme } = storeToRefs(useThemeStore());
-const { importConfig, exportConfig } = useConfig();
-
-const { share } = useShare();
+const { currentMenuId, customMenu, configMenus, builtInConfigMenus } = useMenu();
 
 const showExport = ref(false);
 </script>
@@ -27,22 +22,42 @@ const showExport = ref(false);
       </div>
     </div>
     <div class="flex select-none items-center gap-3">
-      <Dropdown :label="writableTheme.colors.primary.light" title="Preset" icon="i-lucide:palette">
+      <Dropdown label="Presets" title="Presets" icon="i-lucide:palette">
         <div class="p-1">
-          <MenuItem
-            :auto-collapse="false" icon="i-lucide:import" @click="importConfig((config) => {
-              writableTheme = config.theme
-              push.success('Theme imported from config')
-            })"
-          >
+          <MenuItem :auto-collapse="false" :active="currentMenuId === customMenu._id || undefined" :title="customMenu.name">
+            <div class="h-2 w-2 rounded-full" :style="{ backgroundColor: toColor((customMenu.theme)?.colors.primary)?.[scheme] }"></div>
+            {{ customMenu.name }}
+          </MenuItem>
+        </div>
+        <div v-if="builtInConfigMenus.length" class="p-1">
+          <MenuItem disabled class="cursor-default!">
+            <span class="text-sm">Built-in themes</span>
+          </MenuItem>
+          <MenuItem v-for="menu in builtInConfigMenus" :key="menu._id" :active="currentMenuId === menu._id || undefined" :title="menu.name" :auto-collapse="false" icon="i-lucide:share-2">
+            <div class="h-2 w-2 rounded-full" :style="{ backgroundColor: toColor((menu.theme)?.colors.primary)?.[scheme] }"></div>
+            {{ menu.name }}
+          </MenuItem>
+        </div>
+        <div v-if="configMenus.length" class="p-1">
+          <MenuItem disabled class="cursor-default!">
+            <span class="text-sm">Imported themes</span>
+          </MenuItem>
+          <MenuItem v-for="menu in configMenus" :key="menu._id" :active="currentMenuId === menu._id || undefined" :title="menu.name" :auto-collapse="false">
+            <div class="h-2 w-2 rounded-full" :style="{ backgroundColor: toColor((menu.theme)?.colors.primary)?.[scheme] }"></div>
+            {{ menu.name }}
+            <div v-if="menu._removable" class="i-lucide:trash-2 ml-auto" @click.stop></div>
+          </MenuItem>
+        </div>
+        <div class="p-1">
+          <MenuItem :auto-collapse="false" icon="i-lucide:import">
             Import
           </MenuItem>
-          <MenuItem :auto-collapse="false" icon="i-lucide:share" @click="exportConfig">
+          <MenuItem :auto-collapse="false" icon="i-lucide:share">
             Export
           </MenuItem>
         </div>
         <div class="p-1">
-          <MenuItem :auto-collapse="false" icon="i-lucide:share-2" @click="() => share(writableTheme)">
+          <MenuItem :auto-collapse="false" icon="i-lucide:share-2">
             Share
           </MenuItem>
         </div>

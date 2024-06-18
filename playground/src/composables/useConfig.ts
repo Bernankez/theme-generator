@@ -1,51 +1,38 @@
+import type { Theme } from "@bernankez/theme-generator";
 import { storeToRefs } from "pinia";
 import { useFileDialog } from "@vueuse/core";
 import { nanoid } from "nanoid";
-import { useThemeStore } from "../store/theme";
-import type { Theme } from "../../../src";
-import { download } from "../shared/utils";
+import packageJson from "../../package.json";
 import { useConfigStore } from "../store/config";
+import { download } from "../shared/utils";
 
 export interface ThemeConfig {
-  _id: string;
-  _version: number;
+  version: number;
   name: string;
   cssPrefix?: string;
   theme: Theme;
 }
 
-export function useConfig() {
-  const themeStore = useThemeStore();
-  const { writableTheme, cssPrefix } = storeToRefs(themeStore);
-  const { configs } = storeToRefs(useConfigStore());
+export interface InternalThemeConfig extends ThemeConfig {
+  _id: string;
+  _removable?: boolean;
+}
 
-  let hook: ((config: ThemeConfig) => void) | undefined;
+export const configVersion = packageJson["@bernankez/theme-generator"].configVersion;
+
+export function useConfig() {
+  const configStore = useConfigStore();
+  const { configs, builtInConfigs } = storeToRefs(configStore);
+
+  let hook: ((config: InternalThemeConfig) => void) | undefined;
 
   const { open, onChange, reset } = useFileDialog({
     accept: "application/json",
   });
 
-  function exportConfig() {
-    const config: ThemeConfig = {
-      _id: nanoid(),
-      _version: 0,
-      name: writableTheme.value.colors.primary.light,
-      cssPrefix: cssPrefix.value,
-      theme: writableTheme.value,
-    };
-    const file = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
-    const name = `${config.name}.json`;
-    download(file, name);
-  }
-
   function importConfig(fn?: (config: ThemeConfig) => void) {
     hook = fn;
     open();
-  }
-
-  function removeConfig(id: string) {
-    const index = configs.value.findIndex(config => config._id === id);
-    index > -1 && configs.value.splice(index, 1);
   }
 
   onChange((fileList) => {
@@ -59,8 +46,14 @@ export function useConfig() {
     reader.onload = (e) => {
       try {
         const config = JSON.parse(e.target?.result as string) as ThemeConfig;
-        configs.value.push(config);
-        hook?.(config);
+        const _id = nanoid();
+        const internalConfig = {
+          ...config,
+          _id,
+          _removable: true,
+        };
+        hook?.(internalConfig);
+        configs.value.push(internalConfig);
       } catch (error) {
         console.error(error);
       }
@@ -69,10 +62,63 @@ export function useConfig() {
     reset();
   });
 
+  function exportConfig(_id: string) {
+    const internalConfig = configs.value.find(config => config._id === _id);
+    if (!internalConfig) {
+      return;
+    }
+    const { _id: _, _removable, ...config } = internalConfig;
+    _exportConfig(config);
+  }
+
+  function removeConfig(_id: string) {
+    const index = configs.value.findIndex(config => config._id === _id);
+    index > -1 && configs.value.splice(index, 1);
+  }
+
+  function _exportConfig(config: ThemeConfig) {
+    const file = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
+    const name = `${config.name}.json`;
+    download(file, name);
+  }
+
+  function exportThemeAsConfig(options: Omit<ThemeConfig, "version">) {
+    const config: ThemeConfig = {
+      version: configVersion,
+      ...options,
+    };
+    _exportConfig(config);
+  }
+
+  function exportThemeAsUrl(theme: Theme) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("theme", JSON.stringify(theme));
+    return url;
+  }
+
+  function importThemeFromUrl(url: string) {
+    const resolvedUrl = new URL(url);
+    const theme = resolvedUrl.searchParams.get("theme");
+    if (!theme) {
+      return;
+    }
+    try {
+      const _theme = JSON.parse(theme) as Theme;
+      return _theme;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return {
+    builtInConfigs,
+    configs,
     importConfig,
     exportConfig,
     removeConfig,
-    configs,
+
+    importThemeFromUrl,
+    exportThemeAsUrl,
+    exportThemeAsConfig,
   };
 }
