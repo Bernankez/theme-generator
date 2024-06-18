@@ -33,9 +33,12 @@ function remove(menu: MenuItemConfig) {
 </script>
 
 <template>
-  <header class="flex items-center justify-between gap-3 bg-background px-2 py-3 font-mono shadow">
-    <div class="text-2xl">
-      theme-generator
+  <header class="flex items-center justify-between gap-3 bg-background px-2 py-3 font-mono shadow @container">
+    <div class="flex items-center gap-1">
+      <div class="i-fluent-emoji:rainbow shrink-0 text-3xl"></div>
+      <div class="hidden text-2xl @md:block">
+        theme-generator
+      </div>
     </div>
     <div class="flex select-none items-center gap-3">
       <Palette v-if="selected.mode === 'infer'" v-model="themeColor" round />

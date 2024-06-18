@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@iconify-json/fa6-brands": "^1.1.19",
+    "@iconify-json/fluent-emoji": "^1.1.18",
     "@iconify-json/lucide": "^1.1.185",
     "@unocss/reset": "^0.59.4",
     "@vitejs/plugin-vue": "^5.0.4",

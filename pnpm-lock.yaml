@@ -109,6 +109,9 @@ importers:
       '@iconify-json/fa6-brands':
         specifier: ^1.1.19
         version: 1.1.19
+      '@iconify-json/fluent-emoji':
+        specifier: ^1.1.18
+        version: 1.1.18
       '@iconify-json/lucide':
         specifier: ^1.1.185
         version: 1.1.185
@@ -730,6 +733,9 @@ packages:
 
   '@iconify-json/fa6-brands@1.1.19':
     resolution: {integrity: sha512-3Dl0D1gtFwIj7/GT2xJbkM9D/LjuozsgfLrqRWP6B5xuajtsyEvR1wD0Z06y3iaNtASpgWPWyYbml+AHQ3Hw0g==}
+
+  '@iconify-json/fluent-emoji@1.1.18':
+    resolution: {integrity: sha512-LLXbamtfQctodGAOlBEKuXyLs2TrwY/EI0EvNmttuf128V/Bkb872bNmlsKzVrescix3NOvqr0EMhyW/L/Upww==}
 
   '@iconify-json/lucide@1.1.185':
     resolution: {integrity: sha512-WIKjqTcn9f7jX4YhxXYVecHXErcs3zf4UM9rl58s516+O3IDVHw+7jE5YiF8LNhT7W15SZf+FLuNUB5MoWLlEg==}
@@ -3436,6 +3442,17 @@ packages:
       '@vue/composition-api':
         optional: true
 
+  vue-demi@0.14.8:
+    resolution: {integrity: sha512-Uuqnk9YE9SsWeReYqK2alDI5YzciATE0r2SkA6iMAtuXvNTMNACJLJEXNXaEy94ECuBe4Sk6RzRU80kjdbIo1Q==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
   vue-eslint-parser@9.4.2:
     resolution: {integrity: sha512-Ry9oiGmCAK91HrKMtCrKFWmSFWvYkpGglCeFAIqDdr9zdXmMMpJOmUJS7WWsW7fX81h6mwHmUZCQQ1E0PkSwYQ==}
     engines: {node: ^14.17.0 || >=16.0.0}
@@ -3802,7 +3819,7 @@ snapshots:
 
   '@bernankez/utils@0.6.3(vue@3.4.24(typescript@5.4.5))':
     dependencies:
-      vue-demi: 0.14.7(vue@3.4.24(typescript@5.4.5))
+      vue-demi: 0.14.8(vue@3.4.24(typescript@5.4.5))
     optionalDependencies:
       vue: 3.4.24(typescript@5.4.5)
 
@@ -4125,6 +4142,10 @@ snapshots:
   '@humanwhocodes/retry@0.2.3': {}
 
   '@iconify-json/fa6-brands@1.1.19':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/fluent-emoji@1.1.18':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -7229,6 +7250,10 @@ snapshots:
       - terser
 
   vue-demi@0.14.7(vue@3.4.24(typescript@5.4.5)):
+    dependencies:
+      vue: 3.4.24(typescript@5.4.5)
+
+  vue-demi@0.14.8(vue@3.4.24(typescript@5.4.5)):
     dependencies:
       vue: 3.4.24(typescript@5.4.5)
 
