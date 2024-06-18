@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { computed, ref, toValue, watchEffect } from "vue";
 import { type AcceptableTheme, defaultColors, defineTheme, inferThemeFromColor } from "@bernankez/theme-generator";
 import { n } from "@bernankez/utils";
-import { useConfigStore } from "./config";
+import { push } from "notivue";
+import { useShare } from "../composables/useShare";
 
 export const modes = n(["default", "infer", "preset", "custom"]);
 
@@ -21,53 +22,26 @@ export interface MenuItemConfig {
 }
 
 export const useThemeStore = defineStore("theme", () => {
-  const { configs } = useConfigStore();
+  const { parse } = useShare();
 
   const cssPrefix = ref("");
   const themeColor = ref("#c14344");
-  const menus = computed<MenuItemConfig[]>(() => [
-    {
-      id: "default",
-      label: "default",
-      mode: "default",
-      theme: defaultColors,
-    },
-    {
-      id: "infer",
-      label: () => themeColor.value,
-      mode: "infer",
-      theme: () => inferThemeFromColor(themeColor.value),
-      title: "Infer theme from a theme color",
-    },
-    ...configs.map(config => ({
-      id: config._id,
-      label: config.name,
-      mode: "custom" as Mode,
-      theme: config.theme,
-      cssPrefix: config.cssPrefix,
-      deletable: true,
-    })),
-  ]);
-  const selectedId = ref("default");
-  const selected = computed(() => menus.value.find(menu => menu.id === selectedId.value)!);
-  const base = computed(() => selected.value.theme || defaultColors);
   const theme = computed(() => defineTheme({
-    defaults: toValue(base.value),
+    defaults: defaultColors,
   }));
-  const writableTheme = ref(theme.value);
-
-  watchEffect(() => {
-    writableTheme.value = theme.value;
-  });
+  const importTheme = parse();
+  if (importTheme) {
+    push.success({
+      duration: 5000,
+      message: "Theme imported from URL",
+    });
+  }
+  const writableTheme = ref(importTheme || theme.value);
 
   return {
     cssPrefix,
     themeColor,
-    defaults: base,
     theme,
     writableTheme,
-    menus,
-    selected,
-    selectedId,
   };
 });

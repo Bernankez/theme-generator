@@ -3,6 +3,10 @@ import type { Scheme } from "@bernankez/theme-generator";
 import { computed, ref, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import { Notivue, NotivueSwipe } from "notivue";
+import type { NotivueItem } from "notivue";
+import type { SimpleNotificationProps } from "./components/SimpleNotification.vue";
+import SimpleNotification from "./components/SimpleNotification.vue";
 import ThemePalette from "./components/ThemePalette.vue";
 import Website from "./components/Website.vue";
 import Header from "./layout/Header.vue";
@@ -56,4 +60,9 @@ const { sm } = useBreakpoints(breakpointsTailwind);
       <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" v-model="writableTheme" />
     </template>
   </Split>
+  <Notivue v-slot="item">
+    <NotivueSwipe :item="item">
+      <SimpleNotification :item="item as NotivueItem<SimpleNotificationProps>" />
+    </NotivueSwipe>
+  </Notivue>
 </template>

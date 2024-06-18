@@ -1,7 +1,6 @@
 import { storeToRefs } from "pinia";
 import { useFileDialog } from "@vueuse/core";
 import { nanoid } from "nanoid";
-import { toValue } from "vue";
 import { useThemeStore } from "../store/theme";
 import type { Theme } from "../../../src";
 import { download } from "../shared/utils";
@@ -17,7 +16,7 @@ export interface ThemeConfig {
 
 export function useConfig() {
   const themeStore = useThemeStore();
-  const { selected, writableTheme, cssPrefix } = storeToRefs(themeStore);
+  const { writableTheme, cssPrefix } = storeToRefs(themeStore);
   const { configs } = storeToRefs(useConfigStore());
 
   let hook: ((config: ThemeConfig) => void) | undefined;
@@ -30,7 +29,7 @@ export function useConfig() {
     const config: ThemeConfig = {
       _id: nanoid(),
       _version: 0,
-      name: toValue(selected.value.label),
+      name: writableTheme.value.colors.primary.light,
       cssPrefix: cssPrefix.value,
       theme: writableTheme.value,
     };

@@ -9,5 +9,5 @@ export const useConfigStore = defineStore("config", () => {
     configs,
   };
 }, {
-  persist: true,
+  persist: false,
 });
