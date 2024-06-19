@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { Notivue, NotivueSwipe } from "notivue";
@@ -10,11 +10,15 @@ import ThemePalette from "./components/ThemePalette.vue";
 import Website from "./components/Website.vue";
 import Header from "./layout/Header.vue";
 import { scheme } from "./shared/isDark";
-import { useThemeStore } from "./store/theme";
 import Split from "./components/ui/Split.vue";
 import { usePreset } from "./composables/usePreset";
+import { useAppStore } from "./store/app";
+import { useTemplate } from "./composables/useTemplate";
 
-const { theme, cssPrefix } = storeToRefs(useThemeStore());
+const { splitSize } = storeToRefs(useAppStore());
+
+const { currentTemplate, updateTemplate } = useTemplate();
+
 const { style } = usePreset("none");
 
 const websiteWrapperRef = ref<HTMLDivElement>();
@@ -33,10 +37,24 @@ watchEffect(() => {
 });
 
 const { sm } = useBreakpoints(breakpointsTailwind);
+
+const theme = computed({
+  get: () => currentTemplate.value.theme,
+  set: (theme) => {
+    updateTemplate({ ...currentTemplate.value, theme });
+  },
+});
+
+const cssPrefix = computed({
+  get: () => currentTemplate.value.cssPrefix,
+  set: (cssPrefix) => {
+    updateTemplate({ ...currentTemplate.value, cssPrefix });
+  },
+});
 </script>
 
 <template>
-  <Split class="h-screen overflow-hidden" :direction="sm ? undefined : 'vertical'" :size="0.4" :min="0" :max="1">
+  <Split v-model:size="splitSize" class="h-screen overflow-hidden" :direction="sm ? undefined : 'vertical'" :min="0" :max="1">
     <template #1>
       <div ref="websiteWrapperRef">
         <Website />
@@ -44,7 +62,7 @@ const { sm } = useBreakpoints(breakpointsTailwind);
     </template>
     <template #2>
       <Header class="sticky top-0 z-1" />
-      <ThemePalette v-model:scheme="scheme" v-model:cssPrefix="cssPrefix" v-model="theme" />
+      <ThemePalette v-model:scheme="scheme" v-model="theme" v-model:css-prefix="cssPrefix" />
     </template>
   </Split>
   <Notivue v-slot="item">

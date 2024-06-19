@@ -8,6 +8,8 @@ export default defineConfig({
   plugins: [vue(), UnoCSS()],
   resolve: {
     alias: {
+      "~": resolve(__dirname, "."),
+      "@": resolve(__dirname, "./src"),
       "@bernankez/theme-generator": resolve(__dirname, "../src/index.ts"),
     },
   },

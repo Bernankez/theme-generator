@@ -1,7 +1,6 @@
 import { type Preset, presetNone, presetShadcn } from "@bernankez/theme-generator";
-import { storeToRefs } from "pinia";
 import { type MaybeRefOrGetter, computed, toValue } from "vue";
-import { useThemeStore } from "../store/theme";
+import { useTemplate } from "./useTemplate";
 
 const _presets = {
   none: presetNone,
@@ -13,11 +12,14 @@ export type PresetName = keyof typeof _presets;
 export const presets = Object.keys(_presets) as PresetName[];
 
 export function usePreset(preset: MaybeRefOrGetter<PresetName>) {
-  const { theme, cssPrefix } = storeToRefs(useThemeStore());
+  const { currentTemplate } = useTemplate();
+
+  const theme = computed(() => currentTemplate.value.theme);
+  const cssPrefix = computed(() => currentTemplate.value.cssPrefix);
 
   const presetFn = computed(() => _presets[toValue(preset)]);
   const currentPreset = computed<Preset>(() => presetFn.value(theme.value, {
-    cssPrefix: cssPrefix.value,
+    cssPrefix: cssPrefix?.value,
   }));
 
   const json = computed(() => currentPreset.value.theme);
