@@ -27,11 +27,14 @@ const showExport = ref(false);
           <MenuItemTemplateProvider>
             <MenuItemTemplate v-for="template in customTemplates" :key="template._id" :template @update:template="updateTemplate" />
           </MenuItemTemplateProvider>
-          <MenuItem :auto-collapse="false" icon="i-lucide:circle-plus" @click="() => addDefaultTemplate()">
-            New theme
+          <MenuItem :auto-collapse="false" icon="i-lucide:square-plus" @click="() => addDefaultTemplate()">
+            New
           </MenuItem>
         </div>
         <div v-if="builtInTemplates.length" class="p-1">
+          <MenuItem :auto-collapse="false" disabled class="text-sm cursor-default!">
+            Built-in
+          </MenuItem>
           <MenuItemTemplate v-for="template in builtInTemplates" :key="template._id" :template @update:template="updateTemplate" />
         </div>
         <div class="p-1">

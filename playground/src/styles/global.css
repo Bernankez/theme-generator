@@ -12,3 +12,26 @@
 body {
   margin: 0;
 }
+
+/* disable default animation for view transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+.fullscreen-color-picker::view-transition-old(root) {
+  z-index: 1;
+}
+
+.fullscreen-color-picker::view-transition-new(root) {
+  z-index: 999;
+}
+
+::view-transition-old(root) {
+  z-index: 999;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}

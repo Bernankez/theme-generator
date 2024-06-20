@@ -14,6 +14,7 @@
 - [ ] UI: Share from url
 - [ ] UI: Support setting `var(--foreground)`
 - [ ] UI: Lock color
+- [ ] Fix undo/redo
 - [ ] Color tokens
 - [ ] Theme presets (keke.cc/luyejiu.live)
 - [ ] DaisyUI preset

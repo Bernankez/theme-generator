@@ -14,6 +14,7 @@ import Split from "./components/ui/Split.vue";
 import { usePreset } from "./composables/usePreset";
 import { useAppStore } from "./store/app";
 import { useTemplate } from "./composables/useTemplate";
+import FullscreenColorPicker from "@/components/FullscreenColorPicker.vue";
 
 const { splitSize } = storeToRefs(useAppStore());
 
@@ -65,6 +66,7 @@ const cssPrefix = computed({
       <ThemePalette v-model:scheme="scheme" v-model="theme" v-model:css-prefix="cssPrefix" />
     </template>
   </Split>
+  <FullscreenColorPicker />
   <Notivue v-slot="item">
     <NotivueSwipe :item="item">
       <SimpleNotification :item="item as NotivueItem<SimpleNotificationProps>" />
