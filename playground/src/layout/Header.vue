@@ -55,6 +55,12 @@ function generate(event: MouseEvent) {
           <MenuItem :auto-collapse="false" icon="i-lucide:import" @click="() => importTemplateFromJson()">
             Import
           </MenuItem>
+          <MenuItem :auto-collapse="false" icon="i-lucide:upload" @click="() => importTemplateFromJson()">
+            Export current theme
+          </MenuItem>
+          <MenuItem :auto-collapse="false" icon="i-lucide:share-2" @click="() => importTemplateFromJson()">
+            Share to link
+          </MenuItem>
         </div>
       </Dropdown>
       <Button icon="i-lucide:zap" title="Generate" @click="showExport = true">
