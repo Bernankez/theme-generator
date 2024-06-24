@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import Button from "../components/ui/Button.vue";
 import Dropdown from "../components/ui/Dropdown.vue";
 import MenuItem from "../components/ui/MenuItem.vue";
@@ -7,10 +7,21 @@ import ExportDialog from "../components/ExportDialog.vue";
 import { useTemplate } from "@/composables/useTemplate";
 import MenuItemTemplate from "@/components/MenuItemTemplate.vue";
 import MenuItemTemplateProvider from "@/components/MenuItemTemplateProvider.vue";
+import { showColorPickerKey } from "@/injections";
+import { useViewTransition } from "@/composables/useViewTransition";
 
 const { currentTemplate, customTemplates, builtInTemplates, importTemplateFromJson, updateTemplate, addDefaultTemplate } = useTemplate();
 
 const showExport = ref(false);
+
+const { diffuse } = useViewTransition();
+const showColorPicker = inject(showColorPickerKey, ref(false));
+function generate(event: MouseEvent) {
+  diffuse(event.clientX, event.clientY, (classList) => {
+    classList.add("fullscreen-color-picker");
+    showColorPicker.value = true;
+  });
+}
 </script>
 
 <template>
@@ -29,6 +40,9 @@ const showExport = ref(false);
           </MenuItemTemplateProvider>
           <MenuItem :auto-collapse="false" icon="i-lucide:square-plus" @click="() => addDefaultTemplate()">
             New
+          </MenuItem>
+          <MenuItem :auto-collapse="false" icon="i-lucide:wand" @click="generate">
+            Generate from a color
           </MenuItem>
         </div>
         <div v-if="builtInTemplates.length" class="p-1">

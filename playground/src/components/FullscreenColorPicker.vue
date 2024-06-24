@@ -1,51 +1,29 @@
 <script setup lang="ts">
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import { useElementHover } from "@vueuse/core";
 import Palette from "./ui/Palette.vue";
 import Background from "./Background/Background.vue";
+import { useViewTransition } from "@/composables/useViewTransition";
 
 const show = defineModel({
-  default: true,
+  default: false,
 });
 
 const buttonRef = ref<HTMLDivElement>();
 const isHover = useElementHover(buttonRef);
 
-async function onPick(event: MouseEvent) {
-  if (document.startViewTransition) {
-    const x = event.clientX;
-    const y = event.clientY;
-    const endRadius = Math.hypot(
-      Math.max(x, innerWidth - x),
-      Math.max(y, innerHeight - y),
-    );
-    const viewTransition = document.startViewTransition(() => {
-      show.value = false;
-    });
+const { concentrate } = useViewTransition();
 
-    await viewTransition.ready;
-
-    const clipPath = [
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-        `circle(0px at ${x}px ${y}px)`,
-    ];
-
-    document.documentElement.animate(
-      {
-        clipPath,
-      },
-      {
-        duration: 500,
-        easing: "cubic-bezier(.16,.08,.25,1)",
-        pseudoElement: "::view-transition-old(root)",
-      },
-    );
-  }
+function onPick(event: MouseEvent) {
+  concentrate(event.clientX, event.clientY, (classList) => {
+    classList.remove("fullscreen-color-picker");
+    show.value = false;
+  });
 }
 </script>
 
 <template>
-  <div v-if="show" class="fullscreen-color-picker absolute bottom-0 left-0 right-0 top-0 z-1 bg-background">
+  <div v-if="show" class="absolute bottom-0 left-0 right-0 top-0 z-1 bg-background">
     <div class="relative h-full w-full">
       <Background class="absolute left-0 top-0 transition transition-500 -z-1" :class="[isHover ? 'blur-30' : '']" />
       <div class="h-full w-full flex flex-col items-center justify-center gap-10">
