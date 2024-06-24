@@ -9,7 +9,7 @@
 - [x] Choose a primary color as guidance
 - [x] Export/Import
 - [x] Persist writableTheme/cssPrefix/themeColor/SelectedId
-- [ ] UI: Infer from a theme color
+- [x] UI: Infer from a theme color
 - [ ] UI: Export to Json
 - [ ] UI: Share from url
 - [ ] UI: Support setting `var(--foreground)`
