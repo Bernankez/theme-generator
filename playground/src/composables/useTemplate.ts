@@ -1,5 +1,5 @@
 import { storeToRefs } from "pinia";
-import { useFileDialog } from "@vueuse/core";
+import { useClipboard, useFileDialog } from "@vueuse/core";
 import { nanoid } from "nanoid";
 import { push } from "notivue";
 import { type InternalThemeTemplate, type ThemeTemplate, useTemplateStore } from "../store/template";
@@ -9,6 +9,8 @@ export function useTemplate() {
   const templateStore = useTemplateStore();
   const { setCurrentTemplate, removeTemplate, updateTemplate, addDefaultTemplate, copyFromTemplate } = templateStore;
   const { templates, customTemplates, builtInTemplates, currentTemplate } = storeToRefs(templateStore);
+
+  const { copy } = useClipboard();
 
   const { open, onChange, reset } = useFileDialog({
     accept: "application/json",
@@ -46,6 +48,9 @@ export function useTemplate() {
         };
         hook?.(internalTemplate);
         setCurrentTemplate(internalTemplate);
+        push.success({
+          message: `Successfully imported ${internalTemplate.name}`,
+        });
       } catch (error) {
         console.error(error);
       }
@@ -59,6 +64,28 @@ export function useTemplate() {
     const file = new Blob([JSON.stringify(_template, null, 2)], { type: "application/json" });
     const name = `${template.name}.json`;
     download(file, name);
+  }
+
+  function importTemplateFromLink(template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable">) {
+    setCurrentTemplate({
+      _id: nanoid(),
+      ...template,
+      _editable: true,
+      _removable: true,
+    });
+    push.success({
+      message: `Successfully imported ${template.name}`,
+    });
+  }
+
+  async function exportTemplateToLink(template: InternalThemeTemplate) {
+    const { _id, _removable, _editable, ..._template } = template;
+    const url = new URL(location.href);
+    url.searchParams.set("template", JSON.stringify(_template));
+    await copy(url.toString());
+    push.success({
+      message: "Link copied to clipboard",
+    });
   }
 
   return {
@@ -75,5 +102,7 @@ export function useTemplate() {
 
     importTemplateFromJson,
     exportTemplateToJson,
+    importTemplateFromLink,
+    exportTemplateToLink,
   };
 }

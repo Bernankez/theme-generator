@@ -10,8 +10,8 @@
 - [x] Export/Import
 - [x] Persist writableTheme/cssPrefix/themeColor/SelectedId
 - [x] UI: Infer from a theme color
-- [ ] UI: Export to Json
-- [ ] UI: Share from url
+- [x] UI: Export to Json
+- [x] UI: Share from url
 - [ ] UI: Support setting `var(--foreground)`
 - [ ] UI: Lock color
 - [ ] Fix undo/redo
@@ -19,3 +19,4 @@
 - [ ] Theme presets (keke.cc/luyejiu.live)
 - [ ] DaisyUI preset
 - [ ] Improve Website example
+- [ ] UI: Clear cache

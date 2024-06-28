@@ -19,7 +19,13 @@ import FullscreenColorPicker from "@/components/FullscreenColorPicker.vue";
 
 const { splitSize } = storeToRefs(useAppStore());
 
-const { currentTemplate, updateTemplate } = useTemplate();
+const { currentTemplate, updateTemplate, importTemplateFromLink } = useTemplate();
+
+const url = new URL(location.href);
+const template = url.searchParams.get("template");
+if (template) {
+  importTemplateFromLink(JSON.parse(template));
+}
 
 const { style } = usePreset("none");
 

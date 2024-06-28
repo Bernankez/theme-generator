@@ -10,7 +10,7 @@ import MenuItemTemplateProvider from "@/components/MenuItemTemplateProvider.vue"
 import { showColorPickerKey } from "@/injections";
 import { useViewTransition } from "@/composables/useViewTransition";
 
-const { currentTemplate, customTemplates, builtInTemplates, importTemplateFromJson, updateTemplate, addDefaultTemplate } = useTemplate();
+const { currentTemplate, customTemplates, builtInTemplates, importTemplateFromJson, exportTemplateToJson, exportTemplateToLink, updateTemplate, addDefaultTemplate } = useTemplate();
 
 const showExport = ref(false);
 
@@ -55,10 +55,10 @@ function generate(event: MouseEvent) {
           <MenuItem :auto-collapse="false" icon="i-lucide:import" @click="() => importTemplateFromJson()">
             Import
           </MenuItem>
-          <MenuItem :auto-collapse="false" icon="i-lucide:upload" @click="() => importTemplateFromJson()">
+          <MenuItem :auto-collapse="false" icon="i-lucide:upload" @click="() => exportTemplateToJson(currentTemplate)">
             Export current theme
           </MenuItem>
-          <MenuItem :auto-collapse="false" icon="i-lucide:share-2" @click="() => importTemplateFromJson()">
+          <MenuItem :auto-collapse="false" icon="i-lucide:share-2" @click="() => exportTemplateToLink(currentTemplate)">
             Share to link
           </MenuItem>
         </div>
