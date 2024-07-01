@@ -76,11 +76,17 @@ export function kebabCase(str: string) {
 }
 
 export function hexToRGB(hex: string) {
+  if (!chroma.valid(hex)) {
+    return hex;
+  }
   const [r, g, b] = chroma(hex).rgb();
   return makeDestructurable({ r, g, b }, [r, g, b] as [number, number, number]);
 }
 
 export function hexToHsl(hex: string) {
+  if (!chroma.valid(hex)) {
+    return hex;
+  }
   let [h, s, l] = chroma(hex).hsl();
   h = h || 0;
   return makeDestructurable({ h, s, l }, [h, s, l]);

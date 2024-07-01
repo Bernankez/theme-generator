@@ -64,6 +64,10 @@ describe("hexToRGB", () => {
       b: 68,
     });
   });
+
+  it("should keep non color value as is", () => {
+    expect(hexToRGB("var(--background)")).toBe("var(--background)");
+  });
 });
 
 describe("hexToHsl", () => {
@@ -93,5 +97,9 @@ describe("hexToHsl", () => {
         s: 0,
       },
     );
+  });
+
+  it("should keep non color value as is", () => {
+    expect(hexToHsl("var(--background)")).toBe("var(--background)");
   });
 });
