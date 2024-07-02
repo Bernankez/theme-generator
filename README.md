@@ -12,7 +12,7 @@
 - [x] UI: Infer from a theme color
 - [x] UI: Export to Json
 - [x] UI: Share from url
-- [ ] UI: Support setting `var(--foreground)`
+- [x] UI: Support setting `var(--foreground)`
 - [ ] UI: Lock color
 - [ ] Fix undo/redo
 - [ ] Color tokens
