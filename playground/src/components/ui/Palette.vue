@@ -47,8 +47,10 @@ function onDragOver(e: DragEvent) {
 
 const standardColor = computed({
   get: () => {
-    if (color.value && chroma.valid(color.value)) {
-      return chroma(color.value).hex();
+    if (color.value) {
+      if (chroma.valid(color.value)) {
+        return chroma(color.value).hex();
+      }
     }
     return color.value;
   },

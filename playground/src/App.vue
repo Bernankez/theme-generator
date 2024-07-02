@@ -31,16 +31,40 @@ const { style } = usePreset("none");
 
 const websiteWrapperRef = ref<HTMLDivElement>();
 
-watchEffect(() => {
+const cssPrefix = computed({
+  get: () => currentTemplate.value.cssPrefix,
+  set: (cssPrefix) => {
+    updateTemplate({ ...currentTemplate.value, cssPrefix });
+  },
+});
+
+watchEffect((onCleanup) => {
   if (!websiteWrapperRef.value) {
     return;
   }
+  onCleanup(() => {
+    if (websiteWrapperRef.value) {
+      websiteWrapperRef.value.removeAttribute("style");
+    }
+  });
   let _style = { ...style.value?.[scheme.value] };
   if (scheme.value === "dark") {
     _style = { ...style.value?.light, ..._style };
   }
-  for (const key in _style) {
-    websiteWrapperRef.value.style.setProperty(key, _style[key]);
+  if (cssPrefix.value) {
+    for (const key in _style) {
+      websiteWrapperRef.value.style.setProperty(key.replace(`${cssPrefix.value}-`, ""), `var(${key})`);
+      const value = _style[key];
+      // if the value is a css variable and it's not using the current css prefix, skip
+      if (/^var\(([^)]+)\)$/.test(value) && !value.includes(cssPrefix.value)) {
+        continue;
+      }
+      websiteWrapperRef.value.style.setProperty(key, value);
+    }
+  } else {
+    for (const key in _style) {
+      websiteWrapperRef.value.style.setProperty(key, _style[key]);
+    }
   }
 });
 
@@ -50,13 +74,6 @@ const theme = computed({
   get: () => currentTemplate.value.theme,
   set: (theme) => {
     updateTemplate({ ...currentTemplate.value, theme });
-  },
-});
-
-const cssPrefix = computed({
-  get: () => currentTemplate.value.cssPrefix,
-  set: (cssPrefix) => {
-    updateTemplate({ ...currentTemplate.value, cssPrefix });
   },
 });
 

@@ -77,7 +77,11 @@ export function presetShadcn(theme: Theme, options?: PresetShadcnOptions) {
     ...options,
     resolve: (key, scheme) => {
       if (Object.hasOwn(transformedTheme.colors, key)) {
-        const { h, s, l } = hexToHsl(transformedTheme.colors[key as keyof typeof transformedTheme.colors][scheme]);
+        const hsl = hexToHsl(transformedTheme.colors[key as keyof typeof transformedTheme.colors][scheme]);
+        if (typeof hsl === "string") {
+          return hsl;
+        }
+        const [h, s, l] = hsl;
         return `${handlePercent(h)} ${handlePercent(s * 100)}% ${handlePercent(l * 100)}%`;
       }
     },

@@ -39,7 +39,8 @@ export function generateStyleFromScheme<T extends CommonTheme>(theme: T, scheme:
         if (!resolvedTheme.colors[c]) {
           continue;
         }
-        const resolved = resolve(c, [...hexToRGB(resolvedTheme.colors[c])].join(" "), scheme);
+        const rgb = hexToRGB(resolvedTheme.colors[c]);
+        const resolved = resolve(c, typeof rgb === "string" ? rgb : [...rgb].join(" "), scheme);
         Object.assign(style, resolved);
       }
       continue;
