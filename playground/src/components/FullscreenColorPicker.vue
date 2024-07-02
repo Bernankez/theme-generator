@@ -48,16 +48,9 @@ function onPick(event: MouseEvent) {
         <Palette v-model="themeColor" round class="h-30! w-29!" />
         <div ref="buttonRef" role="button" class="flex select-none items-center gap-2 rounded-xl px-5 py-3 text-3xl font-bold italic transition transition-500 cursor-default! hover:bg-background hover:bg-opacity-30" @click="onPick">
           <div class="i-lucide:wand"></div>
-          <span class="font-[kenny-blocks]">PICK</span>
+          <span>PICK</span>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-@font-face {
-  src: url("../assets/font/Kenney_Blocks.ttf");
-  font-family: kenny-blocks;
-}
-</style>
