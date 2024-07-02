@@ -90,6 +90,7 @@ export const useTemplateStore = defineStore("template", () => {
       }
     }
     if (customTemplates.value.length > 0) {
+      // TODO fix
       setCurrentTemplate(customTemplates.value.at(-1)!._id);
     }
     return {

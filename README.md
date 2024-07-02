@@ -20,3 +20,4 @@
 - [ ] DaisyUI preset
 - [ ] Improve Website example
 - [ ] UI: Clear cache
+- [ ] Fix current selected template after removing
