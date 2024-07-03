@@ -3,6 +3,7 @@ import { inject, ref } from "vue";
 import Button from "../components/ui/Button.vue";
 import Dropdown from "../components/ui/Dropdown.vue";
 import MenuItem from "../components/ui/MenuItem.vue";
+import MenuItemTitle from "../components/ui/MenuItemTitle.vue";
 import ExportDialog from "../components/ExportDialog.vue";
 import { useTemplate } from "@/composables/useTemplate";
 import MenuItemTemplate from "@/components/MenuItemTemplate.vue";
@@ -10,7 +11,7 @@ import MenuItemTemplateProvider from "@/components/MenuItemTemplateProvider.vue"
 import { showColorPickerKey } from "@/injections";
 import { useViewTransition } from "@/composables/useViewTransition";
 
-const { currentTemplate, customTemplates, builtInTemplates, importTemplateFromJson, exportTemplateToJson, exportTemplateToLink, updateTemplate, addDefaultTemplate } = useTemplate();
+const { currentTemplate, tempTemplate, customTemplates, builtInTemplates, importTemplateFromJson, exportTemplateToJson, updateTemplate, addDefaultTemplate } = useTemplate();
 
 const showExport = ref(false);
 
@@ -34,6 +35,9 @@ function generate(event: MouseEvent) {
     </div>
     <div class="flex select-none items-center gap-3">
       <Dropdown :label="currentTemplate.name" title="Themes" icon="i-lucide:palette">
+        <div v-if="tempTemplate" class="p-1">
+          <MenuItemTemplate :template="tempTemplate" @update:template="updateTemplate" />
+        </div>
         <div class="p-1">
           <MenuItemTemplateProvider>
             <MenuItemTemplate v-for="template in customTemplates" :key="template._id" :template @update:template="updateTemplate" />
@@ -46,9 +50,9 @@ function generate(event: MouseEvent) {
           </MenuItem>
         </div>
         <div v-if="builtInTemplates.length" class="p-1">
-          <MenuItem :auto-collapse="false" disabled class="text-sm cursor-default!">
+          <MenuItemTitle>
             Built-in
-          </MenuItem>
+          </MenuItemTitle>
           <MenuItemTemplate v-for="template in builtInTemplates" :key="template._id" :template @update:template="updateTemplate" />
         </div>
         <div class="p-1">
@@ -56,10 +60,7 @@ function generate(event: MouseEvent) {
             Import
           </MenuItem>
           <MenuItem :auto-collapse="false" icon="i-lucide:upload" @click="() => exportTemplateToJson(currentTemplate)">
-            Export current theme
-          </MenuItem>
-          <MenuItem :auto-collapse="false" icon="i-lucide:share-2" @click="() => exportTemplateToLink(currentTemplate)">
-            Share to link
+            Export
           </MenuItem>
         </div>
       </Dropdown>

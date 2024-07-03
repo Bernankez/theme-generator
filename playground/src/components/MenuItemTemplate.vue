@@ -13,7 +13,7 @@ const template = defineModel<InternalThemeTemplate>("template", {
   required: true,
 });
 
-const { currentTemplate, setCurrentTemplate, removeTemplate, copyFromTemplate } = useTemplate();
+const { currentTemplate, setCurrentTemplate, removeTemplate, copyFromTemplate, exportTemplateToLink } = useTemplate();
 
 const editId = inject(editIdKey, ref());
 
@@ -65,7 +65,8 @@ function editTemplate() {
       </template>
       <template v-else>
         <Button v-if="template._editable" icon="i-lucide:edit-3" title="Edit" @click.stop="editTemplate" />
-        <Button v-if="template._editable" icon="i-lucide:copy-plus" title="Copy" @click.stop="copyTemplate" />
+        <Button icon="i-lucide:copy-plus" title="Copy" @click.stop="copyTemplate" />
+        <Button v-if="template._editable" icon="i-lucide:share-2" title="Share" @click.stop="() => exportTemplateToLink(template)" />
         <Button v-if="template._removable" icon="i-lucide:trash-2 text-error" title="Delete" @click.stop="deleteTemplate" />
       </template>
     </div>

@@ -15,10 +15,13 @@ export interface InternalThemeTemplate extends ThemeTemplate {
   _id: string;
   _removable?: boolean;
   _editable?: boolean;
+  _temporary?: boolean;
 }
 
 export const useTemplateStore = defineStore("template", () => {
   const { configVersion } = storeToRefs(useAppStore());
+
+  const tempTemplate = ref<InternalThemeTemplate>();
 
   const customTemplates = ref<InternalThemeTemplate[]>([]);
 
@@ -33,7 +36,9 @@ export const useTemplateStore = defineStore("template", () => {
     },
   ]);
 
-  const templates = computed(() => [...customTemplates.value, ...builtInTemplates.value]);
+  const templates = computed(() => {
+    return [tempTemplate.value, ...customTemplates.value, ...builtInTemplates.value].filter(t => t !== undefined);
+  });
 
   const currentId = ref<string>();
   const currentTemplate = computed({
@@ -49,9 +54,19 @@ export const useTemplateStore = defineStore("template", () => {
     },
   });
 
-  function addTemplate(template: InternalThemeTemplate) {
-    if (templates.value.findIndex(t => t._id === template._id) < 0) {
-      customTemplates.value.push(template);
+  function addTemplate(template: InternalThemeTemplate, persist = true) {
+    if (persist) {
+      if (templates.value.findIndex(t => t._id === template._id) < 0) {
+        customTemplates.value.push({
+          ...template,
+          _temporary: false,
+        });
+      }
+    } else {
+      tempTemplate.value = {
+        ...template,
+        _temporary: true,
+      };
     }
   }
 
@@ -60,7 +75,7 @@ export const useTemplateStore = defineStore("template", () => {
   }
 
   function updateTemplate(template: InternalThemeTemplate) {
-    for (const templates of [customTemplates, builtInTemplates]) {
+    for (const templates of [ref([tempTemplate.value].filter(t => t !== undefined)), customTemplates, builtInTemplates]) {
       const index = templates.value.findIndex(t => t._id === template._id);
       if (index > -1) {
         const oldTemplate = templates.value[index];
@@ -146,7 +161,7 @@ export const useTemplateStore = defineStore("template", () => {
 
   function getDefaultTemplateName() {
     let i = 1;
-    while (templates.value.find(t => t.name === `Theme_${i}`)) {
+    while (templates.value.filter(t => !t._temporary).find(t => t.name === `Theme_${i}`)) {
       i++;
     }
     return `Theme_${i}`;
@@ -156,6 +171,7 @@ export const useTemplateStore = defineStore("template", () => {
     currentId,
     currentTemplate,
     templates,
+    tempTemplate,
     customTemplates,
     builtInTemplates,
 

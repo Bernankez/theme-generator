@@ -27,7 +27,7 @@ function onPick(event: MouseEvent) {
   const theme = inferThemeFromColor(themeColor.value);
   const _id = nanoid();
   addTemplate({
-    _id: nanoid(),
+    _id,
     version: configVersion.value,
     name: themeColor.value,
     _editable: true,

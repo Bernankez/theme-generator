@@ -8,7 +8,7 @@ import { download } from "../shared/utils";
 export function useTemplate() {
   const templateStore = useTemplateStore();
   const { addTemplate, setCurrentTemplate, removeTemplate, updateTemplate, addDefaultTemplate, copyFromTemplate } = templateStore;
-  const { templates, customTemplates, builtInTemplates, currentTemplate } = storeToRefs(templateStore);
+  const { templates, tempTemplate, customTemplates, builtInTemplates, currentTemplate } = storeToRefs(templateStore);
 
   const { copy } = useClipboard();
 
@@ -72,13 +72,10 @@ export function useTemplate() {
     addTemplate({
       _id,
       ...template,
-      _editable: true,
-      _removable: true,
-    });
+      _editable: false,
+      _removable: false,
+    }, false);
     setCurrentTemplate(_id);
-    push.success({
-      message: `Successfully imported ${template.name}`,
-    });
   }
 
   async function exportTemplateToLink(template: InternalThemeTemplate) {
@@ -94,6 +91,7 @@ export function useTemplate() {
   return {
     currentTemplate,
     templates,
+    tempTemplate,
     customTemplates,
     builtInTemplates,
 

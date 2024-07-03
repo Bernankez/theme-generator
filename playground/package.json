@@ -30,6 +30,7 @@
     "shiki": "^1.3.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-vue-devtools": "^7.3.5",
     "vue-tsc": "^2.0.6"
   },
   "@bernankez/theme-generator": {
