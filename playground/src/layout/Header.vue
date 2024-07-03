@@ -31,6 +31,9 @@ function generate(event: MouseEvent) {
       <div class="i-fluent-emoji:rainbow shrink-0 text-3xl"></div>
       <div class="hidden text-2xl @md:block">
         theme-generator
+        <sup class="text-sm">
+          <i>Beta</i>
+        </sup>
       </div>
     </div>
     <div class="flex select-none items-center gap-3">
@@ -45,6 +48,8 @@ function generate(event: MouseEvent) {
           <MenuItem :auto-collapse="false" icon="i-lucide:square-plus" @click="() => addDefaultTemplate()">
             New
           </MenuItem>
+        </div>
+        <div class="p-1">
           <MenuItem :auto-collapse="false" icon="i-lucide:wand" @click="generate">
             Generate from a color
           </MenuItem>

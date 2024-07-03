@@ -27,9 +27,9 @@ export const useTemplateStore = defineStore("template", () => {
 
   const builtInTemplates = ref<InternalThemeTemplate[]>([
     {
-      _id: "shadcn",
+      _id: "Neutral",
       version: 0,
-      name: "shadcn",
+      name: "Neutral",
       theme: defineTheme({
         defaults: defaultColors,
       }),

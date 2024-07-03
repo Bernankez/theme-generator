@@ -6,7 +6,6 @@ import { merge } from "lodash-es";
 import { useDebounceFn, useMagicKeys, useManualRefHistory } from "@vueuse/core";
 import Palette from "./ui/Palette.vue";
 import Select from "./ui/Select.vue";
-import Button from "./ui/Button.vue";
 
 const json = defineModel<T>({
   required: true,
@@ -96,10 +95,10 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
         Example use
       </div>
       <div class="flex-auto"></div>
-      <div class="ml-2 w-28 flex items-center justify-evenly">
+      <!-- <div class="ml-2 w-28 flex items-center justify-evenly">
         <Button :disabled="!canUndo" icon="i-lucide:undo-2" title="Undo" @click="undo" />
         <Button :disabled="!canRedo" icon="i-lucide:redo-2" title="Redo" @click="redo" />
-      </div>
+      </div> -->
     </div>
     <div v-for="key in jsonKeys" :key="key" class="palette-row">
       <div class="w-50 shrink-0 text-sm">
