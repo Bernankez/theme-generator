@@ -18,14 +18,15 @@ const buttonRef = ref<HTMLDivElement>();
 const isHover = useElementHover(buttonRef);
 
 const { configVersion } = storeToRefs(useAppStore());
-const { setCurrentTemplate } = useTemplate();
+const { addTemplate, setCurrentTemplate } = useTemplate();
 const themeColor = ref<string>("#c14344");
 
 const { concentrate } = useViewTransition();
 
 function onPick(event: MouseEvent) {
   const theme = inferThemeFromColor(themeColor.value);
-  setCurrentTemplate({
+  const _id = nanoid();
+  addTemplate({
     _id: nanoid(),
     version: configVersion.value,
     name: themeColor.value,
@@ -33,6 +34,7 @@ function onPick(event: MouseEvent) {
     _removable: true,
     theme,
   });
+  setCurrentTemplate(_id);
   concentrate(event.clientX, event.clientY, (classList) => {
     classList.remove("fullscreen-color-picker");
     show.value = false;

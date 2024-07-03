@@ -7,7 +7,7 @@ import { download } from "../shared/utils";
 
 export function useTemplate() {
   const templateStore = useTemplateStore();
-  const { setCurrentTemplate, removeTemplate, updateTemplate, addDefaultTemplate, copyFromTemplate } = templateStore;
+  const { addTemplate, setCurrentTemplate, removeTemplate, updateTemplate, addDefaultTemplate, copyFromTemplate } = templateStore;
   const { templates, customTemplates, builtInTemplates, currentTemplate } = storeToRefs(templateStore);
 
   const { copy } = useClipboard();
@@ -47,7 +47,8 @@ export function useTemplate() {
           _editable: true,
         };
         hook?.(internalTemplate);
-        setCurrentTemplate(internalTemplate);
+        addTemplate(internalTemplate);
+        setCurrentTemplate(internalTemplate._id);
         push.success({
           message: `Successfully imported ${internalTemplate.name}`,
         });
@@ -67,12 +68,14 @@ export function useTemplate() {
   }
 
   function importTemplateFromLink(template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable">) {
-    setCurrentTemplate({
-      _id: nanoid(),
+    const _id = nanoid();
+    addTemplate({
+      _id,
       ...template,
       _editable: true,
       _removable: true,
     });
+    setCurrentTemplate(_id);
     push.success({
       message: `Successfully imported ${template.name}`,
     });
@@ -94,11 +97,12 @@ export function useTemplate() {
     customTemplates,
     builtInTemplates,
 
-    setCurrentTemplate,
+    addTemplate,
     removeTemplate,
     updateTemplate,
     addDefaultTemplate,
     copyFromTemplate,
+    setCurrentTemplate,
 
     importTemplateFromJson,
     exportTemplateToJson,

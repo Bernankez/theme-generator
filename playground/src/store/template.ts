@@ -49,15 +49,14 @@ export const useTemplateStore = defineStore("template", () => {
     },
   });
 
-  function setCurrentTemplate(_id?: string | InternalThemeTemplate) {
-    if (!_id) {
-      currentId.value = undefined;
-      return;
+  function addTemplate(template: InternalThemeTemplate) {
+    if (templates.value.findIndex(t => t._id === template._id) < 0) {
+      customTemplates.value.push(template);
     }
-    if (typeof _id !== "string" && templates.value.findIndex(t => t._id === _id._id) < 0) {
-      customTemplates.value.push(_id);
-    }
-    currentId.value = typeof _id === "string" ? _id : _id._id;
+  }
+
+  function setCurrentTemplate(_id?: string) {
+    currentId.value = _id;
   }
 
   function updateTemplate(template: InternalThemeTemplate) {
@@ -84,13 +83,13 @@ export const useTemplateStore = defineStore("template", () => {
         template = templates.value.splice(index, 1)[0];
         undo = () => {
           templates.value.splice(index, 0, template!);
+          // TODO fix
           setCurrentTemplate(template!._id);
         };
         break;
       }
     }
     if (customTemplates.value.length > 0) {
-      // TODO fix
       setCurrentTemplate(customTemplates.value.at(-1)!._id);
     }
     return {
@@ -112,7 +111,8 @@ export const useTemplateStore = defineStore("template", () => {
       _removable: true,
       theme,
     };
-    setCurrentTemplate(template);
+    addTemplate(template);
+    setCurrentTemplate(template._id);
     return template;
   }
 
@@ -125,7 +125,8 @@ export const useTemplateStore = defineStore("template", () => {
       _editable: true,
       _removable: true,
     };
-    setCurrentTemplate(newTemplate);
+    addTemplate(newTemplate);
+    setCurrentTemplate(newTemplate._id);
   }
 
   function getCopiedTemplateName(name: string) {
@@ -158,11 +159,12 @@ export const useTemplateStore = defineStore("template", () => {
     customTemplates,
     builtInTemplates,
 
-    setCurrentTemplate,
+    addTemplate,
     removeTemplate,
     updateTemplate,
     addDefaultTemplate,
     copyFromTemplate,
+    setCurrentTemplate,
   };
 }, {
   persist: {
