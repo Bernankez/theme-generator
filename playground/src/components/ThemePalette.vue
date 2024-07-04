@@ -88,6 +88,7 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div>
     </div>
     <div class="palette-row font-bold">
+      <div class="h-4 w-4 shrink-0"></div>
       <div class="w-50 shrink-0">
         Name
       </div>
@@ -101,6 +102,9 @@ const jsonKeys = computed(() => Object.keys(json.value.colors).concat(Object.key
       </div> -->
     </div>
     <div v-for="key in jsonKeys" :key="key" class="palette-row">
+      <div class="h-4 w-4 flex shrink-0 items-center">
+        <div v-if="key in json.colors" class="h-3 w-3 b-1 b-muted-foreground rounded-full b-solid" :style="{ backgroundColor: json.colors[key][activeScheme] }"></div>
+      </div>
       <div class="w-50 shrink-0 text-sm">
         {{ key }}
       </div>
