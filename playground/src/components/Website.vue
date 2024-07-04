@@ -12,10 +12,16 @@
           Site
         </div>
         <div class="flex justify-center gap-3 @lg:justify-start">
-          <button class="rounded-md bg-primary p-3 text-primary-foreground hover:bg-primary/90">
+          <button class="rounded-md bg-primary p-3 text-primary-foreground transition hover:bg-primary/90">
             Getting Started
           </button>
-          <button class="rounded-md bg-secondary p-3 text-secondary-foreground hover:bg-secondary/90">
+          <button class="rounded-md bg-secondary p-3 text-secondary-foreground transition hover:bg-secondary/90">
+            Document
+          </button>
+          <button class="rounded-md bg-background p-3 text-foreground transition hover:bg-accent hover:text-accent-foreground">
+            Document
+          </button>
+          <button class="b-1 b-border rounded-md b-solid bg-background p-3 text-foreground transition hover:bg-accent hover:text-accent-foreground">
             Document
           </button>
         </div>
