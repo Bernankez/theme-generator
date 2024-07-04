@@ -15,6 +15,7 @@ export default defineConfig({
   --accent-foreground: 23 23 23;
   --muted: 245 245 245;
   --muted-foreground: 115 115 115;
+  --border: 229 231 235;
   --info: 0 179 240;
   --info-foreground: 0 0 0;
   --success: 0 169 111;
@@ -24,7 +25,7 @@ export default defineConfig({
   --error: 255 111 112;
   --error-foreground: 0 0 0;
   --radius: 0.5rem;
-  }
+}
 
 :root .dark {
   --background: 10 10 10;
@@ -37,6 +38,7 @@ export default defineConfig({
   --accent-foreground: 250 250 250;
   --muted: 38 38 38;
   --muted-foreground: 250 250 250;
+  --border: 229 231 235;
   --info: 0 179 240;
   --info-foreground: 0 0 0;
   --success: 0 169 111;
@@ -67,6 +69,7 @@ export default defineConfig({
         DEFAULT: "rgb(var(--muted))",
         foreground: "rgb(var(--muted-foreground))",
       },
+      border: "rgb(var(--border))",
       info: {
         DEFAULT: "rgb(var(--info))",
         foreground: "rgb(var(--info-foreground))",

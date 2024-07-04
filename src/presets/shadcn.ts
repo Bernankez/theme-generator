@@ -58,8 +58,8 @@ function transformTheme(theme: Theme): ShadcnTheme {
   shadcnTheme.colors.popoverForeground = theme.colors.primaryForeground;
   shadcnTheme.colors.destructive = theme.colors.error;
   shadcnTheme.colors.destructiveForeground = theme.colors.errorForeground;
-  shadcnTheme.colors.border = theme.colors.primary;
-  shadcnTheme.colors.input = theme.colors.primary;
+  shadcnTheme.colors.border = theme.colors.border;
+  shadcnTheme.colors.input = theme.colors.border;
   shadcnTheme.colors.ring = theme.colors.primary;
   shadcnTheme.radius = theme.radius;
 
