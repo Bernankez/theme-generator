@@ -18,12 +18,6 @@
           <button class="rounded-md bg-secondary p-3 text-secondary-foreground transition hover:bg-secondary/90">
             Document
           </button>
-          <button class="rounded-md bg-background p-3 text-foreground transition hover:bg-accent hover:text-accent-foreground">
-            Document
-          </button>
-          <button class="b-1 b-border rounded-md b-solid bg-background p-3 text-foreground transition hover:bg-accent hover:text-accent-foreground">
-            Document
-          </button>
         </div>
       </div>
       <div class="grid grid-cols-2 shrink-0 gap-10 text-8xl @lg:text-9xl">
@@ -38,25 +32,70 @@
         Why <code>@bernankez/theme-generator</code>
       </h2>
       <div class="flex flex-col gap-3 @lg:flex-row">
-        <div class="flex-1 rounded-lg bg-accent p-3 text-accent-foreground">
+        <div class="card">
           <div class="text-xl font-bold">
             One Click
           </div>
-          Auto infer theme from a primary color
+          Auto generate theme via a primary color
         </div>
-        <div class="flex-1 rounded-lg bg-accent p-3 text-accent-foreground">
+        <div class="card">
           <div class="text-xl font-bold">
             UI Framework Presets
           </div>
           Adapt for multiple UI frameworks
         </div>
-        <div class="flex-1 rounded-lg bg-accent p-3 text-accent-foreground">
+        <div class="card">
           <div class="text-xl font-bold">
             Fully Opensource
           </div>
           Visit on GitHub
         </div>
       </div>
+      <h2 class="my-3 text-center text-3xl text-foreground font-bold">
+        Colors
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        <div class="color bg-background text-foreground">
+          Base
+        </div>
+        <div class="color bg-primary text-primary-foreground">
+          Primary
+        </div>
+        <div class="color bg-secondary text-secondary-foreground">
+          Secondary
+        </div>
+        <div class="color bg-accent text-accent-foreground">
+          Accent
+        </div>
+        <div class="color bg-background text-foreground b-0! hover:bg-accent hover:text-accent-foreground">
+          Ghost
+        </div>
+        <div class="color select-none bg-muted text-muted-foreground cursor-not-allowed!">
+          Muted
+        </div>
+        <div class="color bg-info text-info-foreground b-0!">
+          Info
+        </div>
+        <div class="color bg-success text-success-foreground b-0!">
+          Success
+        </div>
+        <div class="color bg-warning text-warning-foreground b-0!">
+          Warning
+        </div>
+        <div class="color bg-error text-error-foreground b-0!">
+          Error
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.card {
+  @apply flex-1 cursor-default b-1 b-border rounded-lg b-solid bg-background p-3 text-foreground transition hover:b-accent hover:bg-accent hover:text-accent-foreground;
+}
+
+.color {
+  @apply b-border b-1 b-solid rounded-lg p-3 cursor-default transition;
+}
+</style>
