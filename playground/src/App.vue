@@ -68,7 +68,7 @@ watchEffect((onCleanup) => {
   }
 });
 
-const { sm } = useBreakpoints(breakpointsTailwind);
+const { md } = useBreakpoints(breakpointsTailwind);
 
 const theme = computed({
   get: () => currentTemplate.value.theme,
@@ -82,7 +82,7 @@ provide(showColorPickerKey, showColorPicker);
 </script>
 
 <template>
-  <Split v-model:size="splitSize" class="h-screen overflow-hidden" :direction="sm ? undefined : 'vertical'" :min="0" :max="1">
+  <Split v-model:size="splitSize" class="h-screen overflow-hidden" :direction="md ? undefined : 'vertical'" :min="0" :max="1">
     <template #1>
       <div ref="websiteWrapperRef">
         <Website />

@@ -1,9 +1,39 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import { scheme } from "@/shared/isDark";
+
+function toggleScheme() {
+  scheme.value = scheme.value === "dark" ? "light" : "dark";
+}
+
+const showMenu = ref(false);
 </script>
 
 <template>
-  <div class="bg-background p-3 @container">
-    <div class="h-200 flex flex-col-reverse items-center justify-evenly gap-3 @lg:flex-row">
+  <div class="bg-background @container">
+    <header class="sticky left-0 top-0 z-1 w-full flex items-center justify-between bg-background bg-opacity-70 p-3 backdrop-blur-8 backdrop-saturate-50">
+      <div>
+        <div class="i-lucide:dog text-10 text-primary"></div>
+      </div>
+      <div>
+        <div class="relative">
+          <div class="cursor-pointer rounded-md p-2 text-foreground transition hover:bg-accent" @click="showMenu = !showMenu">
+            <div v-if="!showMenu" class="i-lucide:menu"></div>
+            <div v-else class="i-lucide:x"></div>
+          </div>
+          <Transition name="menu">
+            <div v-if="showMenu" class="absolute right-0 top-[calc(100%_+_.25rem)] w-50 select-none b-1 b-border rounded-md b-solid bg-background text-foreground shadow">
+              <div class="p-1">
+                <div class="cursor-default rounded-md px-2 py-1 transition hover:bg-muted" @click="toggleScheme">
+                  Toggle Scheme
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </div>
+    </header>
+    <div class="h-200 flex flex-col-reverse items-center justify-evenly gap-3 p-3 @lg:flex-row">
       <div class="flex flex-col gap-10">
         <div class="text-center text-5xl text-foreground font-bold font-italic @lg:text-start">
           Visualize Your Colors<br />
@@ -27,65 +57,70 @@
         <div class="i-lucide:cat text-primary"></div>
       </div>
     </div>
-    <div class="mt-3">
-      <h2 class="my-3 text-center text-3xl text-foreground font-bold">
-        Why <code>@bernankez/theme-generator</code>
-      </h2>
-      <div class="flex flex-col gap-3 @lg:flex-row">
-        <div class="card">
-          <div class="text-xl font-bold">
-            One Click
+    <div class="flex flex-col gap-20 p-3">
+      <div>
+        <h2 class="my-3 text-center text-3xl text-foreground font-bold">
+          Why <code>@bernankez/theme-generator</code>
+        </h2>
+        <div class="flex flex-col gap-3 @lg:flex-row">
+          <div class="card">
+            <div class="text-xl font-bold">
+              One Click
+            </div>
+            Auto generate tme via a primary color
           </div>
-          Auto generate theme via a primary color
-        </div>
-        <div class="card">
-          <div class="text-xl font-bold">
-            UI Framework Presets
+          <div class="card">
+            <div class="text-xl font-bold">
+              UI Framework Presets
+            </div>
+            Adapt for multiple UI frameworks
           </div>
-          Adapt for multiple UI frameworks
-        </div>
-        <div class="card">
-          <div class="text-xl font-bold">
-            Fully Opensource
+          <div class="card">
+            <div class="text-xl font-bold">
+              Fully Opensource
+            </div>
+            Visit on GitHub
           </div>
-          Visit on GitHub
         </div>
       </div>
-      <h2 class="my-3 text-center text-3xl text-foreground font-bold">
-        Colors
-      </h2>
-      <div class="flex flex-wrap gap-3">
-        <div class="color bg-background text-foreground">
-          Base
-        </div>
-        <div class="color bg-primary text-primary-foreground">
-          Primary
-        </div>
-        <div class="color bg-secondary text-secondary-foreground">
-          Secondary
-        </div>
-        <div class="color bg-accent text-accent-foreground">
-          Accent
-        </div>
-        <div class="color bg-background text-foreground b-0! hover:bg-accent hover:text-accent-foreground">
-          Ghost
-        </div>
-        <div class="color select-none bg-muted text-muted-foreground cursor-not-allowed!">
-          Muted
-        </div>
-        <div class="color bg-info text-info-foreground b-0!">
-          Info
-        </div>
-        <div class="color bg-success text-success-foreground b-0!">
-          Success
-        </div>
-        <div class="color bg-warning text-warning-foreground b-0!">
-          Warning
-        </div>
-        <div class="color bg-error text-error-foreground b-0!">
-          Error
+      <div>
+        <h2 class="my-3 text-center text-3xl text-foreground font-bold">
+          Colors
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          <div class="color bg-background text-foreground">
+            Base
+          </div>
+          <div class="color bg-primary text-primary-foreground">
+            Primary
+          </div>
+          <div class="color bg-secondary text-secondary-foreground">
+            Secondary
+          </div>
+          <div class="color bg-accent text-accent-foreground">
+            Accent
+          </div>
+          <div class="color bg-background text-foreground b-0! hover:bg-accent hover:text-accent-foreground">
+            Ghost
+          </div>
+          <div class="color select-none bg-muted text-muted-foreground cursor-not-allowed!">
+            Muted
+          </div>
+          <div class="color bg-info text-info-foreground b-0!">
+            Info
+          </div>
+          <div class="color bg-success text-success-foreground b-0!">
+            Success
+          </div>
+          <div class="color bg-warning text-warning-foreground b-0!">
+            Warning
+          </div>
+          <div class="color bg-error text-error-foreground b-0!">
+            Error
+          </div>
         </div>
       </div>
+      <div></div>
     </div>
   </div>
 </template>
@@ -97,5 +132,17 @@
 
 .color {
   @apply b-border b-1 b-solid rounded-lg p-3 cursor-default transition;
+}
+
+.menu-enter-active,
+.menu-leave-active {
+  transition: all 150ms;
+}
+
+.menu-enter-from,
+.menu-leave-to {
+  opacity: 0;
+  transform-origin: top right;
+  scale: 0.9;
 }
 </style>
