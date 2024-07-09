@@ -38,79 +38,56 @@ console.log(theme);
 //   colors: {
 //     background: {
 //       light: "#ffffff",
-//       dark: "#0a0a0a"
+//       dark: "#0a0a0a",
 //     },
 //     foreground: {
 //       light: "#0a0a0a",
-//       dark: "#fafafa"
+//       dark: "#fafafa",
 //     },
 //     primary: {
 //       light: "#171717",
-//       dark: "#fafafa"
+//       dark: "#fafafa",
 //     },
 //     primaryForeground: {
 //       light: "#fafafa",
-//       dark: "#171717"
+//       dark: "#171717",
 //     },
 //     secondary: {
 //       light: "#f5f5f5",
-//       dark: "#262626"
+//       dark: "#262626",
 //     },
 //     secondaryForeground: {
 //       light: "#171717",
-//       dark: "#fafafa"
+//       dark: "#fafafa",
 //     },
 //     accent: {
 //       light: "#f5f5f5",
-//       dark: "#262626"
+//       dark: "#262626",
 //     },
 //     accentForeground: {
 //       light: "#171717",
-//       dark: "#fafafa"
+//       dark: "#fafafa",
 //     },
 //     muted: {
 //       light: "#f5f5f5",
-//       dark: "#262626"
+//       dark: "#262626",
 //     },
 //     mutedForeground: {
 //       light: "#737373",
-//       dark: "#fafafa"
+//       dark: "#fafafa",
 //     },
-//     info: {
-//       light: "#00b3f0",
-//       dark: "#00b3f0"
-//     },
-//     infoForeground: {
-//       light: "#000000",
-//       dark: "#000000"
-//     },
-//     success: {
-//       light: "#00a96f",
-//       dark: "#00a96f"
-//     },
-//     successForeground: {
-//       light: "#000000",
-//       dark: "#000000"
-//     },
-//     warning: {
-//       light: "#ffc22d",
-//       dark: "#ffc22d"
-//     },
-//     warningForeground: {
-//       light: "#000000",
-//       dark: "#000000"
-//     },
-//     error: {
-//       light: "#ff6f70",
-//       dark: "#ff6f70"
-//     },
-//     errorForeground: {
-//       light: "#000000",
-//       dark: "#000000"
-//     }
+//     border: "#e5e7eb",
+//     info: "#00b3f0",
+//     infoForeground: "#ffffff",
+//     success: "#00a96f",
+//     successForeground: "#ffffff",
+//     warning: "#ffc22d",
+//     warningForeground: "#000000",
+//     error: "#ff6f70",
+//     errorForeground: "#ffffff",
 //   },
-//   radius: "0.5rem"
-// };
+//   radius: "0.5rem",
+// }
 ```
 
 `defaultColors` is the `Neutral` theme of `shadcn`, you can also pass your own color variables, and the remaining variables will be merged with `defaultColors`. The values in `overrides` have a higher priority than those in `defaults`.

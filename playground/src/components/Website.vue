@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
 import { scheme } from "@/shared/isDark";
 
 function toggleScheme() {
@@ -7,6 +8,14 @@ function toggleScheme() {
 }
 
 const showMenu = ref(false);
+
+const menuRef = ref<HTMLDivElement>();
+const menuBtnRef = ref<HTMLDivElement>();
+onClickOutside(menuRef, (e) => {
+  if (menuBtnRef.value && !menuBtnRef.value.contains(e.target as Node)) {
+    showMenu.value = false;
+  }
+});
 </script>
 
 <template>
@@ -17,14 +26,19 @@ const showMenu = ref(false);
       </div>
       <div>
         <div class="relative">
-          <div class="cursor-pointer rounded-md p-2 text-foreground transition hover:bg-accent" @click="showMenu = !showMenu">
+          <div ref="menuBtnRef" class="cursor-pointer rounded-md p-2 text-foreground transition hover:bg-accent" @click="showMenu = !showMenu">
             <div v-if="!showMenu" class="i-lucide:menu"></div>
             <div v-else class="i-lucide:x"></div>
           </div>
           <Transition name="menu">
-            <div v-if="showMenu" class="absolute right-0 top-[calc(100%_+_.25rem)] w-50 select-none b-1 b-border rounded-md b-solid bg-background text-foreground shadow">
+            <div v-show="showMenu" ref="menuRef" class="absolute right-0 top-[calc(100%_+_.25rem)] w-50 select-none b-1 b-border rounded-md b-solid bg-background text-foreground shadow">
               <div class="p-1">
-                <div class="cursor-default rounded-md px-2 py-1 transition hover:bg-muted" @click="toggleScheme">
+                <div
+                  class="cursor-default rounded-md px-2 py-1 transition hover:bg-muted" @click="() => {
+                    toggleScheme();
+                    showMenu = false;
+                  }"
+                >
                   Toggle Scheme
                 </div>
               </div>
@@ -83,7 +97,7 @@ const showMenu = ref(false);
           </div>
         </div>
       </div>
-      <div>
+      <div class="mx-auto">
         <h2 class="my-3 text-center text-3xl text-foreground font-bold">
           Colors
         </h2>
@@ -120,14 +134,29 @@ const showMenu = ref(false);
           </div>
         </div>
       </div>
-      <div></div>
+      <div class="mx-auto max-w-full w-200 rounded-md bg-accent p-3 text-foreground">
+        <div class="flex items-center gap-3">
+          <div class="i-lucide:dog text-10 text-primary"></div>
+          <span class="font-bold">
+            @bernankez/theme-generator
+          </span>
+        </div>
+        <div class="mt-3 flex gap-3">
+          <a class="hover:text-primary" href="https://github.com/Bernankez/theme-generator" target="_blank">
+            GitHub
+          </a>
+          <a class="hover:text-primary" href="https://github.com/Bernankez/theme-generator?tab=readme-ov-file#-theme-generator" target="_blank">
+            Document
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .card {
-  @apply flex-1 cursor-default b-1 b-border rounded-lg b-solid bg-background p-3 text-foreground transition hover:b-accent hover:bg-accent hover:text-accent-foreground;
+  @apply flex flex-col justify-between flex-1 cursor-default b-1 b-border rounded-lg b-solid bg-background p-3 text-foreground transition hover:b-accent hover:bg-accent hover:text-accent-foreground min-h-35;
 }
 
 .color {
