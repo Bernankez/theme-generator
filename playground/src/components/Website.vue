@@ -81,7 +81,7 @@ onClickOutside(menuRef, (e) => {
             <div class="text-xl font-bold">
               One Click
             </div>
-            Auto generate tme via a primary color
+            Auto generate theme via a primary color
           </div>
           <div class="card">
             <div class="text-xl font-bold">
@@ -141,11 +141,23 @@ onClickOutside(menuRef, (e) => {
             @bernankez/theme-generator
           </span>
         </div>
+        <h3 class="my-3 text-center text-2xl text-foreground font-bold">
+          About Colors
+        </h3>
+        <p>
+          Mainly referenced <code><a href="https://ui.shadcn.com/" target="_blank">shadcn</a></code> and
+          <code><a href="https://daisyui.com/" target="_blank">daisyUI</a></code>,
+          but not entirely the same as them.
+          Colors will be automatically inferred according to different presets.
+        </p>
+        <p>
+          In addition, due to the different color styles of different UI libraries (for example, <code>daisyUI</code> tends to use accent color extensively while <code>shadcn</code> tends to use primary color more), the color usage style of this library is closer to shadcn.
+        </p>
         <div class="mt-3 flex gap-3">
-          <a class="hover:text-primary" href="https://github.com/Bernankez/theme-generator" target="_blank">
+          <a href="https://github.com/Bernankez/theme-generator" target="_blank">
             GitHub
           </a>
-          <a class="hover:text-primary" href="https://github.com/Bernankez/theme-generator?tab=readme-ov-file#-theme-generator" target="_blank">
+          <a href="https://github.com/Bernankez/theme-generator?tab=readme-ov-file#-theme-generator" target="_blank">
             Document
           </a>
         </div>
@@ -155,6 +167,10 @@ onClickOutside(menuRef, (e) => {
 </template>
 
 <style scoped>
+a {
+  @apply hover:text-primary-foreground hover:bg-primary/90 transition b-1 b-dashed b-primary p-0.5 rounded-md;
+}
+
 .card {
   @apply flex flex-col justify-between flex-1 cursor-default b-1 b-border rounded-lg b-solid bg-background p-3 text-foreground transition hover:b-accent hover:bg-accent hover:text-accent-foreground min-h-35;
 }
