@@ -52,10 +52,10 @@ function transformTheme(theme: Theme): ShadcnTheme {
     }
   }
 
-  shadcnTheme.colors.card = theme.colors.primary;
-  shadcnTheme.colors.cardForeground = theme.colors.primaryForeground;
-  shadcnTheme.colors.popover = theme.colors.primary;
-  shadcnTheme.colors.popoverForeground = theme.colors.primaryForeground;
+  shadcnTheme.colors.card = theme.colors.background;
+  shadcnTheme.colors.cardForeground = theme.colors.foreground;
+  shadcnTheme.colors.popover = theme.colors.background;
+  shadcnTheme.colors.popoverForeground = theme.colors.foreground;
   shadcnTheme.colors.destructive = theme.colors.error;
   shadcnTheme.colors.destructiveForeground = theme.colors.errorForeground;
   shadcnTheme.colors.border = theme.colors.border;
