@@ -23,14 +23,18 @@ export interface Color extends Record<Scheme, string> {}
 export const colorKeywords = n([
   "background",
   "foreground",
+
   "primary",
   "primaryForeground",
   "secondary",
   "secondaryForeground",
   "accent",
   "accentForeground",
+
   "muted",
   "mutedForeground",
+  "border",
+
   "info",
   "infoForeground",
   "success",
