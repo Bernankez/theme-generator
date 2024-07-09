@@ -61,13 +61,13 @@ export function useTemplate() {
   });
 
   function exportTemplateToJson(template: InternalThemeTemplate) {
-    const { _id, _removable, _editable, ..._template } = template;
+    const { _id, _removable, _editable, _temporary, ..._template } = template;
     const file = new Blob([JSON.stringify(_template, null, 2)], { type: "application/json" });
     const name = `${template.name}.json`;
     download(file, name);
   }
 
-  function importTemplateFromLink(template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable">) {
+  function importTemplateFromLink(template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable" | "_temporary">) {
     const _id = nanoid();
     addTemplate({
       _id,
@@ -79,7 +79,7 @@ export function useTemplate() {
   }
 
   async function exportTemplateToLink(template: InternalThemeTemplate) {
-    const { _id, _removable, _editable, ..._template } = template;
+    const { _id, _removable, _editable, _temporary, ..._template } = template;
     const url = new URL(location.href);
     url.searchParams.set("template", JSON.stringify(_template));
     await copy(url.toString());
