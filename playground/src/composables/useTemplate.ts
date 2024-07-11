@@ -69,8 +69,13 @@ export function useTemplate() {
   }
 
   function importTemplateFromLink(templateString: string) {
-    // TODO adapt for previous version of link
-    const template = JSON.parse(decompressFromEncodedURIComponent(templateString)) as Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable" | "_temporary">;
+    const decompressed = decompressFromEncodedURIComponent(templateString);
+    let template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable" | "_temporary">;
+    if (decompressed) {
+      template = JSON.parse(decompressed);
+    } else {
+      template = JSON.parse(templateString);
+    }
     const _id = nanoid();
     addTemplate({
       _id,
