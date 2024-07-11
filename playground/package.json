@@ -13,6 +13,7 @@
     "@bernankez/theme-generator": "workspace:*",
     "@headlessui/vue": "^1.7.20",
     "@vueuse/core": "^10.9.0",
+    "lz-string": "^1.5.0",
     "nanoid": "^5.0.7",
     "notivue": "^2.4.4",
     "pinia": "^2.1.7",

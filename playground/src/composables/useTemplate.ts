@@ -2,6 +2,7 @@ import { storeToRefs } from "pinia";
 import { useClipboard, useFileDialog } from "@vueuse/core";
 import { nanoid } from "nanoid";
 import { push } from "notivue";
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { type InternalThemeTemplate, type ThemeTemplate, useTemplateStore } from "../store/template";
 import { download } from "../shared/utils";
 
@@ -67,7 +68,14 @@ export function useTemplate() {
     download(file, name);
   }
 
-  function importTemplateFromLink(template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable" | "_temporary">) {
+  function importTemplateFromLink(templateString: string) {
+    const decompressed = decompressFromEncodedURIComponent(templateString);
+    let template: Omit<InternalThemeTemplate, "_id" | "_removable" | "_editable" | "_temporary">;
+    if (decompressed) {
+      template = JSON.parse(decompressed);
+    } else {
+      template = JSON.parse(templateString);
+    }
     const _id = nanoid();
     addTemplate({
       _id,
@@ -81,7 +89,8 @@ export function useTemplate() {
   async function exportTemplateToLink(template: InternalThemeTemplate) {
     const { _id, _removable, _editable, _temporary, ..._template } = template;
     const url = new URL(location.href);
-    url.searchParams.set("template", JSON.stringify(_template));
+    const compressed = compressToEncodedURIComponent(JSON.stringify(_template));
+    url.searchParams.set("template", compressed);
     await copy(url.toString());
     push.success({
       message: "Link copied to clipboard",

@@ -24,7 +24,7 @@ const { currentTemplate, updateTemplate, importTemplateFromLink } = useTemplate(
 const url = new URL(location.href);
 const template = url.searchParams.get("template");
 if (template) {
-  importTemplateFromLink(JSON.parse(template));
+  importTemplateFromLink(template);
 }
 
 const { style } = usePreset("none");
