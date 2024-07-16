@@ -90,7 +90,7 @@
     "vitest": "^1.5.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "nlx lint-staged"
+    "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
     "*": "eslint --fix"
