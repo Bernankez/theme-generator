@@ -33,7 +33,7 @@ ${Object.entries((style.value?.light || {})).map(([key, value]) => {
   }).join("\n")}
 }
 
-:root .dark {
+.dark {
 ${Object.entries((style.value?.dark || {})).map(([key, value]) => {
   return `  ${key}: ${value};`;
 }).join("\n")}

@@ -27,7 +27,7 @@ export default defineConfig({
   --radius: 0.5rem;
 }
 
-:root .dark {
+.dark {
   --background: 10 10 10;
   --foreground: 250 250 250;
   --primary: 250 250 250;
