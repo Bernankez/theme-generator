@@ -56,7 +56,7 @@ watchEffect((onCleanup) => {
       websiteWrapperRef.value.style.setProperty(key.replace(`${cssPrefix.value}-`, ""), `var(${key})`);
       const value = _style[key];
       // if the value is a css variable and it's not using the current css prefix, skip
-      if (/^var\(([^)]+)\)$/.test(value) && !value.includes(cssPrefix.value)) {
+      if (/^var\([^)]+\)$/.test(value) && !value.includes(cssPrefix.value)) {
         continue;
       }
       websiteWrapperRef.value.style.setProperty(key, value);

@@ -31,7 +31,9 @@ export function useMod() {
   }
 
   function stop() {
-    isDefined(timer) && isClient && cancelAnimationFrame(timer);
+    if (isDefined(timer) && isClient) {
+      cancelAnimationFrame(timer);
+    }
     timer = undefined;
   }
 
