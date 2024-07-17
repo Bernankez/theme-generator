@@ -44,7 +44,10 @@ export const defaultColors: AcceptableTheme = {
       light: "#737373",
       dark: "#fafafa",
     },
-    border: "#e5e7eb",
+    border: {
+      light: "#e5e7eb",
+      dark: "#292524",
+    },
     info: "#00b3f0",
     infoForeground: "#ffffff",
     success: "#00a96f",
@@ -106,7 +109,10 @@ export function inferThemeFromColor(themeColor: string) {
         light: "#737373",
         dark: "#fafafa",
       },
-      border: "#e5e7eb",
+      border: {
+        light: "#e5e7eb",
+        dark: "#292524",
+      },
       info: "#00b3f0",
       infoForeground: new Infer("#00b3f0").opposite().hex(),
       success: "#00a96f",
