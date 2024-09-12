@@ -1,6 +1,7 @@
 import { makeDestructurable } from "@bernankez/utils";
 import chroma from "chroma-js";
 import { type AcceptableTheme, type Color, type ColorKeywords, type CommonTheme, type ShapeKeywords, type Theme, colorKeywords, shapeKeywords } from "../types";
+import { defaultColors } from "../infer";
 import { isColor, isShape } from "./is";
 
 export function toColor(color: string | Color) {
@@ -44,6 +45,27 @@ export function toTheme(obj: AcceptableTheme): Theme {
       theme[keyword] = "";
     }
   });
+  return theme;
+}
+
+export function mergeDefaults(theme: Theme) {
+  const defaultTheme = toTheme(defaultColors);
+  for (const key in theme) {
+    if (key === "colors") {
+      for (const c in theme.colors) {
+        const color = theme.colors[c as ColorKeywords];
+        for (const scheme of ["light", "dark"]) {
+          if (!color[scheme as keyof Color]) {
+            color[scheme as keyof Color] = defaultTheme.colors[c as ColorKeywords][scheme as keyof Color];
+          }
+        }
+      }
+    } else if (isShape(key)) {
+      if (!defaultTheme[key as ShapeKeywords]) {
+        defaultTheme[key as ShapeKeywords] = theme[key as ShapeKeywords];
+      }
+    }
+  }
   return theme;
 }
 

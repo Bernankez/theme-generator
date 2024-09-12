@@ -1,17 +1,17 @@
-import { type Theme, defaultColors, defineTheme } from "@bernankez/theme-generator";
+import { type AcceptableTheme, type Theme, defaultColors, defineTheme, mergeDefaults, toTheme } from "@bernankez/theme-generator";
 import { nanoid } from "nanoid";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useAppStore } from "./app";
 
-export interface ThemeTemplate {
+export interface ThemeTemplate<T = Theme> {
   version: number;
   name: string;
   cssPrefix?: string;
-  theme: Theme;
+  theme: T;
 }
 
-export interface InternalThemeTemplate extends ThemeTemplate {
+export interface InternalThemeTemplate<T = Theme> extends ThemeTemplate<T> {
   _id: string;
   _removable?: boolean;
   _editable?: boolean;
@@ -54,17 +54,22 @@ export const useTemplateStore = defineStore("template", () => {
     },
   });
 
-  function addTemplate(template: InternalThemeTemplate, persist = true) {
+  function addTemplate(template: InternalThemeTemplate<AcceptableTheme>, persist = true) {
+    // Fill in missing values
+    const theme = toTheme(template.theme);
+    const mergedTheme = mergeDefaults(theme);
     if (persist) {
       if (templates.value.findIndex(t => t._id === template._id) < 0) {
         customTemplates.value.push({
           ...template,
+          theme: mergedTheme,
           _temporary: false,
         });
       }
     } else {
       tempTemplate.value = {
         ...template,
+        theme: mergedTheme,
         _temporary: true,
       };
     }
