@@ -114,6 +114,15 @@ export function hexToHsl(hex: string) {
   return makeDestructurable({ h, s, l }, [h, s, l]);
 }
 
+export function hexToOklch(hex: string) {
+  if (!chroma.valid(hex)) {
+    return hex;
+  }
+  let [l, c, h] = chroma(hex).oklch();
+  h = h || 0;
+  return makeDestructurable({ l, c, h }, [l, c, h]);
+}
+
 export function findCommonPrefix(key: string, keys: string[]) {
   const prefix = kebabCase(key).split("-")[0];
   return keys.filter(k => kebabCase(k).startsWith(prefix)).map((k) => {

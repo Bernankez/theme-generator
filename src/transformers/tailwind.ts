@@ -4,7 +4,7 @@ import type { CommonTheme } from "../types";
 
 export interface TransformTailwindOptions<T extends CommonTheme> {
   cssPrefix?: string;
-  colorSpace?: "rgb" | "hsl";
+  colorSpace?: "rgb" | "hsl" | "oklch";
   resolve?: (key: Exclude<keyof T, "colors">) => Omit<Theme, "colors"> | undefined | null | void;
 }
 

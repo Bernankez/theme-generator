@@ -1,5 +1,5 @@
 import { n } from "@bernankez/utils";
-import { type Color, type ColorKeywords, type Theme, hexToHsl, transformStyle, transformTailwind, transformUnoCSS } from "..";
+import { type Color, type ColorKeywords, type Theme, hexToHsl, hexToOklch, transformStyle, transformTailwind, transformUnoCSS } from "..";
 
 export interface PresetShadcnOptions {
   cssPrefix?: string;
@@ -93,18 +93,18 @@ export function presetShadcn(theme: Theme, options?: PresetShadcnOptions) {
     ...options,
     resolve: (key, scheme) => {
       if (Object.hasOwn(transformedTheme.colors, key)) {
-        const hsl = hexToHsl(transformedTheme.colors[key as keyof typeof transformedTheme.colors][scheme]);
-        if (typeof hsl === "string") {
-          return hsl;
+        const oklch = hexToOklch(transformedTheme.colors[key as keyof typeof transformedTheme.colors][scheme]);
+        if (typeof oklch === "string") {
+          return oklch;
         }
-        const [h, s, l] = hsl;
-        return `${handlePercent(h)} ${handlePercent(s * 100)}% ${handlePercent(l * 100)}%`;
+        const [l, c, h] = oklch;
+        return `${handlePercent(l)} ${handlePercent(c)} ${handlePercent(h)}`;
       }
     },
   });
   const unocss = transformUnoCSS(transformedTheme, {
     ...options,
-    colorSpace: "hsl",
+    colorSpace: "oklch",
     resolve: (key) => {
       if (key === "radius") {
         return {
@@ -119,7 +119,7 @@ export function presetShadcn(theme: Theme, options?: PresetShadcnOptions) {
   });
   const tailwind = transformTailwind(transformedTheme, {
     ...options,
-    colorSpace: "hsl",
+    colorSpace: "oklch",
     resolve: (key) => {
       if (key === "radius") {
         return {
