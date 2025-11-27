@@ -1,5 +1,5 @@
 import { n } from "@bernankez/utils";
-import { type Color, type ColorKeywords, type Theme, hexToHsl, hexToOklch, transformStyle, transformTailwind, transformUnoCSS } from "..";
+import { type Color, type ColorKeywords, type Theme, hexToOklch, transformStyle, transformTailwind, transformUnoCSS } from "..";
 
 export interface PresetShadcnOptions {
   cssPrefix?: string;
@@ -82,8 +82,8 @@ function transformTheme(theme: Theme): ShadcnTheme {
   return shadcnTheme;
 }
 
-function handlePercent(num: number) {
-  return num.toFixed(1).replace(".0", "");
+function handlePercent(num: number, precision = 1) {
+  return num.toFixed(precision).replace(/\.0+$/, "");
 }
 
 export function presetShadcn(theme: Theme, options?: PresetShadcnOptions) {
@@ -98,7 +98,7 @@ export function presetShadcn(theme: Theme, options?: PresetShadcnOptions) {
           return oklch;
         }
         const [l, c, h] = oklch;
-        return `${handlePercent(l)} ${handlePercent(c)} ${handlePercent(h)}`;
+        return `${handlePercent(l * 100)}% ${handlePercent(c, 3)} ${handlePercent(h, 3)}`;
       }
     },
   });
